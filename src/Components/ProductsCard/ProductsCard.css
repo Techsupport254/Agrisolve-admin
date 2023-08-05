@@ -1,0 +1,200 @@
+.ProductsCard {
+    width: 30%;
+    border-radius: 5px;
+    background-color: var(--white);
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .1);
+    padding: .5rem;
+}
+
+.ProductsCard:first-child {
+    width: 70%;
+    height: 13rem;
+    background: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+}
+
+.ProductsCard:nth-child(2) {
+    height: auto;
+    background: linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%);
+}
+
+.Applaud {
+    width: 100%;
+    height: 100%;
+}
+
+
+.ApplaudBottom {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ApplaudLeft {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    & p {
+        font-size: .8rem;
+    }
+
+    & span {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--primary);
+    }
+}
+
+.ApplaudCenter {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & img {
+        width: 9rem;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.ApplaudRight {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: .5rem;
+
+    & p {
+        font-size: .8rem;
+        color: var(--black);
+        margin-left: .5rem;
+    }
+
+    & button {
+        background-color: var(--green);
+        color: var(--white);
+        border: none;
+        border-radius: 5px;
+        padding: .5rem;
+        font-size: .8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .3s ease-in-out;
+
+        &:hover {
+            background-color: var(--secondary);
+        }
+    }
+}
+
+.ProductsStats {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+}
+
+.StatsTop {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+}
+
+.ProductsStatsLeft {
+    width: 30%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+
+    & p {
+        font-size: .8rem;
+        color: var(--black);
+    }
+
+    & span {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--primary);
+    }
+}
+
+.ProductsStatsRight {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.StatsRow {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: .5rem;
+
+    & span {
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    & p {
+        font-size: .8rem;
+        color: var(--black);
+    }
+
+}
+
+.StatsRow:last-child span {
+    font-weight: 600;
+    color: green;
+}
+
+.StatsBottom {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: .5rem;
+
+    & .BottomRow {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0;
+
+        & p {
+            font-size: .7rem;
+            color: var(--black);
+
+            & span {
+                font-weight: 600;
+                color: var(--primary);
+                cursor: pointer;
+            }
+        }
+    }
+}

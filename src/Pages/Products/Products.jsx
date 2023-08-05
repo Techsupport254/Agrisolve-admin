@@ -1,0 +1,24 @@
+import React from "react";
+import "./Products.css";
+import Table from "../../Components/Table/Table";
+import ProductsCards from "../../Components/ProductsCards/ProductsCards";
+
+const Products = ({ products, user }) => {
+	console.log(user);
+	return (
+		<div className="Products">
+			<div className="ProductsTop">
+				<div className="Header">
+					<i className="fa fa-boxes"></i>
+					<h2>Products</h2>
+				</div>
+			</div>
+			<div className="ProductsCards">
+				<ProductsCards user={user} />
+			</div>
+			<Table products={products} />
+		</div>
+	);
+};
+
+export default Products;

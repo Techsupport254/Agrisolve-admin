@@ -1,0 +1,57 @@
+.Users {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 94vh;
+    overflow: auto;
+}
+
+.UserCards {
+    max-height: 30%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    overflow: auto;
+}
+
+.UsersTable {
+    height: 70%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    overflow: auto;
+}
+
+.User {
+    height: 3rem;
+    display: flex;
+    padding: 1rem;
+    gap: 1rem;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+
+    & h3:first-child {
+        width: 6rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+    }
+}
+
+.User img {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+}

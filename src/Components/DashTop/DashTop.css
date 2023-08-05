@@ -1,0 +1,77 @@
+.DashLeft {
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    & span {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+.DashRight {
+    width: 40%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    & i {
+        font-size: 1.3rem;
+        transition: all .3s ease-in-out;
+
+        &:hover {
+            color: var(--green);
+        }
+    }
+}
+
+.UserProfile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+
+    & .UserImage {
+        width: 2rem;
+        height: 2rem;
+
+        & img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+    }
+}
+
+.UserName {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+
+    & span {
+        font-size: .8rem;
+        font-weight: 600;
+    }
+
+    & p {
+        font-size: .7rem;
+        font-weight: 500;
+        color: #9e9e9e;
+        text-transform: capitalize;
+
+
+        & i {
+            font-size: 1rem;
+            color: var(--black);
+        }
+    }
+}
