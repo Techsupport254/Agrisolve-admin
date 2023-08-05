@@ -15,7 +15,7 @@ function useAuth() {
 		const storedUser = JSON.parse(localStorage.getItem("agrisolveData"));
 		if (!storedUser || storedUser.loginStatus !== "loggedIn") {
 			history.push(
-				"https://64ceabd3dad64a69c92babad--agrisolve.netlify.app/login"
+				"https://64ceb593a3461a6e1947eb37--agrisolve.netlify.app/login"
 			);
 		} else {
 			setUser(storedUser);
