@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import Mainbar from "./Components/Mainbar/Mainbar";
 import axios from "axios";
 import { useHistory } from "react-router-use-history";
-
 function useAuth() {
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [user, setUser] = useState(null);
@@ -12,12 +11,13 @@ function useAuth() {
 	const history = useHistory();
 
 	useEffect(() => {
+		const path =
+			"https://64ceb593a3461a6e1947eb37--agrisolve.netlify.app/login";
 		const checkLoginStatus = async () => {
 			const storedUser = JSON.parse(localStorage.getItem("agrisolveData"));
+			console.log(storedUser);
 			if (!storedUser) {
-				history.push(
-					"https://64ceb593a3461a6e1947eb37--agrisolve.netlify.app/login"
-				);
+				history.push(path);
 			} else {
 				try {
 					const response = await axios.get(
@@ -29,19 +29,15 @@ function useAuth() {
 						}
 					);
 					if (response.data.loginStatus === "loggedIn") {
-						setUser(storedUser);
+						setUser(response.data);
 						setToken(storedUser.token);
 						setLoggedIn(true);
 					} else {
-						history.push(
-							"https://64ceb593a3461a6e1947eb37--agrisolve.netlify.app/login"
-						);
+						history.push(path);
 					}
 				} catch (error) {
 					console.error("Error checking login status", error);
-					history.push(
-						"https://64ceb593a3461a6e1947eb37--agrisolve.netlify.app/login"
-					);
+					history.push("path");
 				}
 			}
 		};
@@ -55,7 +51,6 @@ function useAuth() {
 function App() {
 	const { loggedIn, user, token } = useAuth();
 	const [users, setUsers] = useState([]);
-	const [userDataLoaded, setUserDataLoaded] = useState(false);
 	const [products, setProducts] = useState(null);
 	const [requests, setRequests] = useState(null);
 
@@ -73,7 +68,7 @@ function App() {
 				setUsers(response.data);
 			} catch (err) {
 				console.log(err);
-				setError("Error fetching users.");
+				// setError("Error fetching users.");
 			}
 		};
 
@@ -96,11 +91,60 @@ function App() {
 	}, []);
 
 	const getTimeLabel = (time) => {
-		// ... (rest of the code remains the same)
+		const date = new Date(time);
+		const options = {
+			year: "numeric",
+			month: "short",
+			day: "numeric",
+			hour: "numeric",
+			minute: "numeric",
+			second: "numeric",
+			hour12: false,
+		};
+
+		const timeDiffInMilliseconds = Date.now() - date.getTime();
+		const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+
+		if (timeDiffInMilliseconds >= 3 * oneDayInMilliseconds) {
+			return date.toLocaleString("en-US", {
+				...options,
+				hour: undefined,
+				minute: undefined,
+				second: undefined,
+			});
+		} else if (timeDiffInMilliseconds >= 2 * oneDayInMilliseconds) {
+			return "Yesterday";
+		} else if (timeDiffInMilliseconds >= oneDayInMilliseconds) {
+			return `${Math.floor(
+				timeDiffInMilliseconds / oneDayInMilliseconds
+			)} days ago`;
+		} else if (timeDiffInMilliseconds >= 60 * 60 * 1000) {
+			return `${Math.floor(
+				timeDiffInMilliseconds / (60 * 60 * 1000)
+			)} hours ago`;
+		} else if (timeDiffInMilliseconds >= 60 * 1000) {
+			return `${Math.floor(timeDiffInMilliseconds / (60 * 1000))} minutes ago`;
+		} else if (timeDiffInMilliseconds >= 1000) {
+			return `${Math.floor(timeDiffInMilliseconds / 1000)} seconds ago`;
+		}
+
+		return date.toLocaleString("en-US", options);
 	};
 
 	const fetchRequest = async (url, method, data) => {
-		// ... (rest of the code remains the same)
+		try {
+			const response = await axios({
+				url,
+				method,
+				data,
+				headers: {
+					"x-auth-token": token,
+				},
+			});
+			setRequests(response.data);
+		} catch (err) {
+			console.log(err);
+		}
 	};
 
 	useEffect(() => {
