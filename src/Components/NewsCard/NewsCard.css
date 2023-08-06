@@ -6,7 +6,6 @@
     gap: 1rem;
     align-items: center;
     justify-content: flex-start;
-    border-radius: 10px;
     border-bottom: 1px solid var(--border-color, #E0E0E0);
 }
 

@@ -268,4 +268,56 @@ export const newsData = [
 		image: "https://picsum.photos/200/300",
 		timestamp: "2021-05-01T12:00:00.000Z",
 	},
+	{
+		id: 6,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+];
+
+// history data
+export const historyData = [
+	{
+		id: 1,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+	{
+		id: 2,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+	{
+		id: 3,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+	{
+		id: 4,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+	{
+		id: 5,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+	{
+		id: 6,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
 ];

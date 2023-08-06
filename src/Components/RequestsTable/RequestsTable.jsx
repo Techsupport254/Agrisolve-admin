@@ -11,7 +11,6 @@ const RequestsTable = ({ requests }) => {
 			width: 100,
 			sortable: true,
 			renderCell: (params) => {
-				console.log(params.row);
 				return (
 					<React.Fragment>
 						{params.row.status === "pending" && (

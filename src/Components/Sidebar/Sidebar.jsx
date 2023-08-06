@@ -33,7 +33,6 @@ const Sidebar = ({ user }) => {
 							</p>
 						</div>
 
-						{/* Sidebar items */}
 						<div className="SidebarItems">
 							{sidebardata.map((item) => {
 								return (
@@ -64,8 +63,6 @@ const Sidebar = ({ user }) => {
 							<small>{user?.username}</small>
 							<p>{user?.userType}</p>
 						</div>
-
-						{/* Sidebar items */}
 						<div className="SidebarItems">
 							{sidebardata.map((item) => {
 								const isActive = location.pathname === item.path;

@@ -15,10 +15,23 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
+    height: 25%;
+}
+
+.ReportsBottom {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1rem;
+    height: 100%;
 }
 
 .News {
     width: 60%;
+    max-height: 80%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -28,4 +41,20 @@
     background: var(--background-paper, #FFF);
     box-shadow: 0px 12px 24px -4px rgba(145, 158, 171, 0.12), 0px 0px 2px 0px rgba(145, 158, 171, 0.20);
     padding: .5rem;
+    overflow-y: auto;
+}
+
+.Timeline {
+    width: 40%;
+    max-height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1rem;
+    border-radius: 0.5rem;
+    background: var(--background-paper, #FFF);
+    box-shadow: 0px 12px 24px -4px rgba(145, 158, 171, 0.12), 0px 0px 2px 0px rgba(145, 158, 171, 0.20);
+    padding: .5rem;
+    overflow-y: auto;
 }
