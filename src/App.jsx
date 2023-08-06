@@ -4,6 +4,7 @@ import Sidebar from "./Components/Sidebar/Sidebar";
 import Mainbar from "./Components/Mainbar/Mainbar";
 import axios from "axios";
 import { useHistory } from "react-router-use-history";
+
 function useAuth() {
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [user, setUser] = useState(null);
@@ -15,7 +16,6 @@ function useAuth() {
 			"https://64ceb593a3461a6e1947eb37--agrisolve.netlify.app/login";
 		const checkLoginStatus = async () => {
 			const storedUser = JSON.parse(localStorage.getItem("agrisolveData"));
-			console.log(storedUser);
 			if (!storedUser) {
 				history.push(path);
 			} else {
@@ -28,16 +28,18 @@ function useAuth() {
 							},
 						}
 					);
+
 					if (response.data.loginStatus === "loggedIn") {
 						setUser(response.data);
 						setToken(storedUser.token);
 						setLoggedIn(true);
 					} else {
+						console.log("User not logged in");
 						history.push(path);
 					}
 				} catch (error) {
 					console.error("Error checking login status", error);
-					history.push("path");
+					history.push(path);
 				}
 			}
 		};
@@ -55,9 +57,10 @@ function App() {
 	const [requests, setRequests] = useState(null);
 
 	useEffect(() => {
-		const fetchAllUsers = async () => {
+		const fetchData = async () => {
 			try {
-				const response = await axios.get(
+				// Fetch all users
+				const usersResponse = await axios.get(
 					"https://agrisolve-techsupport254.vercel.app/auth/users",
 					{
 						headers: {
@@ -65,34 +68,50 @@ function App() {
 						},
 					}
 				);
-				setUsers(response.data);
-			} catch (err) {
-				console.log(err);
-				setError("Error fetching users.");
-			}
-		};
+				setUsers(usersResponse.data);
 
-		fetchAllUsers();
-	}, [token]);
-
-	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				const resData = await axios.get(
+				// Fetch products
+				const productsResponse = await axios.get(
 					"https://api.escuelajs.co/api/v1/products"
 				);
-				setProducts(resData.data);
+				setProducts(productsResponse.data);
 			} catch (err) {
 				console.log(err);
 			}
 		};
 
-		fetchProducts();
-	}, []);
+		if (token) {
+			fetchData();
+		}
+	}, [token]);
 
 	const getTimeLabel = (time) => {
-		const date = new Date(time);
-		const options = {
+		const timeDiffInMilliseconds = Date.now() - new Date(time).getTime();
+		const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
+		const timeLabels = [
+			[3 * oneDayInMilliseconds, "Yesterday"],
+			[
+				2 * oneDayInMilliseconds,
+				`${Math.floor(timeDiffInMilliseconds / oneDayInMilliseconds)} days ago`,
+			],
+			[
+				oneDayInMilliseconds,
+				`${Math.floor(timeDiffInMilliseconds / (60 * 60 * 1000))} hours ago`,
+			],
+			[
+				60 * 60 * 1000,
+				`${Math.floor(timeDiffInMilliseconds / (60 * 1000))} minutes ago`,
+			],
+			[60 * 1000, `${Math.floor(timeDiffInMilliseconds / 1000)} seconds ago`],
+		];
+
+		for (const [threshold, label] of timeLabels) {
+			if (timeDiffInMilliseconds >= threshold) {
+				return label;
+			}
+		}
+
+		return new Date(time).toLocaleString("en-US", {
 			year: "numeric",
 			month: "short",
 			day: "numeric",
@@ -100,35 +119,7 @@ function App() {
 			minute: "numeric",
 			second: "numeric",
 			hour12: false,
-		};
-
-		const timeDiffInMilliseconds = Date.now() - date.getTime();
-		const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-
-		if (timeDiffInMilliseconds >= 3 * oneDayInMilliseconds) {
-			return date.toLocaleString("en-US", {
-				...options,
-				hour: undefined,
-				minute: undefined,
-				second: undefined,
-			});
-		} else if (timeDiffInMilliseconds >= 2 * oneDayInMilliseconds) {
-			return "Yesterday";
-		} else if (timeDiffInMilliseconds >= oneDayInMilliseconds) {
-			return `${Math.floor(
-				timeDiffInMilliseconds / oneDayInMilliseconds
-			)} days ago`;
-		} else if (timeDiffInMilliseconds >= 60 * 60 * 1000) {
-			return `${Math.floor(
-				timeDiffInMilliseconds / (60 * 60 * 1000)
-			)} hours ago`;
-		} else if (timeDiffInMilliseconds >= 60 * 1000) {
-			return `${Math.floor(timeDiffInMilliseconds / (60 * 1000))} minutes ago`;
-		} else if (timeDiffInMilliseconds >= 1000) {
-			return `${Math.floor(timeDiffInMilliseconds / 1000)} seconds ago`;
-		}
-
-		return date.toLocaleString("en-US", options);
+		});
 	};
 
 	const fetchRequest = async (url, method, data) => {
