@@ -3,11 +3,9 @@ import "./Requests.css";
 import { requestsNavigations } from "../../Data";
 import { Badge } from "@mui/material";
 import RequestsTable from "../../Components/RequestsTable/RequestsTable";
-import req from "../../assets/requests.svg";
+import req from "../../assets/req.png";
 
-const Requests = ({ requests }) => {
-	console.log(requests);
-	console.log(requestsNavigations);
+const Requests = ({ requests, user }) => {
 	const [active, setActive] = React.useState(
 		requestsNavigations[0].name.toLowerCase()
 	);
@@ -48,11 +46,16 @@ const Requests = ({ requests }) => {
 			</div>
 			<div className="RequestTop">
 				<div className="RequestsLeft">
+					<div className="RequestTopText">
+						<h3>Congratulations!</h3>
+						<span>{user?.name}</span>
+						<p>
+							You have <span>{newRequests?.length}</span> requests. You can
+							attend to them by clicking on the "Accept" badge.
+						</p>
+						{/* <button className="ExportBtn">Export</button> */}
+					</div>
 					<img src={req} alt="requests" className="RequestTopImg" />
-					<p>
-						All your requests data are listed here. You can filter them by
-						status, search for a specific request, or export them in a CSV file.
-					</p>
 				</div>
 				<div className="RequestsRight">
 					{requestsNavigations.map((nav, index) => {

@@ -27,7 +27,7 @@ export const sidebardata = [
 	},
 	{
 		id: 4,
-		title: "Reports",
+		title: "Analytics",
 		path: "/reports",
 		icon: <i className="fas fa-chart-line"></i>,
 	},
@@ -174,5 +174,98 @@ export const requestsNavigations = [
 		icon: <i className="fa fa-times"></i>,
 		active: false,
 		color: "red",
+	},
+];
+
+// analytics data
+export const analyticsData = [
+	{
+		id: 1,
+		title: "Weekly Sales",
+		icon: <i className="fas fa-shopping-cart"></i>,
+		value: 1000,
+		color: "rgba(0, 120, 103, 1)",
+		color2: "rgba(0, 120, 103, 1)",
+		color3: "rgba(0, 75, 80, 1)",
+		backGround: "rgba(200, 250, 214, 1)",
+	},
+	{
+		id: 2,
+		title: "Weekly Income",
+		icon: <i className="fas fa-dollar-sign"></i>,
+		value: 1000,
+		color: "rgba(198, 132, 255, 1)",
+		color2: "rgba(81, 25, 183, 1)",
+		color3: "rgba(39, 9, 122, 1)",
+		backGround: "rgba(239, 214, 255, 1)",
+	},
+	{
+		id: 3,
+		title: "Weekly Expenses",
+		icon: <i className="fas fa-money-bill-wave"></i>,
+		value: 1000,
+		color: "rgba(0, 108, 156, 1)",
+		color2: "rgba(0, 108, 156, 1)",
+		color3: "rgba(0, 55, 104, 1)",
+		backGround: "rgba(202, 253, 245, 1)",
+	},
+	{
+		id: 4,
+		title: "New Customers",
+		icon: <i className="fas fa-users"></i>,
+		value: 1000,
+		color2: "rgba(183, 110, 0, 1)",
+		color: "rgba(183, 110, 0, 1)",
+		color3: "rgba(122, 65, 0, 1)",
+		backGround: "rgba(255, 245, 204, 1)",
+	},
+	{
+		id: 5,
+		title: "Total Orders",
+		icon: <i className="fas fa-boxes"></i>,
+		value: 1000,
+		color: "rgba(91, 228, 155, 1)",
+		color2: "rgba(0, 120, 103, 1)",
+		color3: "rgba(0, 75, 80, 1)",
+		backGround: "rgba(211, 252, 210, 1)",
+	},
+];
+
+// news data
+export const newsData = [
+	{
+		id: 1,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+	{
+		id: 2,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+	{
+		id: 3,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+	{
+		id: 4,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+	{
+		id: 5,
+		title: "Lorem ipsum dolor sit amet.",
+		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
+		image: "https://picsum.photos/200/300",
+		timestamp: "2021-05-01T12:00:00.000Z",
 	},
 ];

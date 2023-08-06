@@ -1,0 +1,10 @@
+.NewsContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.NewsCard {
+    width: 100%;
+    height: 4rem;
+    margin-bottom: .5rem;
+}

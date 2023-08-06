@@ -98,7 +98,8 @@
 
     &.Active {
         color: var(--warning);
-        box-shadow: 0 0 3px var(--txt-teal);
+        box-shadow: 0 0 3px var(--light-green);
+        background-color: var(--dark-green);
         transition: all .3s ease-in-out;
         margin-left: 0;
         animation: fadeIn .5s ease-in;
@@ -107,7 +108,7 @@
             content: '';
             width: 3px;
             height: 100%;
-            background-color: var(--txt-teal);
+            background-color: var(--light-green);
             border-radius: 5px;
             margin-right: calc(1rem - 8px);
             animation: animate .5s ease-in;
@@ -117,8 +118,8 @@
     }
 
     &:hover {
-        color: var(--txt-teal);
-        box-shadow: 0 0 3px var(--txt-teal);
+        color: var(--light-green);
+        box-shadow: 0 0 3px var(--light-green);
     }
 
 }

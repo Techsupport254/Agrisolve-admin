@@ -7,6 +7,7 @@ const Products = lazy(() => import("./Pages/Products/Products"));
 const Reports = lazy(() => import("./Pages/Reports/Reports"));
 const Requests = lazy(() => import("./Pages/Requests/Requests"));
 const Settings = lazy(() => import("./Pages/Settings/Settings"));
+const Login = lazy(() => import("./Components/Login/Login"));
 
 const LoadingFallback = () => (
 	<div className="SpinnerLoading">
@@ -65,17 +66,38 @@ const SidebarPages = ({ user, users, products, getTimeLabel, requests }) => {
 					/>
 					<Route
 						path="/reports"
-						element={loading ? <LoadingFallback /> : <Reports />}
+						element={loading ? <LoadingFallback /> : <Reports
+							user={user}
+							getTimeLabel={getTimeLabel}
+						 />}
 					/>
 					<Route
 						path="/requests"
 						element={
-							loading ? <LoadingFallback /> : <Requests requests={requests} />
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<Requests
+									requests={requests}
+									user={user}
+									getTimeLabel={getTimeLabel}
+								/>
+							)
 						}
 					/>
 					<Route
 						path="/settings"
 						element={loading ? <LoadingFallback /> : <Settings />}
+					/>
+					<Route
+						path="/login"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<Login user={user} users={users} getTimeLabel={getTimeLabel} />
+							)
+						}
 					/>
 				</Routes>
 			</Suspense>

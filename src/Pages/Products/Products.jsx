@@ -4,7 +4,6 @@ import Table from "../../Components/Table/Table";
 import ProductsCards from "../../Components/ProductsCards/ProductsCards";
 
 const Products = ({ products, user }) => {
-	console.log(user);
 	return (
 		<div className="Products">
 			<div className="ProductsTop">

@@ -22,6 +22,9 @@
   --txt-teal: #64ffda;
   --p-color: #94A3B8;
   --bg-color: rgb(18, 27, 48);
+  --light-green: rgba(200, 250, 214, 1);
+  --Background-Paper: rgba(255, 255, 255, 1);
+  --text-primary: rgba(33, 43, 54, 1);
 }
 
 * {

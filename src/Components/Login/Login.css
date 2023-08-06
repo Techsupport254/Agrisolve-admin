@@ -1,0 +1,178 @@
+.LoginPopup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.LoginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 75%;
+    height: 70%;
+    width: 100%;
+    margin-left: 20%;
+    background: #fff;
+    border-radius: 5px;
+
+}
+
+.LoginLeft,
+.LoginRight {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 1rem;
+
+}
+
+.LoginLeft {
+    width: 60%;
+    border-radius: 5px 0 0 5px;
+
+    & h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-top: 1rem;
+    }
+}
+
+.LoginRight {
+    width: 40%;
+    gap: .5rem;
+    border-radius: 0 5px 5px 0;
+
+    & h3 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+.ErrorMessage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--danger);
+}
+
+.NewUser {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: .3rem;
+
+    & p {
+        font-size: .8rem;
+    }
+
+    & a {
+        font-size: .8rem;
+        font-weight: 600;
+        color: #007867;
+    }
+}
+
+.Notification {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    gap: .3rem;
+    padding: 1rem;
+    background-color: #C8FAD6;
+    border-radius: 5px;
+
+    & p {
+        font-size: .8rem;
+    }
+
+    & i {
+        font-size: .8rem;
+        font-weight: 600;
+        color: #007867;
+    }
+}
+
+.Forgot {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    gap: .3rem;
+
+    & p {
+        font-size: .8rem;
+    }
+
+    & a {
+        font-size: .8rem;
+        font-weight: 600;
+        color: #007867;
+    }
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    gap: .5rem;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: all .3s ease-in-out;
+
+    & i {
+        padding: 0 10px;
+        font-size: 1rem;
+        color: rgba(33, 43, 54, 1);
+    }
+
+    &:hover {
+        border: 1px solid #5BE49B;
+    }
+}
+
+input {
+    border: none;
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: .8rem;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.LoginBtn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(33, 43, 54, 1);
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 5px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}

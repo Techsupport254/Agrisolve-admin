@@ -14,7 +14,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 30vh;
+    height: 50vh;
 }
 
 .RequestsLeft {
@@ -25,15 +25,51 @@
     width: 50%;
     height: 100%;
     gap: 1rem;
-    border-bottom: 1px solid #E5E5E5;
     overflow: hidden;
-    background: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+    background: rgba(200, 250, 214, 1);
     border-radius: 5px;
     padding: .5rem;
 
+    & .RequestTopText {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: .5rem;
+        width: 100%;
+
+        & h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        & span {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+    }
+
     & img {
-        width: 15rem;
+        width: 18rem;
         object-fit: cover;
+    }
+}
+
+.ExportBtn {
+    width: auto;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .1rem .5rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border-radius: 5px;
+    background: rgba(6, 94, 73, 1);
+    color: #fff;
+
+    &:hover {
+        transform: scale(1.1);
     }
 }
 
@@ -45,7 +81,6 @@
     width: 50%;
     height: 100%;
     gap: .5rem;
-    border-bottom: 1px solid #E5E5E5;
 }
 
 .RequestTopItem {
@@ -68,7 +103,7 @@
 }
 
 .RequestTopItemActive {
-    background-color: var(--txt-teal);
+    background-color: rgba(200, 250, 214, 1);
     color: #000;
 
     & i {
@@ -79,4 +114,8 @@
 .RequestTopItemIcon {
     font-size: 1rem;
     color: #000000;
+}
+
+.RequestBottom {
+    height: auto;
 }

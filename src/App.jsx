@@ -12,8 +12,7 @@ function useAuth() {
 	const history = useHistory();
 
 	useEffect(() => {
-		const path =
-			"https://64ceb593a3461a6e1947eb37--agrisolve.netlify.app/login";
+		const path = "/login";
 		const checkLoginStatus = async () => {
 			const storedUser = JSON.parse(localStorage.getItem("agrisolveData"));
 			if (!storedUser) {
@@ -150,9 +149,9 @@ function App() {
 	return (
 		<div className="App flex flex-col md:flex-row w-full h-screen">
 			<div className="Sidebar w-1/2 md:w-1/5 p-1 border-r-2 bg-slate-800 text-white">
-				{loggedIn && <Sidebar user={user} />}
+				<Sidebar user={user} />
 			</div>
-			<div className="Mainbar w-full md:w-4/5 p-1 border-r-2 bg-slate-200 text-black">
+			<div className="Mainbar w-full md:w-4/5 p-1 border-r-2 bg-white text-black">
 				<Mainbar
 					user={user}
 					users={users}
