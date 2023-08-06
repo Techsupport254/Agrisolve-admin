@@ -1,31 +1,74 @@
 import React, { useState } from "react";
 import "./LoginPopup.css";
 
-const LoginPopup = ({ loginURL, onLogin }) => {
+const LoginPopup = ({ onLogin }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
-		// Perform login action with the email and password
+
+		// Validate the form
+		if (!email || !password) {
+			setError("Please fill in all the fields");
+			return;
+		}
+
+		// Set loading to true
+		setLoading(true);
+
 		try {
-			const response = await fetch(loginURL, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ email, password }),
-			});
-			const userData = await response.json();
-			if (response.ok && userData.loginStatus === "loggedIn") {
-				onLogin(userData); // Trigger the onLogin function with the user data
+			const response = await fetch(
+				"https://agrisolve-techsupport254.vercel.app/auth/login",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ email, password }),
+				}
+			);
+
+			if (response.ok) {
+				const data = await response.json();
+
+				// User logged in successfully
+				setError(null);
+				onLogin(data);
+
+				// save the user data in local storage
+				localStorage.setItem("agrisolveData", JSON.stringify(data));
+
+				// Update login status in the database
+				await fetch(
+					`https://agrisolve-techsupport254.vercel.app/auth/user/${email}`,
+					{
+						method: "PATCH",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ loginStatus: "loggedIn" }),
+					}
+				);
+
+				// Set loading to false after 3 seconds
+				setTimeout(() => {
+					setLoading(false);
+					// Redirect to the home page after 3 seconds
+					window.location.href = "/";
+				}, 3000);
 			} else {
-				setError("Invalid email or password"); // Set the error state if login fails
+				// Error logging in
+				const data = await response.json();
+				setError(data.message);
+				setLoading(false);
 			}
 		} catch (error) {
-			console.error("Error during login", error);
-			setError("An error occurred during login"); // Set the error state if an error occurs during login
+			console.error("Error logging in", error);
+			setError("An error occurred during login");
+			setLoading(false);
 		}
 	};
 
@@ -54,8 +97,8 @@ const LoginPopup = ({ loginURL, onLogin }) => {
 						<i className="fas fa-lock"></i>
 					</div>
 					<div className="LoginBtns">
-						<button type="submit" className="LoginBtn1">
-							Login
+						<button type="submit" className="LoginBtn1" disabled={loading}>
+							{loading ? "Logging in..." : "Login"}
 						</button>
 						<button className="LoginBtn2">Cancel</button>
 					</div>

@@ -68,7 +68,7 @@ function App() {
 				setUsers(response.data);
 			} catch (err) {
 				console.log(err);
-				// setError("Error fetching users.");
+				setError("Error fetching users.");
 			}
 		};
 
