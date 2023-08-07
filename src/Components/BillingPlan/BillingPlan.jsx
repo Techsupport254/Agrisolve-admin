@@ -1,12 +1,12 @@
 import React from "react";
 import "./BillingPlan.css";
 
-const BillingPlan = () => {
+const BillingPlan = ({ user }) => {
 	const plans = [
 		{
 			name: "Basic",
 			price: 0,
-			icon: <i className="fa fa-user"></i>,
+			icon: <i class="fa-solid fa-layer-group"></i>,
 			features: [
 				"1 Workspace",
 				"Unlimited Traffic",
@@ -22,7 +22,8 @@ const BillingPlan = () => {
 		{
 			name: "Starter",
 			price: 500,
-			icon: <i className="fa fa-user"></i>,
+			icon: <i class="fa-solid fa-layer-group"></i>,
+			current: true,
 			features: [
 				"1 Workspace",
 				"Unlimited Traffic",
@@ -38,7 +39,7 @@ const BillingPlan = () => {
 		{
 			name: "Premium",
 			price: 1000,
-			icon: <i className="fa fa-user"></i>,
+			icon: <i class="fa-solid fa-layer-group"></i>,
 			features: [
 				"1 Workspace",
 				"Unlimited Traffic",
@@ -55,24 +56,57 @@ const BillingPlan = () => {
 
 	return (
 		<div className="BillingPlan">
-			{plans.map((plan, index) => (
-				<div className="BillingPlanCard" key={index}>
-					<div className="Icon">{plan.icon}</div>
-					<div className="Header">
-						<h1>{plan.name}</h1>
+			<div className="PlanCards">
+				{plans.map((plan, index) => (
+					<div className="BillingPlanCard" key={index}>
+						<div className="CurrentPlan">
+							{plan.current && (
+								<div className="Plan">
+									<i className="fas fa-star"></i>
+									<p>Current</p>
+								</div>
+							)}
+						</div>
+
+						<div className="Icon">{plan.icon}</div>
+						<div className="Header">
+							<h1>{plan.name}</h1>
+						</div>
+						<div className="BillingPrice">
+							{plan.price === 0 ? (
+								<p>Free</p>
+							) : (
+								<>
+									<p>KSh. {plan.price}</p>&nbsp;
+									<span>/month</span>
+								</>
+							)}
+						</div>
 					</div>
-					<div className="BillingPrice">
-						{plan.price === 0 ? (
-							<p>Free</p>
-						) : (
-							<>
-								<p>KSh. {plan.price}</p>&nbsp;
-								<span>/month</span>
-							</>
-						)}
-					</div>
+				))}
+			</div>
+			<div className="BillingBottom">
+				<div className="BillingRow">
+					<p>Current Plan</p>
+					<span>{plans.find((plan) => plan.current).name}</span>
 				</div>
-			))}
+				<div className="BillingRow">
+					<p>Billing Name</p>
+					<span>{user?.name}</span>
+				</div>
+				<div className="BillingRow">
+					<p>Billing Email</p>
+					<span>{user?.email}</span>
+				</div>
+				<div className="BillingRow">
+					<p>Billing Phone</p>
+					<span>{user?.phone}</span>
+				</div>
+			</div>
+			<div className="BillingBtns">
+				<button className="BillingBtn Danger-Btn">Cancel Plan</button>
+				<button className="BillingBtn SuccessBtn">Change Plan</button>
+			</div>
 		</div>
 	);
 };

@@ -9,7 +9,7 @@ const Billing = ({ user }) => {
 				<div className="Header">
 					<h1>Plan</h1>
 				</div>
-				<BillingPlan />
+				<BillingPlan user={user} />
 			</div>
 			<div className="BillingRight"></div>
 		</div>

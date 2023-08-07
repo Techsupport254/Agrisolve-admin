@@ -1,9 +1,19 @@
 .BillingPlan {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    gap: 1rem;
+}
+
+.PlanCards {
+    display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-    height: 100%;
+    height: 40%;
     width: 100%;
     margin: 1rem 0;
 }
@@ -13,12 +23,14 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    height: 40%;
-    background: var(--background-paper, #FFF);
+    height: 100%;
+    border: 1px solid #ece9e9;
     box-shadow: var(--boxShadow);
     border-radius: 5px;
-    padding: 1rem;
-    width: 30%;
+    padding: .5rem;
+    width: 32%;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
 
     & .Icon {
         font-size: 3rem;
@@ -34,6 +46,7 @@
 
     & .BillingPrice {
         font-size: 1rem;
+        line-height: 2;
         font-weight: 600;
         color: var(--bg-color);
         margin-bottom: 1rem;
@@ -41,5 +54,104 @@
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
+    }
+
+    &:hover {
+        border: 1px solid var(--green);
+    }
+}
+
+.CurrentPlan {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+
+    & .Plan {
+        height: auto;
+        font-size: .7rem;
+        font-weight: 600;
+        color: var(--success);
+        background: rgba(200, 250, 214, 1);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: .3rem;
+        border-radius: 5px;
+        padding: .1rem .2rem;
+    }
+}
+
+.BillingBottom {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #ece9e9;
+}
+
+.BillingRow {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+
+
+    & p {
+        font-size: .8rem;
+        font-weight: 600;
+        color: var(--gray);
+    }
+
+    & span {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+.BillingBtns {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+
+    & .Danger-Btn {
+        background: rgba(255, 233, 213, 1);
+        color: rgba(122, 9, 22, 1);
+        border: none;
+        padding: .3rem .5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        align-self: center;
+
+        &:hover {
+            background: rgba(255, 233, 213, .8);
+        }
+    }
+
+    & .SuccessBtn {
+        background: rgba(200, 250, 214, 1);
+        color: rgba(0, 100, 0, 1);
+        border: none;
+        padding: .3rem .5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        align-self: center;
+
+        &:hover {
+            background: rgba(200, 250, 214, .8);
+        }
     }
 }

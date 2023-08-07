@@ -81,38 +81,33 @@ function App() {
 	const getTimeLabel = (time) => {
 		const timeDiffInMilliseconds = Date.now() - new Date(time).getTime();
 		const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-		const timeLabels = [
-			[3 * oneDayInMilliseconds, "Yesterday"],
-			[
-				2 * oneDayInMilliseconds,
-				`${Math.floor(timeDiffInMilliseconds / oneDayInMilliseconds)} days ago`,
-			],
-			[
-				oneDayInMilliseconds,
-				`${Math.floor(timeDiffInMilliseconds / (60 * 60 * 1000))} hours ago`,
-			],
-			[
-				60 * 60 * 1000,
-				`${Math.floor(timeDiffInMilliseconds / (60 * 1000))} minutes ago`,
-			],
-			[60 * 1000, `${Math.floor(timeDiffInMilliseconds / 1000)} seconds ago`],
-		];
+		const oneHourInMilliseconds = 60 * 60 * 1000;
+		const oneMinuteInMilliseconds = 60 * 1000;
 
-		for (const [threshold, label] of timeLabels) {
-			if (timeDiffInMilliseconds >= threshold) {
-				return label;
-			}
+		if (timeDiffInMilliseconds < oneMinuteInMilliseconds) {
+			return `${Math.floor(timeDiffInMilliseconds / 1000)} seconds ago`;
+		} else if (timeDiffInMilliseconds < oneHourInMilliseconds) {
+			return `${Math.floor(
+				timeDiffInMilliseconds / oneMinuteInMilliseconds
+			)} minutes ago`;
+		} else if (timeDiffInMilliseconds < oneDayInMilliseconds) {
+			return `${Math.floor(
+				timeDiffInMilliseconds / oneHourInMilliseconds
+			)} hours ago`;
+		} else if (timeDiffInMilliseconds < 2 * oneDayInMilliseconds) {
+			return "Yesterday";
+		} else if (timeDiffInMilliseconds < 3 * oneDayInMilliseconds) {
+			return `${Math.floor(
+				timeDiffInMilliseconds / oneDayInMilliseconds
+			)} days ago`;
+		} else {
+			// Display the actual date without minutes, hours, or seconds
+			return new Date(time).toLocaleString("en-US", {
+				year: "numeric",
+				month: "short",
+				day: "numeric",
+			});
 		}
-
-		return new Date(time).toLocaleString("en-US", {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-			hour: "numeric",
-			minute: "numeric",
-			second: "numeric",
-			hour12: false,
-		});
 	};
 
 	useEffect(() => {
