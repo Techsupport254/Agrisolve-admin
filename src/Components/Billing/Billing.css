@@ -1,0 +1,32 @@
+.Billing {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    height: 80vh;
+    width: 100%;
+    gap: 1rem;
+}
+
+.BillingLeft,
+.BillingRight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100%;
+    background: var(--background-paper, #FFF);
+    box-shadow: var(--boxShadow);
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+.BillingLeft {
+    width: 70%;
+}
+
+.BillingRight {
+    width: 30%;
+    padding: 1rem;
+    justify-content: flex-start;
+}

@@ -1,0 +1,181 @@
+.General {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 75vh;
+    width: 100%;
+    gap: 1rem;
+}
+
+.GeneralLeft,
+.GeneralRight {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: var(--background-paper, #FFF);
+    box-shadow: var(--boxShadow);
+    border-radius: 5px;
+
+}
+
+.GeneralLeft {
+    width: 30%;
+}
+
+.GeneralRight {
+    width: 70%;
+    padding: 1rem;
+    justify-content: flex-start;
+}
+
+.ProfilePhoto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 12rem;
+    width: 12rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+
+
+    & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        padding: .5rem;
+        border: 1px solid #f5f3f3;
+        transition: all 0.3s ease-in-out;
+    }
+
+    &:hover {
+        .UpdatePhoto {
+            display: flex;
+        }
+    }
+}
+
+.UpdatePhoto {
+    height: 12rem;
+    width: 12rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    cursor: pointer;
+    color: var(--white);
+    transition: color 0.3s ease-in-out;
+    position: absolute;
+    display: none;
+    background: var(--bg-color-clear);
+    border-radius: 50%;
+
+    & i {
+        font-size: 1.3rem;
+    }
+
+    & h1 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+.ProfileInfoItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    & h2 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    & span {
+        font-size: .8rem;
+        font-weight: 400;
+        color: var(--p-color);
+    }
+
+    & p {
+        text-transform: capitalize;
+        font-size: .8rem;
+        font-weight: 400;
+        color: var(--gray-dark);
+    }
+
+    & .Verified {
+        margin-top: 1rem;
+    }
+}
+
+.DangerBtn {
+    background: rgba(255, 233, 213, 1);
+    color: rgba(122, 9, 22, 1);
+    border: none;
+    padding: .3rem .5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    margin-top: 2rem;
+    align-self: center;
+
+    &:hover {
+        background: rgba(255, 172, 130, 1);
+    }
+}
+
+.GeneralRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.GeneralRowItem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    gap: .5rem;
+    text-transform: capitalize;
+}
+
+.EditBtn {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    & button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        background: var(--bg-color);
+        color: var(--white);
+        border: none;
+        padding: .3rem .5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            background: var(--bg-color-clear);
+        }
+    }
+
+
+}

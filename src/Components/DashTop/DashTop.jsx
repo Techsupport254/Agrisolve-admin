@@ -84,6 +84,9 @@ const DashTop = ({ user }) => {
 									<i className="fa fa-bell"></i>
 								</Badge>
 							</div>
+							<div className="DashSettings">
+								<i className="fas fa-cog"></i>
+							</div>
 							<div className="Logout">
 								<i className="fa fa-sign-out-alt"></i>
 							</div>

@@ -5,10 +5,13 @@ import Mainbar from "./Components/Mainbar/Mainbar";
 import axios from "axios";
 import { useHistory } from "react-router-use-history";
 
-function useAuth() {
+function App() {
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [user, setUser] = useState(null);
 	const [token, setToken] = useState(null);
+	const [users, setUsers] = useState([]);
+	const [products, setProducts] = useState(null);
+	const [requests, setRequests] = useState(null);
 	const history = useHistory();
 
 	useEffect(() => {
@@ -32,8 +35,8 @@ function useAuth() {
 						setUser(response.data);
 						setToken(storedUser.token);
 						setLoggedIn(true);
-					} else {
-						console.log("User not logged in");
+					} else if (response.data.loginStatus === "loggedOut") {
+						console.log("User logged out");
 						history.push(path);
 					}
 				} catch (error) {
@@ -46,42 +49,33 @@ function useAuth() {
 		checkLoginStatus();
 	}, [history]);
 
-	return { loggedIn, user, token };
-}
-
-function App() {
-	const { loggedIn, user, token } = useAuth();
-	const [users, setUsers] = useState([]);
-	const [products, setProducts] = useState(null);
-	const [requests, setRequests] = useState(null);
-
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				// Fetch all users
-				const usersResponse = await axios.get(
-					"https://agrisolve-techsupport254.vercel.app/auth/users",
-					{
-						headers: {
-							"x-auth-token": token,
-						},
-					}
-				);
-				setUsers(usersResponse.data);
+				if (token) {
+					// Fetch all users
+					const usersResponse = await axios.get(
+						"https://agrisolve-techsupport254.vercel.app/auth/users",
+						{
+							headers: {
+								"x-auth-token": token,
+							},
+						}
+					);
+					setUsers(usersResponse.data);
 
-				// Fetch products
-				const productsResponse = await axios.get(
-					"https://api.escuelajs.co/api/v1/products"
-				);
-				setProducts(productsResponse.data);
+					// Fetch products
+					const productsResponse = await axios.get(
+						"https://api.escuelajs.co/api/v1/products"
+					);
+					setProducts(productsResponse.data);
+				}
 			} catch (err) {
 				console.log(err);
 			}
 		};
 
-		if (token) {
-			fetchData();
-		}
+		fetchData();
 	}, [token]);
 
 	const getTimeLabel = (time) => {
@@ -121,30 +115,30 @@ function App() {
 		});
 	};
 
-	const fetchRequest = async (url, method, data) => {
-		try {
-			const response = await axios({
-				url,
-				method,
-				data,
-				headers: {
-					"x-auth-token": token,
-				},
-			});
-			setRequests(response.data);
-		} catch (err) {
-			console.log(err);
-		}
-	};
-
 	useEffect(() => {
+		const fetchRequest = async (url, method, data) => {
+			try {
+				const response = await axios({
+					url,
+					method,
+					data,
+					headers: {
+						"x-auth-token": token,
+					},
+				});
+				setRequests(response.data);
+			} catch (err) {
+				console.log(err);
+			}
+		};
+
 		if (user) {
 			fetchRequest(
 				"https://agrisolve-techsupport254.vercel.app/consults/consults",
 				"GET"
 			);
 		}
-	}, [user]);
+	}, [user, token]);
 
 	return (
 		<div className="App flex flex-col md:flex-row w-full h-screen">

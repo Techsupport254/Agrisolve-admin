@@ -1,0 +1,45 @@
+.BillingPlan {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.BillingPlanCard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 40%;
+    background: var(--background-paper, #FFF);
+    box-shadow: var(--boxShadow);
+    border-radius: 5px;
+    padding: 1rem;
+    width: 30%;
+
+    & .Icon {
+        font-size: 3rem;
+        color: var(--green);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 1rem;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    & .BillingPrice {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--bg-color);
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+    }
+}

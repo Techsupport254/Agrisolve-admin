@@ -21,10 +21,12 @@
   --bg-clear: rgba(255, 255, 255, 0.1);
   --txt-teal: #64ffda;
   --p-color: #94A3B8;
-  --bg-color: rgb(18, 27, 48);
+  --bg-color: rgba(33, 43, 54, 1);
+  --bg-color-clear: rgba(18, 27, 48, 0.8);
   --light-green: rgba(200, 250, 214, 1);
   --Background-Paper: rgba(255, 255, 255, 1);
   --text-primary: rgba(33, 43, 54, 1);
+  --boxShadow: 0px 12px 24px -4px rgba(145, 158, 171, 0.12), 0px 0px 2px 0px rgba(145, 158, 171, 0.20);
 }
 
 * {

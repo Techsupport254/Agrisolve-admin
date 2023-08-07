@@ -1,3 +1,8 @@
+import Billing from "./Components/Billing/Billing";
+import General from "./Components/General/General";
+import ProfileNoti from "./Components/ProfileNoti/ProfileNoti";
+import Security from "./Components/Security/Security";
+
 // sidebardata
 export const sidebardata = [
 	{
@@ -34,9 +39,9 @@ export const sidebardata = [
 
 	{
 		id: 6,
-		title: "Settings",
-		path: "/settings",
-		icon: <i className="fas fa-cog"></i>,
+		title: "User",
+		path: "/user",
+		icon: <i className="fas fa-user"></i>,
 	},
 ];
 
@@ -319,5 +324,33 @@ export const historyData = [
 		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
 		image: "https://picsum.photos/200/300",
 		timestamp: "2021-05-01T12:00:00.000Z",
+	},
+];
+
+// user data
+export const profileData = [
+	{
+		id: 1,
+		name: "General",
+		icon: <i className="fas fa-cog"></i>,
+		component: <General />,
+	},
+	{
+		id: 2,
+		name: "Billing",
+		icon: <i className="fa fa-credit-card"></i>,
+		component: <Billing />,
+	},
+	{
+		id: 3,
+		name: "Security",
+		icon: <i className="fas fa-lock"></i>,
+		component: <Security />,
+	},
+	{
+		id: 4,
+		name: "Notifications",
+		icon: <i className="fas fa-bell"></i>,
+		component: <ProfileNoti />,
 	},
 ];

@@ -1,12 +1,12 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import Profile from "./Pages/Profile/Profile";
 
 const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
 const Users = lazy(() => import("./Pages/Users/Users"));
 const Products = lazy(() => import("./Pages/Products/Products"));
 const Reports = lazy(() => import("./Pages/Reports/Reports"));
 const Requests = lazy(() => import("./Pages/Requests/Requests"));
-const Settings = lazy(() => import("./Pages/Settings/Settings"));
 const Login = lazy(() => import("./Components/Login/Login"));
 
 const LoadingFallback = () => (
@@ -66,10 +66,13 @@ const SidebarPages = ({ user, users, products, getTimeLabel, requests }) => {
 					/>
 					<Route
 						path="/reports"
-						element={loading ? <LoadingFallback /> : <Reports
-							user={user}
-							getTimeLabel={getTimeLabel}
-						 />}
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<Reports user={user} getTimeLabel={getTimeLabel} />
+							)
+						}
 					/>
 					<Route
 						path="/requests"
@@ -86,8 +89,14 @@ const SidebarPages = ({ user, users, products, getTimeLabel, requests }) => {
 						}
 					/>
 					<Route
-						path="/settings"
-						element={loading ? <LoadingFallback /> : <Settings />}
+						path="/user"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<Profile user={user} getTimeLabel={getTimeLabel} />
+							)
+						}
 					/>
 					<Route
 						path="/login"
