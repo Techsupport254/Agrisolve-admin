@@ -80,7 +80,7 @@
     }
 
     & button {
-        background-color: var(--green);
+        background-color: var(--success-dark);
         color: var(--white);
         border: none;
         border-radius: 5px;

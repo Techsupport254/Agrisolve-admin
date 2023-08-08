@@ -3,6 +3,7 @@ import "./ProductsCard.css";
 import congrats from "../../assets/congrats.svg";
 import CircularBar from "../CircularBar/CircularBar";
 import { Badge } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const ProductsCard = ({ category, user }) => {
 	return (
@@ -24,7 +25,9 @@ const ProductsCard = ({ category, user }) => {
 								selling to your customers. You'll be notified when you receive
 								an order.
 							</p>
-							<button>Add Products</button>
+							<Link to="new">
+								<button>Add Products</button>
+							</Link>
 						</div>
 					</div>
 				</div>

@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Table.css";
 import { DataGrid } from "@mui/x-data-grid";
+import LinearProgress, {
+	linearProgressClasses,
+} from "@mui/material/LinearProgress";
+import { styled } from "@mui/material/styles";
 
 const Table = ({ products }) => {
+	const [selectedItem, setSelectedItem] = useState(null);
+
 	if (products === null) {
 		return (
 			<div className="SpinnerLoading">
@@ -11,29 +17,115 @@ const Table = ({ products }) => {
 		);
 	}
 
+	const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
+		height: 5,
+		width: 100,
+		borderRadius: 4,
+		[`&.${linearProgressClasses.colorPrimary}`]: {
+			backgroundColor:
+				value > 75
+					? "var(--success-lighter)"
+					: value > 50
+					? "var(--primary-lighter)"
+					: value > 25
+					? "var(--warning-lighter)"
+					: "var(--error-lighter)",
+		},
+		[`& .${linearProgressClasses.bar}`]: {
+			borderRadius: 4,
+			backgroundColor:
+				value > 75
+					? "var(--success-light)"
+					: value > 50
+					? "var(--primary-light)"
+					: value > 25
+					? "var(--warning-light)"
+					: "var(--error-light)",
+		},
+	}));
+
 	const columns = [
-		{ field: "id", headerName: "ID", width: 100, sortable: true },
-		{ field: "title", headerName: "Title", width: 200, sortable: true },
-		{ field: "category", headerName: "Category", width: 150, sortable: true },
-		{ field: "description", headerName: "Description", width: 200 },
-		{ field: "price", headerName: "Price ($)", width: 130, sortable: true },
-		{ field: "quantity", headerName: "Stock", width: 130, sortable: true },
 		{
-			field: "date",
-			headerName: "Created/Updated",
+			field: "product",
+			headerName: "Product",
+			width: 250,
 			sortable: true,
-			width: 180,
+			renderCell: (params) => {
+				return (
+					<div className="Product">
+						<div className="ProductImage">
+							<img src={params.row.image} alt={params.row.title} />
+						</div>
+						<div className="ProductDetails">
+							<span>{params.row.title}</span>
+							<p>{params.row.category}</p>
+						</div>
+					</div>
+				);
+			},
 		},
 		{
-			field: "action",
-			headerName: "Action",
+			field: "price",
+			headerName: "Price",
 			width: 130,
 			sortable: false,
 			renderCell: (params) => {
 				return (
-					<div className="action">
-						<i className="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-						<i className="fas fa-trash-alt"></i>
+					<div className="Price">
+						<span>KSh. {params.row.price}</span>
+					</div>
+				);
+			},
+		},
+		{
+			field: "quantity",
+			headerName: "Stock",
+			width: 130,
+			sortable: false,
+			renderCell: (params) => {
+				const value = 80;
+				return (
+					<div className="Stock">
+						<BorderLinearProgress
+							variant="determinate"
+							value={(value / 100) * 100}
+						/>
+						<span>{value} in stock</span>
+					</div>
+				);
+			},
+		},
+		{
+			field: "date",
+			headerName: "Created/Updated",
+			width: 180,
+			sortable: false,
+		},
+		{
+			field: "status",
+			headerName: "Status",
+			width: 130,
+			sortable: true,
+			renderCell: (params) => {
+				return (
+					<div
+						className="PublishStatus"
+						style={{
+							backgroundColor:
+								params.row.status === "published"
+									? "var(--success-lighter)"
+									: "var(--warning-lighter)",
+							color:
+								params.row.status === "published"
+									? "var(--success-dark)"
+									: "var(--warning-dark)",
+						}}
+					>
+						{params.row.status === "published" ? (
+							<span className="Available">Published</span>
+						) : (
+							<span className="Unavailable">Draft</span>
+						)}
 					</div>
 				);
 			},
@@ -44,8 +136,9 @@ const Table = ({ products }) => {
 		id: product.id,
 		title: product.title,
 		category: product.category.name,
-		description: product.description,
 		quantity: product.quantity,
+		image: product.images[0],
+
 		date: product.updatedAt
 			? new Date(product.updatedAt).toLocaleDateString("en-US", {
 					year: "numeric",
@@ -62,14 +155,31 @@ const Table = ({ products }) => {
 	}));
 
 	return (
-		<div style={{ height: 600, width: "100%" }}>
-			<DataGrid
-				rows={rows}
-				columns={columns}
-				checkboxSelection
-				disableSelectionOnClick
-				sortingOrder={["asc", "desc", null]}
-			/>
+		<div style={{ width: "100%" }}>
+			{selectedItem ? (
+				<div className="SelectedActions">
+					<button
+						onClick={() => console.log("Edit selected item", selectedItem.id)}
+					>
+						Edit
+					</button>
+					<button
+						onClick={() => console.log("Delete selected item", selectedItem.id)}
+					>
+						Delete
+					</button>
+				</div>
+			) : (
+				<DataGrid
+					rows={rows}
+					columns={columns}
+					rowHeight={80}
+					checkboxSelection
+					onRowSelected={(e) => setSelectedItem(e.isSelected ? e.data : null)}
+					disableSelectionOnClick
+					sortingOrder={["asc", "desc", null]}
+				/>
+			)}
 		</div>
 	);
 };

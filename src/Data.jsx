@@ -302,7 +302,7 @@ export const historyData = [
 		title: "Lorem ipsum dolor sit amet.",
 		description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. ",
 		image: "https://picsum.photos/200/300",
-		timestamp: "2021-05-01T12:00:00.000Z",
+		timestamp: "2022-05-01T12:00:00.000Z",
 	},
 	{
 		id: 4,
@@ -352,5 +352,51 @@ export const profileData = [
 		name: "Notifications",
 		icon: <i className="fas fa-bell"></i>,
 		component: <ProfileNoti />,
+	},
+];
+
+// invoice data
+export const invoiceData = [
+	{
+		id: 1,
+		title: "INV-0001",
+		date: "2021-05-01T12:00:00.000Z",
+		amount: 1000,
+		status: "paid",
+	},
+	{
+		id: 2,
+		title: "INV-0002",
+		date: "2021-05-01T12:00:00.000Z",
+		amount: 1000,
+		status: "pending",
+	},
+	{
+		id: 3,
+		title: "INV-0003",
+		date: "2021-05-01T12:00:00.000Z",
+		amount: 1000,
+		status: "paid",
+	},
+	{
+		id: 4,
+		title: "INV-0004",
+		date: "2021-05-01T12:00:00.000Z",
+		amount: 1000,
+		status: "pending",
+	},
+	{
+		id: 5,
+		title: "INV-0005",
+		date: "2021-05-01T12:00:00.000Z",
+		amount: 1000,
+		status: "paid",
+	},
+	{
+		id: 6,
+		title: "INV-0006",
+		date: "2021-05-01T12:00:00.000Z",
+		amount: 1000,
+		status: "pending",
 	},
 ];

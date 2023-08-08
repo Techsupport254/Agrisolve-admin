@@ -1,0 +1,82 @@
+.ProfileNoti {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    box-shadow: var(--boxShadow);
+    height: 100%;
+    gap: 1rem;
+}
+
+.NotificationRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    box-shadow: var(--boxShadow);
+    height: 100%;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.NotificationLeft,
+.NotificationRight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100%;
+    padding: 1rem;
+}
+
+.NotificationLeft {
+    width: 35%;
+    gap: 1rem;
+
+    & p {
+        font-size: 1rem;
+        line-height: 1.5;
+        font-weight: 500;
+        color: var(--bg-color);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+    }
+}
+
+.NotificationRight {
+    width: 65%;
+    box-shadow: var(--boxShadow);
+    border-radius: 5px;
+
+    & .NotiRow {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 1rem;
+
+        & p {
+            font-size: 1rem;
+            line-height: 1.5;
+            font-weight: 500;
+            color: var(--bg-color);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+        }
+    }
+}
+
+.NotiSwitch {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}

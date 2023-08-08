@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import "./General.css";
 import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
+import axios from "axios";
 
 const General = ({ user }) => {
+	const [uploading, setUploading] = useState(false);
+
 	const [verificationStatus, setVerificationStatus] = useState(
 		user?.verificationStatus === "verified"
 	);
@@ -18,16 +21,77 @@ const General = ({ user }) => {
 		// You can make API calls here to update the verification status
 	};
 
+	const handleBrowseClick = () => {
+		// Trigger the hidden input element's click event
+		const fileInput = document.getElementById("file-input");
+		if (fileInput) {
+			fileInput.click();
+		}
+	};
+
+	const handleFileInputChange = async (event) => {
+		const file = event.target.files[0];
+		const CLOUD_NAME = __CLOUD_NAME__;
+		const PRESET_NAME = __UPLOAD_PRESET__;
+		setUploading(true);
+
+		try {
+			const formData = new FormData();
+			formData.append("file", file);
+			formData.append("upload_preset", PRESET_NAME);
+
+			const uploadResponse = await axios.post(
+				`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+				formData
+			);
+
+			console.log("Upload Response:", uploadResponse.data);
+
+			const updateResponse = await axios.patch(
+				`https://agrisolve-techsupport254.vercel.app/auth/user/${user.email}`,
+				{
+					profilePicture: uploadResponse.data.secure_url,
+				},
+				{
+					headers: {
+						"x-auth-token": user.token,
+					},
+				}
+			);
+
+			console.log("Update Response:", updateResponse.data);
+
+			setUploading(false);
+		} catch (err) {
+			console.error("Error:", err);
+			setUploading(false);
+		}
+	};
+
 	return (
 		<div className="General">
 			<div className="GeneralLeft">
-				<div className="ProfilePhoto">
-					<img src={user?.profilePicture} alt="ProfilePhoto" />
-					<div className="UpdatePhoto">
-						<i className="fa fa-camera"></i>
-						<h1>Update photo</h1>
+				{uploading ? (
+					<div className="Uploading">
+						<div className="ProfilePhoto">
+							<img src={user?.profilePicture} alt="ProfilePhoto" />
+						</div>
 					</div>
-				</div>
+				) : (
+					<div className="ProfilePhoto">
+						<img src={user?.profilePicture} alt="ProfilePhoto" />
+						<div className="UpdatePhoto" onClick={handleBrowseClick}>
+							<i className="fa fa-camera"></i>
+							<h1>Update photo</h1>
+						</div>
+						<input
+							type="file"
+							id="file-input"
+							hidden
+							onChange={handleFileInputChange}
+						/>
+					</div>
+				)}
 				<div className="ProfileInfo">
 					<div className="ProfileInfoItem">
 						<h2>{user?.name}</h2>

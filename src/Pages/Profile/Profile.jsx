@@ -2,7 +2,7 @@ import React from "react";
 import "./Profile.css";
 import { profileData } from "../../Data";
 
-const Profile = ({ user }) => {
+const Profile = ({ user, getTimeLabel }) => {
 	const initialActiveIndex = 0;
 	const [active, setActive] = React.useState(initialActiveIndex);
 
@@ -29,7 +29,10 @@ const Profile = ({ user }) => {
 				))}
 			</div>
 			<div className="ProfileContent">
-				{React.cloneElement(profileData[active].component, { user })}
+				{React.cloneElement(profileData[active].component, {
+					user,
+					getTimeLabel,
+				})}
 			</div>
 		</div>
 	);

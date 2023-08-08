@@ -27,6 +27,65 @@
 
 .BillingRight {
     width: 30%;
-    padding: 1rem;
     justify-content: flex-start;
+    overflow: auto;
+}
+
+.InvoiceHistory {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .2rem;
+}
+
+.InvoiceRow {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: .5rem;
+}
+
+.InvoiceRowItem {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    & h1 {
+        font-size: 1rem;
+        line-height: 1.5;
+        font-weight: 600;
+        color: var(--bg-color);
+    }
+
+    & p {
+        font-size: .7rem;
+        font-weight: 500;
+        color: var(--bg-color);
+    }
+}
+
+.InvoiceAmount {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.InvoiceDownload {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    & button {
+        border-bottom: 2px solid var(--bg-color);
+    }
 }

@@ -12,19 +12,24 @@ const RequestsTable = ({ requests }) => {
 			sortable: true,
 			renderCell: (params) => {
 				return (
-					<React.Fragment>
+					<div>
 						{params.row.status === "pending" && (
 							<Badge
 								badgeContent="Accept"
 								color="primary"
 								anchorOrigin={{
 									vertical: "top",
-									horizontal: "center",
+									horizontal: "left",
 								}}
-							></Badge>
+								sx={{
+									marginLeft: "16px",
+									marginRight: "30px",
+									cursor: "pointer",
+								}}
+							/>
 						)}
 						{params.row.id}
-					</React.Fragment>
+					</div>
 				);
 			},
 		},

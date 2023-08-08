@@ -12,10 +12,12 @@
 	"dependencies": {
 		"@emotion/react": "^11.11.1",
 		"@emotion/styled": "^11.11.0",
-		"@mui/material": "^5.14.3",
+		"@mui/material": "^5.14.4",
+		"@mui/styled-engine-sc": "^5.12.0",
 		"@mui/x-data-grid": "^6.10.2",
 		"antd": "^5.6.1",
 		"axios": "^1.4.0",
+		"dotenv": "^16.3.1",
 		"ejs": "^3.1.9",
 		"framer-motion": "^10.15.0",
 		"react": "^18.2.0",
@@ -25,6 +27,7 @@
 		"react-router-dom": "^6.11.1",
 		"react-router-use-history": "^1.1.0",
 		"recharts": "^2.7.2",
+		"styled-components": "^5.3.11",
 		"uplot": "^1.6.24"
 	},
 	"devDependencies": {
