@@ -6,7 +6,7 @@ import LinearProgress, {
 } from "@mui/material/LinearProgress";
 import { styled } from "@mui/material/styles";
 
-const Table = ({ products }) => {
+const Table = ({ products, getTimeLabel }) => {
 	const [selectedItem, setSelectedItem] = useState(null);
 
 	if (products === null) {
@@ -78,12 +78,12 @@ const Table = ({ products }) => {
 			},
 		},
 		{
-			field: "quantity",
+			field: "stock",
 			headerName: "Stock",
 			width: 130,
 			sortable: false,
 			renderCell: (params) => {
-				const value = 80;
+				const value = params.row.stock;
 				return (
 					<div className="Stock">
 						<BorderLinearProgress
@@ -100,6 +100,13 @@ const Table = ({ products }) => {
 			headerName: "Created/Updated",
 			width: 180,
 			sortable: false,
+			renderCell: (params) => {
+				return (
+					<div className="Date">
+						<span>{getTimeLabel(params.row.date)}</span>
+					</div>
+				);
+			},
 		},
 		{
 			field: "status",
@@ -112,16 +119,16 @@ const Table = ({ products }) => {
 						className="PublishStatus"
 						style={{
 							backgroundColor:
-								params.row.status === "published"
+								params.row.status === "Published"
 									? "var(--success-lighter)"
 									: "var(--warning-lighter)",
 							color:
-								params.row.status === "published"
+								params.row.status === "Published"
 									? "var(--success-dark)"
 									: "var(--warning-dark)",
 						}}
 					>
-						{params.row.status === "published" ? (
+						{params.row.status === "Published" ? (
 							<span className="Available">Published</span>
 						) : (
 							<span className="Unavailable">Draft</span>
@@ -133,23 +140,13 @@ const Table = ({ products }) => {
 	];
 
 	const rows = products.map((product) => ({
-		id: product.id,
-		title: product.title,
-		category: product.category.name,
-		quantity: product.quantity,
+		id: product._id,
+		title: product.productName,
+		category: product.productCategory,
+		stock: product.stock,
 		image: product.images[0],
-
-		date: product.updatedAt
-			? new Date(product.updatedAt).toLocaleDateString("en-US", {
-					year: "numeric",
-					month: "long",
-					day: "numeric",
-			  })
-			: new Date(product.creationAt).toLocaleDateString("en-US", {
-					year: "numeric",
-					month: "long",
-					day: "numeric",
-			  }),
+		status: product.productStatus,
+		date: product.updatedAt ? product.updatedAt : product.createdAt,
 
 		price: product.price,
 	}));

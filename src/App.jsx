@@ -66,7 +66,7 @@ function App() {
 
 					// Fetch products
 					const productsResponse = await axios.get(
-						"https://api.escuelajs.co/api/v1/products"
+						"https://agrisolve-techsupport254.vercel.app/products"
 					);
 					setProducts(productsResponse.data);
 				}

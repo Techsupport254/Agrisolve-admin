@@ -29,7 +29,7 @@ const DashTable = ({ products, getTimeLabel }) => {
 	];
 
 	const rows = products.map((product) => ({
-		id: product.id,
+		id: product._id,
 		orderedBy: "product.orderedBy.name",
 		quantity: product.quantity,
 		ordered: getTimeLabel(product.creationAt),

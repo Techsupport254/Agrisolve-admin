@@ -9,9 +9,9 @@ const UsersTable = ({ users, getTimeLabel }) => {
 	const [order, setOrder] = useState("desc");
 	const [userTypeFilter, setUserTypeFilter] = useState("all");
 	const [sortedUsers, setSortedUsers] = useState([]);
+
 	useEffect(() => {
-		// Sort users by the date they joined, most recent first
-		const sortedData = users.sort((a, b) => {
+		const sortedData = [...users].sort((a, b) => {
 			return new Date(b.created_at) - new Date(a.created_at);
 		});
 		setSortedUsers(sortedData);
@@ -43,6 +43,7 @@ const UsersTable = ({ users, getTimeLabel }) => {
 		}
 
 		setSelectedUsers(newSelected);
+		console.log(selectedUsers);
 	};
 
 	const handleSortRequest = (property) => {
@@ -61,12 +62,11 @@ const UsersTable = ({ users, getTimeLabel }) => {
 	});
 
 	const sortedAndFilteredUsers = filteredUsers.sort((a, b) => {
-		if (orderBy === "name") {
+		if (orderBy === "username") {
 			return (a.name > b.name ? 1 : -1) * (order === "asc" ? 1 : -1);
 		}
-		return (a.userType > b.userType ? 1 : -1) * (order === "asc" ? 1 : -1);
+		return (a[orderBy] > b[orderBy] ? 1 : -1) * (order === "asc" ? 1 : -1);
 	});
-
 	// Columns for DataGrid
 	const columns = [
 		{

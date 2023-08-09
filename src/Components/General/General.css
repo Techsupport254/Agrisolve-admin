@@ -164,8 +164,8 @@
         align-items: center;
         justify-content: center;
         gap: .5rem;
-        background: var(--bg-color);
-        color: var(--white);
+        background: var(--success-lighter);
+        color: var(--info-darker);
         border: none;
         padding: .3rem .5rem;
         border-radius: 5px;
@@ -173,7 +173,7 @@
         transition: all 0.3s ease-in-out;
 
         &:hover {
-            background: var(--bg-color-clear);
+            background: var(--info-lighter);
         }
     }
 

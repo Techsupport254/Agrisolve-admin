@@ -150,6 +150,42 @@
             color: var(--success-dark);
         }
     }
+
+    & button:disabled {
+        background: var(--gray);
+        color: var(--white);
+
+        &:hover {
+            background: var(--gray);
+            color: var(--white);
+        }
+    }
+
+    & button {
+        background: var(--gray);
+        color: var(--success-darker);
+        cursor: none;
+
+        &:hover {
+            background: var(--gray);
+            color: var(--success-dark);
+        }
+
+        & i {
+            color: var(--success-dark);
+        }
+    }
+
+    & p {
+        font-size: .8rem;
+        color: var(--success-dark);
+        font-weight: 600;
+    }
+
+    & i {
+        font-size: 1rem;
+        color: var(--success-dark);
+    }
 }
 
 .Sitch {
@@ -162,5 +198,90 @@
         font-size: .8rem;
         color: var(--gray);
         font-weight: 600;
+    }
+}
+
+.SelectedImages {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .5rem;
+    background: var(--success-lighter);
+    border-radius: 5px;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.SelectedImage {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+    padding: .2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid var(--success-dark);
+
+
+    & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    & p {
+        font-size: .8rem;
+        color: var(--black);
+        font-weight: 600;
+    }
+}
+
+.UploadBtn {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-radius: 5px;
+    cursor: pointer;
+
+    & p {
+        font-size: .8rem;
+        color: var(--success-dark);
+        font-weight: 600;
+    }
+
+    & i {
+        font-size: 1rem;
+        color: var(--success-dark);
+    }
+}
+
+.FileName {
+    width: 100%;
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 .2rem;
+    background: var(--success-lighter);
+
+    & p {
+        font-size: .7rem;
+        color: var(--success-dark);
+        font-weight: 600;
+    }
+
+    & i {
+        font-size: .6rem;
+        color: var(--error-dark);
+        cursor: pointer;
+
     }
 }
