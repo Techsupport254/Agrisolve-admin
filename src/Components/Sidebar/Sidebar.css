@@ -153,7 +153,7 @@
     padding: .5rem;
     border-top: 1px solid var(--gray);
 
-    & .Header{
+    & .Header {
         color: var(--p-color);
     }
 }
@@ -220,6 +220,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-top: 1px solid var(--p-color);
 
     & .Upgrade {
         width: 100%;
@@ -299,6 +300,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 3rem 0;
 
     & span {
         color: var(--p-color);

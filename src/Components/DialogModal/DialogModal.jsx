@@ -18,7 +18,12 @@ const DialogModal = ({
 	const [errorMessage, setErrorMessage] = useState("");
 	const [token, setToken] = useState(null);
 	const history = useHistory();
+	const [quotedAmount, setQuotedAmount] = useState(null);
 
+	// get quoted amount
+	useEffect(() => {
+		setQuotedAmount(selectedRequest?.amountQuoted);
+	}, [selectedRequest?.amountQuoted]);
 
 	const handleQuote = async () => {
 		setLoading(true);
@@ -27,7 +32,7 @@ const DialogModal = ({
 				`https://agrisolve-techsupport254.vercel.app/consults/consults/${selectedRequest._id}`,
 				{
 					status: "quoted",
-					amountQuoted: selectedRequest?.quotedAmount,
+					amountQuoted: quotedAmount,
 				},
 				{
 					headers: {
@@ -107,13 +112,10 @@ const DialogModal = ({
 							</InputAdornment>
 						),
 					}}
-					value={selectedRequest?.quotedAmount || ""} // Ensure default value is provided
-					onChange={(e) =>
-						setSelectedRequest({
-							...selectedRequest,
-							quotedAmount: e.target.value,
-						})
-					}
+					value={quotedAmount || ""}
+					onChange={(e) => {
+						setQuotedAmount(e.target.value);
+					}}
 				/>
 			</div>
 			{error && (

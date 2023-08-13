@@ -67,6 +67,26 @@ const Accepted = ({
 		setIsModalOpen(!isModalOpen);
 	};
 
+	// filter chats to display the one with latest last message first
+	const filteredChats = chats?.sort((a, b) => {
+		const aLastMessage =
+			a.conversations[0]?.messages[a.conversations[0]?.messages.length - 1];
+		const bLastMessage =
+			b.conversations[0]?.messages[b.conversations[0]?.messages.length - 1];
+
+		if (aLastMessage && bLastMessage) {
+			return (
+				new Date(bLastMessage.timestamp) - new Date(aLastMessage.timestamp)
+			);
+		} else if (aLastMessage && !bLastMessage) {
+			return -1;
+		} else if (!aLastMessage && bLastMessage) {
+			return 1;
+		} else {
+			return 0;
+		}
+	});
+
 	return (
 		<div className="Accepted">
 			<div className="Header">
@@ -165,7 +185,7 @@ const Accepted = ({
 													<span>
 														{lastMessage?.sender === user._id
 															? "You"
-															: lastMessage?.senderName === sender.username
+															: lastMessage?.senderName === sender?.username
 															? lastMessage?.senderName
 															: "Admin"}
 														:{" "}

@@ -39,7 +39,7 @@ const ProductsCard = ({ category, user }) => {
 						</div>
 						<div className="ProductsStatsRight">
 							<div className="StatsRow">
-								<Badge color="primary" variant="dot" />
+								<Badge color="success" variant="dot" />
 								<p>Products</p>
 								<span>100</span>
 							</div>

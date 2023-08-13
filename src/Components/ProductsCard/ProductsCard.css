@@ -15,7 +15,7 @@
 
 .ProductsCard:nth-child(2) {
     height: auto;
-    background: linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%);
+    background: var(--success-lighter);
 }
 
 .Applaud {
@@ -46,7 +46,7 @@
     & span {
         font-size: 1rem;
         font-weight: 600;
-        color: var(--primary);
+        color: var(--success-darker);
     }
 }
 
@@ -130,7 +130,7 @@
     & span {
         font-size: 1rem;
         font-weight: 600;
-        color: var(--primary);
+        color: var(--success-darker);
     }
 }
 
@@ -154,7 +154,7 @@
 
     & span {
         font-weight: 600;
-        color: var(--primary);
+        color: var(--success-darker);
     }
 
     & p {
@@ -166,7 +166,7 @@
 
 .StatsRow:last-child span {
     font-weight: 600;
-    color: green;
+    color: var(--success-darker);
 }
 
 .StatsBottom {
@@ -192,7 +192,7 @@
 
             & span {
                 font-weight: 600;
-                color: var(--primary);
+                color: var(--success-darker);
                 cursor: pointer;
             }
         }
