@@ -13,6 +13,7 @@ function App() {
 	const [products, setProducts] = useState(null);
 	const [requests, setRequests] = useState(null);
 	const history = useHistory();
+	const [chats, setChats] = useState([]);
 
 	useEffect(() => {
 		const path = "/login";
@@ -47,7 +48,7 @@ function App() {
 		};
 
 		checkLoginStatus();
-	}, [history]);
+	}, []);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -121,7 +122,10 @@ function App() {
 						"x-auth-token": token,
 					},
 				});
-				setRequests(response.data);
+				const filteredRequests = response.data.filter(
+					(request) => request.refId !== user._id
+				);
+				setRequests(filteredRequests);
 			} catch (err) {
 				console.log(err);
 			}
@@ -135,6 +139,26 @@ function App() {
 		}
 	}, [user, token]);
 
+	// fetch chats
+	useEffect(() => {
+		const fetchChats = async () => {
+			try {
+				const response = await axios.get(
+					"https://agrisolve-techsupport254.vercel.app/chats/chats"
+				);
+				setChats(response.data.filter((chat) => chat.recipient === user._id));
+			} catch (error) {
+				console.error("Error fetching chats", error);
+			}
+		};
+
+		fetchChats();
+
+		const interval = setInterval(fetchChats, 1000);
+
+		return () => clearInterval(interval);
+	}, [user?._id]);
+
 	return (
 		<div className="App flex flex-col md:flex-row w-full h-screen">
 			<div className="Sidebar w-1/2 md:w-1/5 p-1 border-r-2 bg-slate-800 text-white">
@@ -147,6 +171,7 @@ function App() {
 					products={products}
 					getTimeLabel={getTimeLabel}
 					requests={requests}
+					chats={chats}
 				/>
 			</div>
 		</div>

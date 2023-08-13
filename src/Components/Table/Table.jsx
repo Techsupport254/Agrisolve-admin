@@ -96,18 +96,12 @@ const Table = ({ products, getTimeLabel }) => {
 			},
 		},
 		{
-			field: "date",
-			headerName: "Created/Updated",
-			width: 180,
-			sortable: false,
-			renderCell: (params) => {
-				return (
-					<div className="Date">
-						<span>{getTimeLabel(params.row.date)}</span>
-					</div>
-				);
-			},
+			field: "wholesale",
+			headerName: "Wholesale",
+			width: 150,
+			sortable: true,
 		},
+
 		{
 			field: "status",
 			headerName: "Status",
@@ -137,6 +131,19 @@ const Table = ({ products, getTimeLabel }) => {
 				);
 			},
 		},
+		{
+			field: "date",
+			headerName: "Created/Updated",
+			width: 180,
+			sortable: false,
+			renderCell: (params) => {
+				return (
+					<div className="Date">
+						<span>{getTimeLabel(params.row.date)}</span>
+					</div>
+				);
+			},
+		},
 	];
 
 	const rows = products.map((product) => ({
@@ -147,7 +154,7 @@ const Table = ({ products, getTimeLabel }) => {
 		image: product.images[0],
 		status: product.productStatus,
 		date: product.updatedAt ? product.updatedAt : product.createdAt,
-
+		wholesale: product.wholesale,
 		price: product.price,
 	}));
 

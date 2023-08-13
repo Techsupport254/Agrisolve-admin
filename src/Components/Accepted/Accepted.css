@@ -1,0 +1,297 @@
+.Accepted {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 98vh;
+    width: 100%;
+    padding: 1rem;
+}
+
+.AcceptedContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    box-shadow: var(--boxShadow);
+    padding: .5rem;
+}
+
+.AcceptedLeft,
+.AcceptedRight {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100%;
+    border-radius: 5px;
+    padding: .5rem;
+}
+
+.AcceptedLeft {
+    width: 30%;
+}
+
+.AcceptedRight {
+    width: 70%;
+}
+
+.ChatTop {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.ChatNav {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: .3rem 1rem;
+
+    & .ImageSection {
+        position: relative;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        width: 100%;
+        object-fit: cover;
+
+    }
+
+    & img {
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+.ChatNavText {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    & span {
+        font-size: .8rem;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    & p {
+        font-size: .8rem;
+        font-weight: 400;
+        color: var(--gray);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+.ChatBottom {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.SearchBar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.ChatUsers {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+    padding: .3rem;
+    overflow: auto;
+}
+
+.ChatUser {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .3rem;
+    padding: .3rem;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+
+.ChatUserImage {
+    position: relative;
+    border-radius: 50%;
+    object-fit: cover;
+
+    & img {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+}
+
+.ChatDetails {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: .5rem;
+
+    & .ChatUserText {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+
+        & .TopPart {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: .5rem;
+
+            & h3 {
+                font-size: .9rem;
+                font-weight: 600;
+            }
+
+            & .ChatTime {
+                font-size: .7rem;
+                font-weight: 400;
+                color: var(--gray);
+            }
+        }
+    }
+}
+
+.Message {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .1rem;
+
+    & span {
+        font-size: .8rem;
+        font-weight: 500;
+    }
+
+    & p {
+        font-size: .8rem;
+        font-weight: 400;
+        color: var(--gray);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+    }
+}
+
+.ChatTopLeft1 {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+
+}
+
+.ChatTopRight {
+    width: 65%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .5rem;
+
+}
+
+.More {
+    width: 20%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+
+    & i {
+        font-size: 1rem;
+        color: var(--success-darker);
+        cursor: pointer;
+        transition: all .3s ease-in-out;
+
+        &:hover {
+            color: var(--success-light);
+        }
+    }
+}
+
+.ChatDetails {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+}
+
+.ChatMessages {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+    padding: 0 1rem;
+}
+
+.MoreDialog {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+}
+
+.ModalDialog {
+    width: 50%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+}

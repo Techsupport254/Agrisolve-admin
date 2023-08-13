@@ -76,22 +76,23 @@ a {
 
 /* scrollbar */
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
-  color: #fff;
+  width: 0;
+  height: 0;
+  color: var(--p-color);
+  margin: 3px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #bfbcbc;
+  background: var(--p-color);
 
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #fff;
+  background:var(--p-color);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--p-color);
 }
 
 textarea {
@@ -140,4 +141,45 @@ textarea {
     font-size: 1rem;
     color: var(--green);
   }
+}
+
+
+.Online {
+  display: flex;
+  position: absolute;
+  width: .7rem;
+  height: .7rem;
+  border-radius: 50%;
+  background-color: green;
+  border: 2px solid white;
+  bottom: 5%;
+  right: 5%;
+  animation: pulse 1s linear infinite;
+
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+.Offline {
+  display: flex;
+  position: absolute;
+  width: .7rem;
+  height: .7rem;
+  border-radius: 50%;
+  background-color: red;
+  border: 2px solid white;
+  bottom: 5%;
+  right: 5%;
 }

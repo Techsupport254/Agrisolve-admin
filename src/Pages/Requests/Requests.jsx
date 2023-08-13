@@ -5,7 +5,7 @@ import { Badge } from "@mui/material";
 import RequestsTable from "../../Components/RequestsTable/RequestsTable";
 import req from "../../assets/req.png";
 
-const Requests = ({ requests, user }) => {
+const Requests = ({ requests, user, users, getTimeLabel }) => {
 	const [active, setActive] = React.useState(
 		requestsNavigations[0].name.toLowerCase()
 	);
@@ -13,6 +13,9 @@ const Requests = ({ requests, user }) => {
 	const handleActive = (name) => {
 		setActive(name);
 	};
+
+	let acceptedRequests =
+		requests?.filter((request) => request.acceptedById === user._id) || [];
 
 	let newRequests =
 		requests?.filter((request) => request.newConsult === true) || [];
@@ -29,6 +32,8 @@ const Requests = ({ requests, user }) => {
 			return requests;
 		} else if (status === "new") {
 			return newRequests;
+		} else if (status === "accepted") {
+			return acceptedRequests;
 		} else if (status === "pending") {
 			return pendingRequests;
 		} else if (status === "approved") {
@@ -77,7 +82,7 @@ const Requests = ({ requests, user }) => {
 								</div>
 								<Badge
 									badgeContent={
-										nav.name === "New"
+										nav.name === "All"
 											? newRequests.length
 											: nav.name === "Pending"
 											? pendingRequests.length
@@ -88,7 +93,7 @@ const Requests = ({ requests, user }) => {
 									color={
 										nav.name === "All"
 											? "secondary"
-											: nav.name === "New"
+											: nav.name === "Accepted"
 											? "primary"
 											: nav.name === "Pending"
 											? "warning"
@@ -110,7 +115,12 @@ const Requests = ({ requests, user }) => {
 				</div>
 			</div>
 			<div className="RequestBottom">
-				<RequestsTable requests={filterRequests(active)} />
+				<RequestsTable
+					requests={filterRequests(active)}
+					users={users}
+					getTimeLabel={getTimeLabel}
+					user={user}
+				/>
 			</div>
 		</div>
 	);

@@ -1,0 +1,125 @@
+.DialogModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    width: 100%;
+    height: 100%;
+
+}
+
+.Note {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: var(--boxShadow);
+    background-color: var(--success-lighter);
+    color: var(--bg-color);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+
+    & p {
+        font-size: .8rem;
+        font-weight: 600;
+    }
+}
+
+.RequestSummary {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+}
+
+.SummaryRow {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .5rem;
+
+    & span {
+        font-size: .8rem;
+        font-weight: 600;
+    }
+
+    & p {
+        font-size: .8rem;
+        font-weight: 400;
+        color: var(--gray);
+    }
+}
+
+.ApproveBtn {
+    width: 100%;
+
+    & button {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        padding: .5rem;
+        border-radius: 5px;
+        box-shadow: var(--boxShadow);
+        background-color: var(--bg-color);
+        color: var(--white);
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+.Error {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: var(--boxShadow);
+    background-color: var(--error-lighter);
+    color: var(--bg-color);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+
+    & p {
+        font-size: .8rem;
+        font-weight: 600;
+    }
+}
+
+.Success {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: var(--boxShadow);
+    background-color: var(--success-lighter);
+    color: var(--bg-color);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+
+    & p {
+        font-size: .8rem;
+        font-weight: 600;
+    }
+}

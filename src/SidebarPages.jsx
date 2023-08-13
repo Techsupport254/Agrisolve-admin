@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Profile from "./Pages/Profile/Profile";
 import NotFound from "./Components/404/NotFound";
+import Accepted from "./Components/Accepted/Accepted";
 
 const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
 const Users = lazy(() => import("./Pages/Users/Users"));
@@ -17,7 +18,14 @@ const LoadingFallback = () => (
 	</div>
 );
 
-const SidebarPages = ({ user, users, products, getTimeLabel, requests }) => {
+const SidebarPages = ({
+	user,
+	users,
+	products,
+	getTimeLabel,
+	requests,
+	chats,
+}) => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
@@ -85,6 +93,7 @@ const SidebarPages = ({ user, users, products, getTimeLabel, requests }) => {
 								<Requests
 									requests={requests}
 									user={user}
+									users={users}
 									getTimeLabel={getTimeLabel}
 								/>
 							)
@@ -120,6 +129,23 @@ const SidebarPages = ({ user, users, products, getTimeLabel, requests }) => {
 							)
 						}
 					/>
+					<Route
+						path="requests/:id"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<Accepted
+									user={user}
+									users={users}
+									getTimeLabel={getTimeLabel}
+									requests={requests}
+									chats={chats}
+								/>
+							)
+						}
+					/>
+
 					{/* 404 */}
 					<Route
 						path="*"
