@@ -1,0 +1,53 @@
+.Transaction {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+}
+
+.TransactionTitle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    & h3 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    & p {
+        font-size: .8rem;
+        color: #777;
+    }
+}
+
+.TransactionDescription {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+
+
+    & span {
+        font-size: .8rem;
+    }
+
+    & p {
+        font-size: .8rem;
+        color: #777;
+    }
+
+    & small {
+        font-size: .8rem;
+        color: var(--success-darker);
+        background: var(--success-lighter);
+        padding: .1rem .2rem;
+        border-radius: 5px;
+        font-weight: 600;
+    }
+}

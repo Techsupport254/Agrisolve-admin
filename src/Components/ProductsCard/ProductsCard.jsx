@@ -12,14 +12,10 @@ const ProductsCard = ({ category, user }) => {
 				<div className="Applaud">
 					<div className="ApplaudBottom">
 						<div className="ApplaudLeft">
-							<p>Congratulations!</p>
-							<span>{user?.name}</span>
-						</div>
-						<div className="ApplaudCenter">
-							<img src={congrats} alt="congrats" />
-						</div>
-
-						<div className="ApplaudRight">
+							<div className="Congrats">
+								<p>Congratulations!</p>
+								<span>{user?.name}</span>
+							</div>
 							<p>
 								Your store is now live! You can now add products and start
 								selling to your customers. You'll be notified when you receive
@@ -28,6 +24,9 @@ const ProductsCard = ({ category, user }) => {
 							<Link to="new">
 								<button>Add Products</button>
 							</Link>
+						</div>
+						<div className="ApplaudRight">
+							<img src={congrats} alt="congrats" />
 						</div>
 					</div>
 				</div>

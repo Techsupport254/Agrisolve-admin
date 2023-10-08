@@ -8,7 +8,9 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import logo from "../../assets/logo.png";
 import { Badge } from "@mui/material";
 
-const Sidebar = ({ user }) => {
+
+const Sidebar = ({ user, unseenCount, newRequestCount }) => {
+	const admin = __ADMIN__;
 	const location = useLocation();
 
 	const normalData = sidebardata.filter((item) => item.management === false);
@@ -111,6 +113,21 @@ const Sidebar = ({ user }) => {
 												{item.item}
 												<div className="Icon text-teal-300">{item.icon}</div>
 												<span>{item.title}</span>
+												{item.title === "Requests" && newRequestCount > 0 && (
+													<Badge
+														badgeContent={newRequestCount}
+														color="primary"
+														className="ml-3"
+														anchorOrigin={{
+															vertical: "top",
+															horizontal: "left",
+														}}
+														sx={{
+															marginLeft: "2rem",
+															fontSize: "0.5rem",
+														}}
+													/>
+												)}
 											</motion.div>
 										</Link>
 									);
@@ -134,6 +151,21 @@ const Sidebar = ({ user }) => {
 												<Badge
 													badgeContent="Soon"
 													color="info"
+													className="ml-3"
+													anchorOrigin={{
+														vertical: "top",
+														horizontal: "left",
+													}}
+													sx={{
+														marginLeft: "2rem",
+														fontSize: "0.5rem",
+													}}
+												/>
+											)}
+											{item.title === "Chats" && unseenCount > 0 && (
+												<Badge
+													badgeContent={unseenCount}
+													color="primary"
 													className="ml-3"
 													anchorOrigin={{
 														vertical: "top",
@@ -174,7 +206,7 @@ const Sidebar = ({ user }) => {
 											</>
 										)}
 										<div className="UpgradeBtn">
-											<Link to="/profile">
+											<Link to="/user">
 												<button>Upgrade</button>
 											</Link>
 										</div>

@@ -39,37 +39,82 @@ const RequestsTable = ({ requests, users, getTimeLabel, user }) => {
 
 	const columns = [
 		{
-			field: "id",
-			headerName: "ID",
+			field: "subject",
+			headerName: "Subject",
 			width: 200,
 			sortable: true,
 			renderCell: (params) => {
 				return (
-					<div>
-						{params.row.status === "pending" && (
-							<Badge
-								badgeContent="New"
-								color="primary"
-								anchorOrigin={{
-									vertical: "top",
-									horizontal: "left",
-								}}
-								sx={{
-									marginLeft: "16px",
-									marginRight: "30px",
-									cursor: "pointer",
-								}}
-							/>
-						)}
-						{params.row.id}
+					<div className="ReqCol">
+						<span>{params.row.subject}</span>
+						<p>
+							{params.row.status === "pending" ? (
+								<Badge
+									badgeContent="New"
+									color="primary"
+									anchorOrigin={{
+										vertical: "top",
+										horizontal: "left",
+									}}
+									sx={{
+										marginLeft: "16px",
+										marginRight: "30px",
+										cursor: "pointer",
+									}}
+								/>
+							) : params.row.status === "accepted" ? (
+								<p style={{ color: "#4caf50" }}>Accepted</p>
+							) : params.row.status === "rejected" ? (
+								<p
+									style={{
+										color: "#f44336",
+									}}
+								>
+									Rejected
+								</p>
+							) : (
+								<p
+									style={{
+										color: "#3f51b5",
+									}}
+								>
+									Settled
+								</p>
+							)}
+						</p>
 					</div>
 				);
 			},
 		},
-		{ field: "subject", headerName: "Subject", width: 200, sortable: true },
-		{ field: "senderName", headerName: "Sender", width: 200, sortable: true },
-		{ field: "urgency", headerName: "Urgency", width: 150, sortable: true },
-		{ field: "status", headerName: "Status", width: 130, sortable: true },
+		{
+			field: "senderName",
+			headerName: "Sender",
+			width: 200,
+			sortable: true,
+			renderCell: (params) => {
+				return (
+					<div className="ReqCol">
+						<span>
+							{params.row.senderName === user.username
+								? "You"
+								: params.row.senderName}
+						</span>
+						<p
+							style={{
+								color:
+									params.row.urgency === "High"
+										? "#f44336"
+										: params.row.urgency === "Medium"
+										? "#ff9800"
+										: "#4caf50",
+							}}
+						>
+							{params.row.urgency}
+						</p>
+					</div>
+				);
+			},
+		},
 		{
 			field: "acceptedBy",
 			headerName: "Accepted By",
@@ -84,7 +129,7 @@ const RequestsTable = ({ requests, users, getTimeLabel, user }) => {
 									: params.row.acceptedBy}
 							</span>
 						) : (
-							<span>___</span>
+							<span>N/A</span>
 						)}
 					</div>
 				);
@@ -100,7 +145,7 @@ const RequestsTable = ({ requests, users, getTimeLabel, user }) => {
 						{params.row.status === "accepted" ? (
 							<span>{params.row.acceptedAt}</span>
 						) : (
-							<span>___</span>
+							<span>N/A</span>
 						)}
 					</div>
 				);
@@ -113,7 +158,7 @@ const RequestsTable = ({ requests, users, getTimeLabel, user }) => {
 		sortedRequests?.map((request, index) => ({
 			id: request._id || index + 1,
 			subject: request.subject,
-			senderName: request.username,
+			senderName: request.name,
 			urgency: request.urgency,
 			status: request.status,
 			description: request.consultDescription,
@@ -140,7 +185,6 @@ const RequestsTable = ({ requests, users, getTimeLabel, user }) => {
 		setSelectedSender(selectedSender);
 		handleModalOpen();
 
-		// navigate to /requests/:id
 		if (
 			params.row.status === "accepted" &&
 			params.row.acceptedById === user._id
@@ -151,7 +195,7 @@ const RequestsTable = ({ requests, users, getTimeLabel, user }) => {
 			});
 	};
 	return (
-		<div style={{ height: 600, width: "100%" }}>
+		<div className="RequestsTable" style={{ height: 600 }}>
 			<DataGrid
 				rows={rows}
 				columns={columns}

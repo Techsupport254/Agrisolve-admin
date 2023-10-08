@@ -10,5 +10,6 @@ export default defineConfig({
 	define: {
 		__CLOUD_NAME__: JSON.stringify(process.env.CLOUD_NAME),
 		__UPLOAD_PRESET__: JSON.stringify(process.env.UPLOAD_PRESET),
+		__ADMIN__ : JSON.stringify(process.env.ADMIN),
 	},
 });

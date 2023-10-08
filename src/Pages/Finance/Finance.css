@@ -1,0 +1,104 @@
+.Finance {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    gap: 1rem;
+    padding: .5rem;
+    overflow: auto;
+}
+
+.FinanceContainer {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    gap: .5rem;
+    overflow: auto;
+}
+
+.Transactions,
+.Advert {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100%;
+    padding: .5rem;
+    box-shadow: var(--boxShadow);
+    border-radius: 5px;
+}
+
+.Transactions {
+    width: 60%;
+    overflow: auto;
+    max-height: 60vh;
+}
+
+.Advert {
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & .AdvertContainer {
+        margin-top: 10%;
+        width: 70%;
+        background: var(--success-lighter);
+        box-shadow: var(--boxShadow);
+        padding: .5rem;
+
+        & img {
+            width: 150px;
+            object-fit: cover;
+            position: relative;
+            left: 50%;
+            top: -30% !important;
+            transform: translate(-50%, -30%);
+        }
+
+        & .Invite {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+
+            & h3 {
+                font-size: 1rem;
+                font-weight: 600;
+                color: var(--black);
+            }
+
+            & p {
+                font-size: 1rem;
+                color: var(--black);
+                text-align: center;
+            }
+
+            & input {
+                background: var(--white);
+            }
+
+            & button {
+                padding: .1rem .2rem;
+                border-radius: 5px;
+                background: var(--success-darker);
+                color: var(--success-lighter);
+                font-size: .8rem;
+                font-weight: 600;
+                border: none;
+                cursor: pointer;
+                transition: all .3s ease-in-out;
+
+                &:hover {
+                    background: var(--success-lighter);
+                    color: var(--success-darker);
+                }
+            }
+        }
+    }
+}

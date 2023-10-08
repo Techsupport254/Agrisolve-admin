@@ -22,7 +22,7 @@ const AnalyticsCard = ({ data }) => {
 			</p>
 			<span
 				style={{
-					color: data.color,
+					color: data.color3,
 				}}
 			>
 				{data.title}

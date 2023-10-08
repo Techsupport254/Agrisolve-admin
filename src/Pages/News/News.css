@@ -1,0 +1,204 @@
+.NewsPage {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100vh;
+    width: 100%;
+    overflow: auto;
+}
+
+.NewsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+    padding: .5rem;
+    gap: .5rem;
+    overflow: auto;
+}
+
+.Lists {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+
+    & ul {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        height: 100%;
+        width: 100%;
+        list-style: disc;
+        column-count: 2;
+        gap: .5rem;
+
+        & li {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            list-style: disc;
+        }
+    }
+}
+
+.Create {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100%;
+    width: 100%;
+    box-shadow: var(--boxShadow);
+    padding: .5rem;
+    border-radius: 5px;
+    gap: .5rem;
+
+
+    & .CreateLeft {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 30%;
+    }
+
+    & .CreateRight {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        height: 100%;
+        width: 70%;
+        gap: .5rem;
+        padding: .5rem;
+        overflow: auto;
+    }
+
+    & button {
+        padding: .3rem .5rem;
+        border-radius: 5px;
+        background: var(--success-lighter);
+        color: var(--success-darker);
+        font-size: .8rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all .3s ease-in-out;
+
+        &:hover {
+            background: var(--success-darker);
+            color: var(--success-lighter);
+        }
+    }
+}
+
+
+.ImageInput {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+
+    & span {
+        font-size: .8rem;
+        color: var(--black);
+        font-weight: 600;
+    }
+}
+
+.InputField {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    background: var(--success-lighter);
+    border-radius: 5px;
+    padding: 1rem;
+    cursor: pointer;
+
+    & img {
+        width: 50%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    & p {
+        font-size: .8rem;
+        color: var(--black);
+
+        &>span {
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--success-darker);
+        }
+    }
+
+}
+
+.Event {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    gap: .5rem;
+
+    & .SwitchEvent {
+        width: 50%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: .5rem;
+    }
+}
+
+.Images {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    gap: .5rem;
+    overflow: auto;
+
+    & .Close {
+        background: var(--danger-lighter);
+        color: var(--danger-darker);
+        border: none;
+        border-radius: 5px;
+        padding: .2rem;
+        font-size: .8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .3s ease-in-out;
+
+        &:hover {
+            background: var(--danger-darker);
+            color: var(--danger-lighter);
+        }
+    }
+
+    & img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+}

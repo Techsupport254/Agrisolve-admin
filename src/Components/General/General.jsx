@@ -18,7 +18,6 @@ const General = ({ user }) => {
 
 	const handleVerificationToggle = () => {
 		setVerificationStatus(!verificationStatus);
-		// You can make API calls here to update the verification status
 	};
 
 	const handleBrowseClick = () => {

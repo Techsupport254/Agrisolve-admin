@@ -1,0 +1,213 @@
+.ActiveChat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    padding: 0 .5rem;
+}
+
+.NoChat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: .5rem;
+
+    & img {
+        width: 50%;
+        object-fit: cover;
+    }
+
+    & h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    & h4 {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    & p {
+        font-size: 1rem;
+        font-weight: 400;
+    }
+}
+
+.ChatHeader {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    box-shadow: var(--boxShadow);
+    border-radius: 5px;
+    padding: .5rem;
+
+    & .Avatar {
+        width: 50px;
+        height: 50px;
+        margin-right: .5rem;
+
+        & img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+    }
+}
+
+.ChatBody {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: 80% !important;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    gap: .5rem;
+    padding: .2rem;
+    /* current position should be end */
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+    scroll-padding: 0 0 1rem 0;
+
+
+    & .ChatDate {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        width: 100%;
+        box-shadow: var(--boxShadow);
+        border-radius: 5px;
+        padding: .5rem;
+        gap: .5rem;
+
+
+
+        & .Date {
+            padding: .2rem .5rem;
+            background-color: var(--success-lighter);
+            border-radius: 5px;
+            color: var(--success-darker);
+            font-size: .6rem;
+            font-weight: 600;
+            top: 0;
+        }
+    }
+}
+
+.ChatFooter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    box-shadow: var(--boxShadow);
+    border-radius: 5px;
+    padding: .5rem;
+    bottom: 1%;
+    gap: .5rem;
+
+    & form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: .5rem;
+    }
+
+    & i {
+        font-size: 1.5rem;
+        color: var(--success-darker);
+        transition: all .3s ease-in-out;
+
+        &:hover {
+            cursor: pointer;
+            color: var(--success-dark);
+        }
+    }
+
+    & .InputField {
+        width: 85%;
+    }
+
+    & .Attachments {
+        width: 5%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: .5rem;
+
+        & i {
+            font-size: 1.2rem;
+        }
+    }
+
+    & button {
+        width: 5%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+    }
+}
+
+.ChatMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    max-width: 50%;
+
+    & p {
+        font-size: .8rem;
+        letter-spacing: .5px;
+    }
+
+    & small {
+        align-self: flex-end;
+        font-size: .6rem;
+        letter-spacing: .5px;
+        color: #777;
+
+        & span {
+            font-size: .6rem;
+            letter-spacing: .5px;
+            color: var(--success-dark);
+            font-weight: 600;
+            padding: .1rem .2rem;
+            border-radius: 5px;
+        }
+    }
+}
+
+.Sent {
+    align-self: self-start;
+
+    & p {
+        background: rgba(145, 158, 171, 0.16);
+        border-radius: 0 5px 5px 5px;
+        padding: .2rem;
+    }
+}
+
+.Received {
+    align-self: self-end;
+
+    & p {
+        background: rgb(200, 250, 214);
+        border-radius: 5px 0 5px 5px;
+        padding: .2rem;
+    }
+}

@@ -31,6 +31,9 @@ const NewProduct = ({ user }) => {
 	const [verificationStatus, setVerificationStatus] = useState(
 		user?.verificationStatus === "verified"
 	);
+	const [published, setPublished] = useState(false);
+	const [draft, setDraft] = useState(false);
+
 	const capitalize = (str) => {
 		if (typeof str !== "string") return "";
 		return str.charAt(0).toUpperCase() + str.slice(1);
@@ -43,6 +46,7 @@ const NewProduct = ({ user }) => {
 			fileInput.click();
 		}
 	};
+
 	const handleRemoveImage = (index) => {
 		const newSelectedFiles = selectedFiles.filter((_, i) => i !== index);
 		setSelectedFiles(newSelectedFiles);
@@ -58,10 +62,9 @@ const NewProduct = ({ user }) => {
 
 		const CLOUD_NAME = __CLOUD_NAME__;
 		const PRESET_NAME = __UPLOAD_PRESET__;
+		const imageUrls = [];
 
 		try {
-			const imageUrls = [];
-
 			for (const file of selectedFiles) {
 				const formData = new FormData();
 				formData.append("file", file);
@@ -74,106 +77,85 @@ const NewProduct = ({ user }) => {
 
 				if (response.status === 200) {
 					imageUrls.push(response.data.secure_url);
-					console.log("Image uploaded:", response.data);
 				} else {
 					console.error("Error uploading image:", response.data);
 				}
 			}
 
-			// Update the images state with the uploaded image URLs
-			setProductImages((prevImages) => [...prevImages, ...imageUrls]);
+			if (imageUrls.length > 0) {
+				// Upload product after images are successfully uploaded
+				setUploadingProduct(true);
+				const refId = user?._id;
+
+				const productData = {
+					productName,
+					productCategory,
+					subCategory,
+					productDescription,
+					images: imageUrls,
+					brandName,
+					productWeight,
+					packagingType,
+					labels,
+					tags,
+					instructions,
+					price,
+					wholesalePrice,
+					wholesaleRate,
+					wholesale,
+					stock,
+					productStatus,
+					refId,
+				};
+
+				const productResponse = await axios.post(
+					"http://localhost:8000/products/new",
+					productData
+				);
+
+				if (productResponse.status === 200) {
+					// Product successfully uploaded
+					setUploadingProduct(false);
+					setTimeout(() => {
+						setUploadedProduct(true);
+						window.location.href = "/products";
+					}, 2000);
+				} else {
+					console.error("Error uploading product:", productResponse.data);
+				}
+			} else {
+				console.error("No images uploaded.");
+			}
 
 			// Set uploaded to true after all images are uploaded
 			setTimeout(() => {
 				setUploaded(true);
 			}, 2000);
-
-			// Perform additional update actions here if needed
-
-			setUploading(false);
 		} catch (error) {
 			console.error("Error uploading images:", error);
+		} finally {
 			setUploading(false);
 		}
+
+		return {
+			status: imageUrls.length > 0 ? 200 : 500,
+			data: imageUrls,
+			message:
+				imageUrls.length > 0
+					? "Images uploaded successfully"
+					: "Error uploading images",
+		};
 	};
 
 	const categories = [
 		{ name: "livestock", value: "livestock" },
 		{ name: "crops", value: "crops" },
 		{ name: "poultry", value: "poultry" },
+		{ name: "general", value: "general" },
 	];
 
 	const handleWholesaleToggle = () => {
 		setWholesale(!wholesale);
-	};
-	const [published, setPublished] = useState(false);
-
-	const handleSaveProduct = async () => {
-		try {
-			setUploadingProduct(true);
-
-			const productData = {
-				productName,
-				productCategory,
-				subCategory,
-				productDescription,
-				images,
-				brandName,
-				productWeight,
-				packagingType,
-				labels,
-				tags,
-				instructions,
-				price,
-				wholesalePrice,
-				wholesaleRate,
-				wholesale,
-				stock,
-				productStatus,
-			};
-
-			const response = await axios.post(
-				"https://agrisolve-techsupport254.vercel.app/products/new",
-				productData
-			);
-
-			if (response.status === 200) {
-				// Product successfully uploaded
-				setUploadingProduct(false);
-				setTimeout(() => {
-					setUploadedProduct(true);
-				}, 2000);
-				console.log("Product uploaded:", response.data);
-
-				// Clear the form
-				setProductName("");
-				setProductCategory("");
-				setSubCategory("");
-				setProductDescription("");
-				setProductImages([]);
-				setBrandName("");
-				setProductWeight("");
-				setPackagingType("");
-				setLabels([]);
-				setTags([]);
-				setInstructions("");
-				setPrice("");
-				setStock("");
-				setSelectedFiles([]);
-				setWholesalePrice("");
-				setWholesaleRate("");
-				setWholesale(false);
-				setStock(false);
-				setProductStatus("Draft");
-			} else {
-				console.error("Error uploading product:", response.data);
-			}
-
-			setUploading(false);
-		} catch (error) {
-			console.error("Error uploading product:", error);
-			setUploading(false);
-		}
 	};
 
 	return (
@@ -275,30 +257,6 @@ const NewProduct = ({ user }) => {
 											<img src={URL.createObjectURL(file)} alt="product" />
 										</div>
 									))}
-								</div>
-								<div className="UploadBtn">
-									{uploading ? (
-										<Button
-											variant="success"
-											size="sm"
-											onClick={handleUploadImages}
-										>
-											<i className="fa fa-spinner fa-spin"></i>
-										</Button>
-									) : uploaded ? (
-										<>
-											<i className="fas fa-check"></i> &nbsp;
-											<p>Images Uploaded Successfully!</p>
-										</>
-									) : (
-										<Button
-											variant="success"
-											size="sm"
-											onClick={handleUploadImages}
-										>
-											Upload
-										</Button>
-									)}
 								</div>
 							</>
 						) : (
@@ -521,7 +479,14 @@ const NewProduct = ({ user }) => {
 
 			<div className="NewItemBtn">
 				<div className=" NewBtns">
-					{uploadingProduct ? (
+					{uploading ? (
+						<>
+							<button disabled>Cancel</button>
+							<button>
+								<i className="fa fa-spinner fa-spin"></i> Uploading
+							</button>
+						</>
+					) : uploadingProduct ? (
 						<>
 							<button disabled>Cancel</button>
 							<button>
@@ -538,7 +503,7 @@ const NewProduct = ({ user }) => {
 							<button>Cancel</button>
 							<button
 								onClick={() => {
-									handleSaveProduct();
+									handleUploadImages();
 								}}
 							>
 								Upload Product

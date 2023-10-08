@@ -58,7 +58,7 @@
     justify-content: flex-start;
 
     & h1 {
-        font-size: 1rem;
+        font-size: .8rem;
         line-height: 1.5;
         font-weight: 600;
         color: var(--bg-color);
@@ -66,8 +66,7 @@
 
     & p {
         font-size: .7rem;
-        font-weight: 500;
-        color: var(--bg-color);
+        color: #777;
     }
 }
 
@@ -86,6 +85,6 @@
     justify-content: flex-start;
 
     & button {
-        border-bottom: 2px solid var(--bg-color);
+        border-bottom: 1px solid var(--bg-color);
     }
 }

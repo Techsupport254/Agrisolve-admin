@@ -59,6 +59,7 @@ const Table = ({ products, getTimeLabel }) => {
 						<div className="ProductDetails">
 							<span>{params.row.title}</span>
 							<p>{params.row.category}</p>
+							<h3>Ksh. {params.row.price}</h3>
 						</div>
 					</div>
 				);
@@ -72,7 +73,16 @@ const Table = ({ products, getTimeLabel }) => {
 			renderCell: (params) => {
 				return (
 					<div className="Price">
-						<span>KSh. {params.row.price}</span>
+						{params.row.wholesale ? (
+							<>
+								<span className="Wholesale">
+									Ksh. {params.row.wholesalePrice}
+								</span>
+								
+							</>
+						) : (
+							<span className="Retail">Ksh. {params.row.price}</span>
+						)}
 					</div>
 				);
 			},
@@ -156,6 +166,8 @@ const Table = ({ products, getTimeLabel }) => {
 		date: product.updatedAt ? product.updatedAt : product.createdAt,
 		wholesale: product.wholesale,
 		price: product.price,
+		wholesale: product.wholesale,
+		wholesalePrice: product.wholesalePrice,
 	}));
 
 	return (

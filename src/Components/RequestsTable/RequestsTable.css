@@ -1,0 +1,24 @@
+.RequestsTable {
+    width: 78vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    overflow: auto;
+    padding: .5rem;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.ReqCol {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+
+    & p{
+        font-size: .8rem;
+    }
+}

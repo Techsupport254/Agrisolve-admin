@@ -131,6 +131,14 @@
     justify-content: flex-end;
     gap: 1rem;
 
+    & button{
+        border-radius: 5px;
+        padding: .2rem .3rem;
+        font-weight: 600;
+        font-size: .8rem;
+        transition: all .3s ease-in-out;
+    }
+
     & button:first-child {
         background: var(--error-light);
         color: var(--error-darker);
@@ -142,8 +150,8 @@
     }
 
     & button:last-child {
-        background: var(--success-light);
-        color: var(--success-darker);
+        border: 1px solid var(--primary-dark);
+        color: var(--success-dark);
 
         &:hover {
             background: var(--success-lighter);
@@ -151,30 +159,6 @@
         }
     }
 
-    & button:disabled {
-        background: var(--gray);
-        color: var(--white);
-
-        &:hover {
-            background: var(--gray);
-            color: var(--white);
-        }
-    }
-
-    & button {
-        background: var(--gray);
-        color: var(--success-darker);
-        cursor: none;
-
-        &:hover {
-            background: var(--gray);
-            color: var(--success-dark);
-        }
-
-        & i {
-            color: var(--success-dark);
-        }
-    }
 
     & p {
         font-size: .8rem;

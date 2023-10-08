@@ -86,11 +86,11 @@ function App() {
 		const oneMinuteInMilliseconds = 60 * 1000;
 
 		if (timeDiffInMilliseconds < oneMinuteInMilliseconds) {
-			return `${Math.floor(timeDiffInMilliseconds / 1000)} seconds ago`;
+			return `${Math.floor(timeDiffInMilliseconds / 1000)} secs ago`;
 		} else if (timeDiffInMilliseconds < oneHourInMilliseconds) {
 			return `${Math.floor(
 				timeDiffInMilliseconds / oneMinuteInMilliseconds
-			)} minutes ago`;
+			)} mins ago`;
 		} else if (timeDiffInMilliseconds < oneDayInMilliseconds) {
 			return `${Math.floor(
 				timeDiffInMilliseconds / oneHourInMilliseconds
@@ -139,6 +139,12 @@ function App() {
 		}
 	}, [user, token]);
 
+	// new request count
+	const newRequestCount = requests?.filter(
+		(request) => request.newConsult === true
+	).length;
+
+
 	// fetch chats
 	useEffect(() => {
 		const fetchChats = async () => {
@@ -159,10 +165,28 @@ function App() {
 		return () => clearInterval(interval);
 	}, [user?._id]);
 
+
+	// messages map
+	const messagesMap = new Map();
+
+	chats.forEach((chat) => {
+		messagesMap.set(chat.refId, chat?.conversations[0].messages);
+	});
+
+	// flatten messages
+	const messages = Array.from(messagesMap.values()).flat();
+	const unseenCount = messages.filter(
+		(message) => message.status !== "read" && message.sender !== user._id
+	).length;
+
 	return (
 		<div className="App flex flex-col md:flex-row w-full h-screen">
 			<div className="Sidebar w-1/2 md:w-1/5 p-1 border-r-2 bg-slate-800 text-white">
-				<Sidebar user={user} />
+				<Sidebar
+					user={user}
+					unseenCount={unseenCount}
+					newRequestCount={newRequestCount}
+				/>
 			</div>
 			<div className="Mainbar w-full md:w-4/5 p-1 border-r-2 bg-white text-black">
 				<Mainbar

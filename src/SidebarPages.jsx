@@ -1,8 +1,6 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import Profile from "./Pages/Profile/Profile";
-import NotFound from "./Components/404/NotFound";
-import Accepted from "./Components/Accepted/Accepted";
+import Orders from "./Pages/Orders/Orders";
 
 const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
 const Users = lazy(() => import("./Pages/Users/Users"));
@@ -11,6 +9,12 @@ const Reports = lazy(() => import("./Pages/Reports/Reports"));
 const Requests = lazy(() => import("./Pages/Requests/Requests"));
 const Login = lazy(() => import("./Components/Login/Login"));
 const NewProduct = lazy(() => import("./Components/NewProduct/NewProduct"));
+const Chats = lazy(() => import("./Pages/Chats/Chats"));
+const Finance = lazy(() => import("./Pages/Finance/Finance"));
+const News = lazy(() => import("./Pages/News/News"));
+const Accepted = lazy(() => import("./Components/Accepted/Accepted"));
+const NotFound = lazy(() => import("./Components/404/NotFound"));
+const Profile = lazy(() => import("./Pages/Profile/Profile"));
 
 const LoadingFallback = () => (
 	<div className="SpinnerLoading">
@@ -145,7 +149,96 @@ const SidebarPages = ({
 							)
 						}
 					/>
-
+					<Route
+						path="news"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<News user={user} users={users} getTimeLabel={getTimeLabel} />
+							)
+						}
+					/>
+					<Route
+						path="news/:id"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<News user={user} users={users} getTimeLabel={getTimeLabel} />
+							)
+						}
+					/>
+					{/* finance */}
+					<Route
+						path="finance"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<Finance
+									user={user}
+									users={users}
+									getTimeLabel={getTimeLabel}
+								/>
+							)
+						}
+					/>
+					<Route
+						path="chats"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<Chats
+									user={user}
+									users={users}
+									getTimeLabel={getTimeLabel}
+									chats={chats}
+								/>
+							)
+						}
+					/>
+					<Route
+						path="chats/:id"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<Chats
+									user={user}
+									users={users}
+									getTimeLabel={getTimeLabel}
+									chats={chats}
+								/>
+							)
+						}
+					/>
+					<Route
+						path="orders"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<Orders
+									user={user}
+									users={users}
+									getTimeLabel={getTimeLabel}
+									products={products}
+								/>
+							)
+						}
+					/>
+					<Route
+						path="orders/:id"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<Orders user={user} users={users} getTimeLabel={getTimeLabel} />
+							)
+						}
+					/>
 					{/* 404 */}
 					<Route
 						path="*"

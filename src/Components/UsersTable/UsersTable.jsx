@@ -71,21 +71,63 @@ const UsersTable = ({ users, getTimeLabel }) => {
 	const columns = [
 		{
 			field: "username",
-			headerName: "Username",
-			width: 140,
+			headerName: "User",
+			width: 200,
 			sortable: true,
 			renderCell: (params) => (
-				<div>
-					{params.row.loggedIn === true && (
-						<Badge
-							className="ActiveUser"
-							color="success"
-							overlap="circular"
-							variant="dot"
-							sx={{ marginRight: 1 }}
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "flex-start",
+						alignItems: "center",
+						alignItems: "center",
+					}}
+				>
+					<div className="Avatar">
+						<Avatar
+							src={
+								params.row.profile
+									? params.row.profile
+									: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
+							}
+							sx={{ width: 40, height: 40, marginRight: 1 }}
+							alt="Profile"
 						/>
-					)}
-					<span>{params.row.username}</span>
+						{/* online badge */}
+						{params.row.loggedIn && (
+							<Badge
+								badgeContent=" "
+								color="success"
+								overlap="circular"
+								variant="dot"
+								sx={{
+									position: "absolute",
+									marginLeft: 4.4,
+									marginTop: -1,
+									border: "1px solid #fff",
+									backgroundColor: "#fff",
+									// animation
+									animation: "pulse 1s infinite",
+
+									"@keyframes pulse": {
+										"0%": {
+											transform: "scale(1)",
+										},
+										"50%": {
+											transform: "scale(1.2)",
+										},
+										"100%": {
+											transform: "scale(1)",
+										},
+									},
+								}}
+							/>
+						)}
+					</div>
+					<div className="UserName">
+						<span>{params.row.username}</span>
+						<p>{params.row.name}</p>
+					</div>
 					{params.row.hasBadge && (
 						<Badge
 							badgeContent="New"
@@ -98,34 +140,49 @@ const UsersTable = ({ users, getTimeLabel }) => {
 			),
 		},
 		{
-			field: "profile",
-			headerName: "Profile",
-			width: 110,
-			renderCell: (params) => (
-				<div style={{ display: "flex", alignItems: "center" }}>
-					<Avatar
-						src={
-							params.row.profile
-								? params.row.profile
-								: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
-						}
-						sx={{ width: 40, height: 40, marginRight: 1 }}
-						alt="Profile"
-					/>
-				</div>
-			),
-		},
-		{
-			field: "name",
-			headerName: "Name",
-			width: 200,
-			sortable: true,
-		},
-		{
 			field: "email",
-			headerName: "Email",
+			headerName: "Contacts",
 			width: 250,
 			sortable: true,
+			renderCell: (params) => (
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "flex-start",
+						alignItems: "center",
+					}}
+				>
+					<div className="Email">
+						<span
+							style={{
+								color: "#3f51b5",
+								fontWeight: "bold",
+								fontSize: 12,
+								cursor: "pointer",
+								transition: "all 0.3s ease",
+
+								"&:hover": {
+									color: "#f50057",
+								},
+							}}
+							// onclick
+							onClick={() => window.open(`mailto:${params.row.email}`)}
+						>
+							{params.row.email}
+						</span>
+						<p
+							style={{
+								color: "#757575",
+								fontSize: 12,
+								cursor: "pointer",
+							}}
+							onClick={() => window.open(`tel:${params.row.phone}`)}
+						>
+							{params.row.phone}
+						</p>
+					</div>
+				</div>
+			),
 		},
 		{
 			field: "userType",
@@ -212,6 +269,7 @@ const UsersTable = ({ users, getTimeLabel }) => {
 		Payment: user.paymentStatus,
 		hasBadge: user.newUser === true,
 		loggedIn: user.loginStatus === "loggedIn",
+		phone: user.phone,
 	}));
 
 	return (

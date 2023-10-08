@@ -1,0 +1,91 @@
+.FinanceCard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    gap: .5rem;
+    padding: .5rem;
+    border-radius: 5px;
+    box-shadow: var(--boxShadow);
+
+    & .Title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        gap: .5rem;
+
+        & i {
+            font-size: 1.5rem;
+        }
+
+        & h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+    }
+
+    & .Value {
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    & .Date {
+
+        & p {
+            font-size: .7rem;
+            color: var(--p-color);
+        }
+    }
+}
+
+.Account {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    gap: .5rem;
+
+    & img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    & .AccountDetails {
+        & span {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        & p {
+            font-size: .8rem;
+            font-weight: 600;
+        }
+    }
+
+    & .Withdraw {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: .5rem;
+        padding: .5rem .8rem;
+        border-radius: 5px;
+        background: var(--success-darker);
+        color: var(--success-lighter);
+        font-size: .8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .3s ease-in-out;
+
+        &:hover {
+            background: var(--success-lighter);
+            color: var(--success-darker);
+        }
+    }
+}
