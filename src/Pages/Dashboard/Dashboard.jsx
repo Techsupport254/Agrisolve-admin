@@ -5,7 +5,7 @@ import Stats from "../../Components/Stats/Stats";
 import DashTop from "../../Components/DashTop/DashTop";
 import DashTable from "../../Components/DashTable/DashTable";
 
-const Dashboard = ({ user, products, getTimeLabel }) => {
+const Dashboard = ({ user, users, products, getTimeLabel }) => {
 	return (
 		<div className="Dashboard">
 			<DashTop user={user} />
@@ -17,7 +17,12 @@ const Dashboard = ({ user, products, getTimeLabel }) => {
 					<Stats />
 				</div>
 				<div className="Table">
-					<DashTable products={products} getTimeLabel={getTimeLabel} />
+					<DashTable
+						products={products}
+						getTimeLabel={getTimeLabel}
+						user={user}
+						users={users}
+					/>
 				</div>
 			</div>
 		</div>
