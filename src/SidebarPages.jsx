@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import Orders from "./Pages/Orders/Orders";
 
+// Lazy-loaded components
 const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
 const Users = lazy(() => import("./Pages/Users/Users"));
 const Products = lazy(() => import("./Pages/Products/Products"));
@@ -15,6 +15,8 @@ const News = lazy(() => import("./Pages/News/News"));
 const Accepted = lazy(() => import("./Components/Accepted/Accepted"));
 const NotFound = lazy(() => import("./Components/404/NotFound"));
 const Profile = lazy(() => import("./Pages/Profile/Profile"));
+const Orders = lazy(() => import("./Pages/Orders/Orders"));
+const Order = lazy(() => import("./Pages/Order/Order"));
 
 const LoadingFallback = () => (
 	<div className="SpinnerLoading">
@@ -29,12 +31,42 @@ const SidebarPages = ({
 	getTimeLabel,
 	requests,
 	chats,
+	messages,
+	orders,
+	getCustomer,
+	getProduct,
+	earnings,
 }) => {
 	const [loading, setLoading] = useState(true);
+	const [admin, setAdmin] = useState(false);
+	const [agriprofessional, setAgriprofessional] = useState(false);
+	const [agribusiness, setAgribusiness] = useState(false);
+	const admin_email = __ADMIN__;
+	console.log(user?.email, admin_email);
+	// Check if user is admin
+	useEffect(() => {
+		if (user?.email === admin_email) {
+			setAdmin(true);
+		}
+	}, [user?.email, admin_email]);
 
 	useEffect(() => {
 		setLoading(false);
 	}, []);
+
+	// Check if user is not agriprofessional
+	useEffect(() => {
+		if (user?.userType === "agriprofessional" && !admin) {
+			setAgriprofessional(true);
+		}
+	}, [user?.userType]);
+
+	// Check if user is not agribusiness
+	useEffect(() => {
+		if (user?.userType === "agribusiness" && !admin) {
+			setAgribusiness(true);
+		}
+	}, [user?.userType]);
 
 	return (
 		<React.Fragment>
@@ -50,34 +82,53 @@ const SidebarPages = ({
 									user={user}
 									products={products}
 									getTimeLabel={getTimeLabel}
+									requests={requests}
+									chats={chats}
+									messages={messages}
+									orders={orders}
+									getCustomer={getCustomer}
+									getProduct={getProduct}
+									earnings={earnings}
 								/>
 							)
 						}
 					/>
-					<Route
-						path="/users"
-						element={
-							loading ? (
-								<LoadingFallback />
-							) : (
-								<Users user={user} users={users} getTimeLabel={getTimeLabel} />
-							)
-						}
-					/>
-					<Route
-						path="/products"
-						element={
-							loading ? (
-								<LoadingFallback />
-							) : (
-								<Products
-									products={products}
-									user={user}
-									getTimeLabel={getTimeLabel}
-								/>
-							)
-						}
-					/>
+					{user?.email === admin_email && (
+						<Route
+							path="/users"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<Users
+										user={user}
+										users={users}
+										getTimeLabel={getTimeLabel}
+									/>
+								)
+							}
+						/>
+					)}
+					{(admin || agribusiness) && (
+						<Route
+							path="/products"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<Products
+										products={products}
+										user={user}
+										getTimeLabel={getTimeLabel}
+										orders={orders}
+										getCustomer={getCustomer}
+										getProduct={getProduct}
+										earnings={earnings}
+									/>
+								)
+							}
+						/>
+					)}
 					<Route
 						path="/reports"
 						element={
@@ -88,21 +139,23 @@ const SidebarPages = ({
 							)
 						}
 					/>
-					<Route
-						path="/requests"
-						element={
-							loading ? (
-								<LoadingFallback />
-							) : (
-								<Requests
-									requests={requests}
-									user={user}
-									users={users}
-									getTimeLabel={getTimeLabel}
-								/>
-							)
-						}
-					/>
+					{(agriprofessional || admin) && (
+						<Route
+							path="/requests"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<Requests
+										requests={requests}
+										user={user}
+										users={users}
+										getTimeLabel={getTimeLabel}
+									/>
+								)
+							}
+						/>
+					)}
 					<Route
 						path="/user"
 						element={
@@ -180,68 +233,97 @@ const SidebarPages = ({
 									user={user}
 									users={users}
 									getTimeLabel={getTimeLabel}
+									earnings={earnings}
 								/>
 							)
 						}
 					/>
-					<Route
-						path="chats"
-						element={
-							loading ? (
-								<LoadingFallback />
-							) : (
-								<Chats
-									user={user}
-									users={users}
-									getTimeLabel={getTimeLabel}
-									chats={chats}
-								/>
-							)
-						}
-					/>
-					<Route
-						path="chats/:id"
-						element={
-							loading ? (
-								<LoadingFallback />
-							) : (
-								<Chats
-									user={user}
-									users={users}
-									getTimeLabel={getTimeLabel}
-									chats={chats}
-								/>
-							)
-						}
-					/>
-					<Route
-						path="orders"
-						element={
-							loading ? (
-								<LoadingFallback />
-							) : (
-								<Orders
-									user={user}
-									users={users}
-									getTimeLabel={getTimeLabel}
-									products={products}
-								/>
-							)
-						}
-					/>
-					<Route
-						path="orders/:id"
-						element={
-							loading ? (
-								<LoadingFallback />
-							) : (
-								<Orders user={user} users={users} getTimeLabel={getTimeLabel} />
-							)
-						}
-					/>
+					{(agriprofessional || admin) && (
+						<Route
+							path="chats"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<Chats
+										user={user}
+										users={users}
+										getTimeLabel={getTimeLabel}
+										chats={chats}
+									/>
+								)
+							}
+						/>
+					)}
+					{(agriprofessional || admin) && (
+						<Route
+							path="chats/:id"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<Chats
+										user={user}
+										users={users}
+										getTimeLabel={getTimeLabel}
+										chats={chats}
+									/>
+								)
+							}
+						/>
+					)}
+					{(agribusiness || admin) && (
+						<Route
+							path="orders"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<Orders
+										user={user}
+										users={users}
+										getTimeLabel={getTimeLabel}
+										products={products}
+									/>
+								)
+							}
+						/>
+					)}
+					{(agribusiness || admin) && (
+						<Route
+							path="orders/:id"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<Order
+										user={user}
+										users={users}
+										getTimeLabel={getTimeLabel}
+										products={products}
+									/>
+								)
+							}
+						/>
+					)}
 					{/* 404 */}
 					<Route
 						path="*"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<NotFound
+									user={user}
+									users={users}
+									getTimeLabel={getTimeLabel}
+								/>
+							)
+						}
+					/>
+					{/* unauthorized*/}
+					<Route
+						path="unauthorized"
 						element={
 							loading ? (
 								<LoadingFallback />

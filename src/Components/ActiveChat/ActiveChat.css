@@ -47,6 +47,18 @@
     box-shadow: var(--boxShadow);
     border-radius: 5px;
     padding: .5rem;
+    border: 1px solid red;
+
+
+}
+
+.ChatUser {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    gap: .5rem;
 
     & .Avatar {
         width: 50px;
@@ -60,7 +72,45 @@
             border-radius: 50%;
         }
     }
+
+    & .UserDetails {
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+
+        & h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        & p {
+            font-size: .8rem;
+            color: #777;
+        }
+    }
+
+    & .Status {
+        width: 75%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        align-self: flex-end;
+        padding: .2rem;
+        gap: 1rem;
+
+        & i {
+            font-size: 1.2rem;
+            color: var(--success-dark);
+        }
+    }
 }
+
+
+
+
 
 .ChatBody {
     display: flex;
@@ -209,5 +259,98 @@
         background: rgb(200, 250, 214);
         border-radius: 5px 0 5px 5px;
         padding: .2rem;
+    }
+}
+
+.ModalCont {
+    width: 250px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+    padding: .5rem;
+    border-radius: 5px;
+    background: var(--white);
+    box-shadow: var(--boxShadow);
+    position: absolute;
+    top: 19%;
+    right: 1.5%;
+    z-index: 1000;
+    overflow: hidden;
+
+    & span {
+        font-size: .8rem;
+        font-weight: 600;
+    }
+
+    & p {
+        font-size: .8rem;
+        color: #777;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    & .Note {
+        font-size: .7rem;
+        font-weight: 400;
+        padding: .2rem;
+
+        &:hover {
+            display: flex;
+        }
+    }
+
+}
+
+.ModalTop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    & i {
+        font-size: 1rem;
+        color: var(--success-dark);
+        transition: all .3s ease-in-out;
+
+        &:hover {
+            cursor: pointer;
+            color: var(--success-darker);
+            background: var(--success-lighter);
+            border-radius: 50%;
+            padding: .2rem;
+        }
+    }
+}
+
+.KES {
+    font-size: .8rem;
+    font-weight: 600;
+    border-radius: 5px;
+}
+
+.UpdateBtn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: .2rem .5rem;
+    border-radius: 5px;
+    background: var(--success-lighter);
+    color: var(--success-dark);
+    font-size: .8rem;
+    font-weight: 600;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+        cursor: pointer;
+        background: var(--success-dark);
+        color: var(--white);
     }
 }

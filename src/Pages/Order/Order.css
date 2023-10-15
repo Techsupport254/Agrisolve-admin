@@ -1,0 +1,95 @@
+.OrderParent {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: 99vh;
+    gap: .5rem;
+    overflow: auto;
+}
+
+.OrderTop {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+}
+
+.OrderInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+
+    & span {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+
+        & small {
+            font-size: .8rem;
+            font-weight: 400;
+            padding: .1rem .2rem;
+            border-radius: 5px;
+            background-color: var(--primary-lighter);
+            color: var(--primary-darker);
+        }
+    }
+
+    & p {
+        font-size: .8rem;
+        font-weight: 400;
+    }
+}
+
+.OrderContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.OrderLeft {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 70%;
+    gap: 1rem;
+}
+
+.OrderHistory,
+.OrderDetails,
+.OrderRight {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 100%;
+    padding: .5rem;
+    border-radius: 5px;
+    gap: 1rem;
+    box-shadow: var(--boxShadow);
+}
+
+.OrderDetails,
+.OrderHistory {
+    width: 100%;
+}
+
+.OrderRight {
+    width: 30%;
+}

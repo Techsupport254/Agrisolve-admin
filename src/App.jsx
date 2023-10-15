@@ -14,6 +14,9 @@ function App() {
 	const [requests, setRequests] = useState(null);
 	const history = useHistory();
 	const [chats, setChats] = useState([]);
+	const [orders, setOrders] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [earnings, setEarnings] = useState([]);
 
 	useEffect(() => {
 		const path = "/login";
@@ -69,7 +72,11 @@ function App() {
 					const productsResponse = await axios.get(
 						"https://agrisolve-techsupport254.vercel.app/products"
 					);
-					setProducts(productsResponse.data);
+					// where refId === user._id
+					const filteredProducts = productsResponse.data.filter(
+						(product) => product.refId === user?._id
+					);
+					setProducts(filteredProducts);
 				}
 			} catch (err) {
 				console.log(err);
@@ -123,7 +130,7 @@ function App() {
 					},
 				});
 				const filteredRequests = response.data.filter(
-					(request) => request.refId !== user._id
+					(request) => request.refId !== user?._id
 				);
 				setRequests(filteredRequests);
 			} catch (err) {
@@ -144,7 +151,6 @@ function App() {
 		(request) => request.newConsult === true
 	).length;
 
-
 	// fetch chats
 	useEffect(() => {
 		const fetchChats = async () => {
@@ -152,7 +158,7 @@ function App() {
 				const response = await axios.get(
 					"https://agrisolve-techsupport254.vercel.app/chats/chats"
 				);
-				setChats(response.data.filter((chat) => chat.recipient === user._id));
+				setChats(response.data.filter((chat) => chat.recipient === user?._id));
 			} catch (error) {
 				console.error("Error fetching chats", error);
 			}
@@ -165,7 +171,6 @@ function App() {
 		return () => clearInterval(interval);
 	}, [user?._id]);
 
-
 	// messages map
 	const messagesMap = new Map();
 
@@ -176,8 +181,60 @@ function App() {
 	// flatten messages
 	const messages = Array.from(messagesMap.values()).flat();
 	const unseenCount = messages.filter(
-		(message) => message.status !== "read" && message.sender !== user._id
+		(message) => message.status !== "read" && message.sender !== user?._id
 	).length;
+
+	// Fetch orders
+	const fetchOrders = async () => {
+		try {
+			const response = await axios.get("https://agrisolve.vercel.app/order");
+			setOrders(response.data);
+			setLoading(false);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		fetchOrders();
+	}, [user?._id]);
+	// Function to get user by userId
+	const getCustomer = (userId) => {
+		if (!users) return null;
+		return users.find((user) => user?._id === userId);
+	};
+
+	// Function to get product by productId
+	const getProduct = (productId) => {
+		if (!products) return null;
+		return products.find((product) => product?._id === productId);
+	};
+
+	// sort orders by date
+	orders.sort((a, b) => {
+		return new Date(b.date) - new Date(a.date);
+	});
+
+	// filter products to display where ownerId === user._id
+	orders.forEach((order) => {
+		order.products = order.products.filter(
+			(product) => product?.ownerId === user?._id
+		);
+	});
+
+	// fetch earnings
+	const fetchEarnings = async () => {
+		try {
+			const response = await axios.get("http://localhost:8000/earnings/");
+			setEarnings(response.data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		fetchEarnings();
+	}, [user?._id]);
 
 	return (
 		<div className="App flex flex-col md:flex-row w-full h-screen">
@@ -196,6 +253,12 @@ function App() {
 					getTimeLabel={getTimeLabel}
 					requests={requests}
 					chats={chats}
+					messages={messages}
+					orders={orders}
+					getCustomer={getCustomer}
+					getProduct={getProduct}
+					loading={loading}
+					earnings={earnings}
 				/>
 			</div>
 		</div>

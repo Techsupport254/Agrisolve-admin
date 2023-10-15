@@ -5,7 +5,21 @@ import CircularBar from "../CircularBar/CircularBar";
 import { Badge } from "@mui/material";
 import { Link } from "react-router-dom";
 
-const ProductsCard = ({ category, user }) => {
+const ProductsCard = ({ category, user, products, orders, earnings }) => {
+	// get earnings where user id is equal to the user id
+	const userEarnings = earnings?.filter(
+		(earning) => earning?.user_id === user?.id
+	);
+	// get the earnings array
+	const earningsArray = userEarnings?.[0]?.earnings?.map(
+		(earning) => earning?.amount
+	);
+	// get the total income
+	const totalIncome = earningsArray
+		?.reduce((a, b) => a + b, 0)
+		?.toFixed(2)
+		.toString()
+		.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	return (
 		<div className="ProductsCard">
 			{category?.name === "applaud" ? (
@@ -30,6 +44,30 @@ const ProductsCard = ({ category, user }) => {
 						</div>
 					</div>
 				</div>
+			) : category?.name === "earnings" ? (
+				<div className="ProductsEarnings">
+					<div className="EarningsTop">
+						<div className="EarningsLeft">
+							<div className="Header">
+								<h3>Earnings</h3>
+							</div>
+							<span className="EarningsAmount">KES {totalIncome}</span>
+						</div>
+					</div>
+					<div className="EarningsBottom">
+						<p>Today</p>
+						<div className="BottomRow">
+							<p>
+								You have <span>0 new orders</span>
+							</p>
+						</div>
+						<div className="BottomRow">
+							<p>
+								<span>0 orders</span> were delivered today
+							</p>
+						</div>
+					</div>
+				</div>
 			) : (
 				<div className="ProductsStats">
 					<div className="StatsTop">
@@ -40,12 +78,17 @@ const ProductsCard = ({ category, user }) => {
 							<div className="StatsRow">
 								<Badge color="success" variant="dot" />
 								<p>Products</p>
-								<span>100</span>
+								<span>{products?.length}</span>
 							</div>
 							<div className="StatsRow">
 								<Badge color="success" variant="dot" />
 								<p>Sales</p>
-								<span>20</span>
+								<span>
+									{
+										orders?.filter((order) => order?.status === "delivered")
+											?.length
+									}
+								</span>
 							</div>
 						</div>
 					</div>

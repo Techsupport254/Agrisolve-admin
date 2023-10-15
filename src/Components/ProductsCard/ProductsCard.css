@@ -16,7 +16,11 @@
 .ProductsCard:nth-child(2) {
     height: auto;
     background: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+}
 
+.ProductsCard:nth-child(3) {
+    height: auto;
+    background: var(--bg-color);
 }
 
 .Applaud {
@@ -62,7 +66,7 @@
         color: var(--success-darker);
     }
 
-    & a{
+    & a {
         font-size: .8rem;
         border-radius: 5px;
         padding: .3rem .5rem;
@@ -193,4 +197,42 @@
             }
         }
     }
+}
+
+.ProductsEarnings {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+    color: #fff;
+    gap: .5rem;
+
+    & .EarningsAmount {
+        background: var(--success-darker);
+        padding: .3rem .5rem;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-top: .5rem;
+    }
+
+    & p {
+        font-size: .8rem;
+    }
+
+    & span {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+}
+
+.EarningsBottom,
+.BottomRow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

@@ -12,12 +12,14 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import nochat from "../../assets/nochat.png";
+import { useHistory } from "react-router-use-history";
 
 const Orders = ({ user, users, products, getTimeLabel }) => {
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
+	const history = useHistory();
 
 	// Fetch orders
 	const fetchOrders = async () => {
@@ -57,6 +59,10 @@ const Orders = ({ user, users, products, getTimeLabel }) => {
 			(product) => product?.ownerId === user?._id
 		);
 	});
+
+	const productsLength = orders?.map((order) => order.products.length);
+	const LenghtNumber = parseInt(productsLength);
+
 	return (
 		<div className="Orders">
 			<div className="Header">
@@ -71,7 +77,7 @@ const Orders = ({ user, users, products, getTimeLabel }) => {
 				</div>
 			</div>
 			<div className="OrdersContainer">
-				{orders.length === 0 ? (
+				{LenghtNumber === 0 ? (
 					<div className="NoOrder">
 						<img src={nochat} alt="" />
 						<h3>No orders yet</h3>
@@ -175,105 +181,121 @@ const Orders = ({ user, users, products, getTimeLabel }) => {
 									</TableRow>
 								) : (
 									orders.map((order) =>
-										order.products.map((product) => (
-											<TableRow key={order._id}>
-												<TableCell>{order.orderId}</TableCell>
-												<TableCell>
-													<div className="Customer">
-														<div className="Avatar">
-															<img
-																src={getCustomer(order.userId)?.profilePicture}
-																alt=""
-															/>
+										order.products.map((product) =>
+											!product ? (
+												<p>No product</p>
+											) : (
+												<TableRow
+													key={order._id}
+													onClick={() => history.push(`/orders/${order._id}`)}
+												>
+													<TableCell>{order.orderId}</TableCell>
+													<TableCell>
+														<div className="Customer">
+															<div className="Avatar">
+																<img
+																	src={
+																		getCustomer(order.userId)?.profilePicture
+																	}
+																	alt=""
+																/>
+															</div>
+															<div className="CustomerDetails">
+																<span>{getCustomer(order.userId)?.name}</span>
+																<p>{getCustomer(order.userId)?.email}</p>
+																<h3>{getTimeLabel(order?.date)}</h3>
+															</div>
 														</div>
-														<div className="CustomerDetails">
-															<span>{getCustomer(order.userId)?.name}</span>
-															<p>{getCustomer(order.userId)?.email}</p>
-															<h3>{getTimeLabel(order?.date)}</h3>
+													</TableCell>
+													<TableCell>
+														<div className="Customer">
+															<div className="ProductImage">
+																<img
+																	src={getProduct(product.productId)?.images[0]}
+																	alt={
+																		getProduct(product.productId)?.productName
+																	}
+																/>
+															</div>
+															<div className="CustomerDetails">
+																<span>
+																	{getProduct(product.productId)?.productName}
+																</span>
+																<h3>
+																	{
+																		getProduct(product.productId)
+																			?.productCategory
+																	}
+																</h3>
+																<p>
+																	{getProduct(product.productId)?.brandName}
+																</p>
+															</div>
 														</div>
-													</div>
-												</TableCell>
-												<TableCell>
-													<div className="Customer">
-														<div className="ProductImage">
-															<img
-																src={getProduct(product.productId)?.images[0]}
-																alt={getProduct(product.productId)?.productName}
-															/>
-														</div>
-														<div className="CustomerDetails">
-															<span>
-																{getProduct(product.productId)?.productName}
-															</span>
-															<h3>
-																{getProduct(product.productId)?.productCategory}
-															</h3>
-															<p>{getProduct(product.productId)?.brandName}</p>
-														</div>
-													</div>
-												</TableCell>
-												<TableCell>{product.quantity}</TableCell>
-												<TableCell>
-													{"KES" +
-														" " +
-														getProduct(product.productId)
-															?.price.toString()
-															.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-												</TableCell>
-												<TableCell>
-													{"KES" +
-														" " +
-														(
-															product.quantity *
-															getProduct(product.productId)?.price
-														)
-															.toString()
-															.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-												</TableCell>
-												<TableCell>
-													<p
-														style={{
-															color:
-																order.payment === "Pending"
-																	? "var(--warning-dark)"
-																	: order.payment === "Paid"
-																	? "var(--success-dark)"
-																	: "var(--error-dark)",
-														}}
-													>
-														{order.payment}
-													</p>
-												</TableCell>
-												<TableCell>
-													<p
-														style={{
-															color:
-																order.status === "Pending"
-																	? "var(--warning-darker)"
-																	: order.status === "Approved"
-																	? "var(--primary-darker)"
-																	: order.status === "delivered"
-																	? "var(--success-darker)"
-																	: "var(--error-darker)",
+													</TableCell>
+													<TableCell>{product.quantity}</TableCell>
+													<TableCell>
+														{"KES" +
+															" " +
+															getProduct(product.productId)
+																?.price.toString()
+																.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+													</TableCell>
+													<TableCell>
+														{"KES" +
+															" " +
+															(
+																product.quantity *
+																getProduct(product.productId)?.price
+															)
+																.toString()
+																.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+													</TableCell>
+													<TableCell>
+														<p
+															style={{
+																color:
+																	order.payment === "Pending"
+																		? "var(--warning-dark)"
+																		: order.payment === "Paid"
+																		? "var(--success-dark)"
+																		: "var(--error-dark)",
+															}}
+														>
+															{order.payment}
+														</p>
+													</TableCell>
+													<TableCell>
+														<p
+															style={{
+																color:
+																	order.status === "Pending"
+																		? "var(--warning-darker)"
+																		: order.status === "Approved"
+																		? "var(--primary-darker)"
+																		: order.status === "delivered"
+																		? "var(--success-darker)"
+																		: "var(--error-darker)",
 
-															backgroundColor:
-																order.status === "Pending"
-																	? "var(--warning-lighter)"
-																	: order.status === "Approved"
-																	? "var(--primary-lighter)"
-																	: order.status === "delivered"
-																	? "var(--success-lighter)"
-																	: "var(--error-lighter)",
-														}}
-													>
-														{order.status}
-													</p>
-												</TableCell>
-												<TableCell>
-													<i className="fa fa-ellipsis-v"></i>
-												</TableCell>
-											</TableRow>
-										))
+																backgroundColor:
+																	order.status === "pending"
+																		? "var(--warning-lighter)"
+																		: order.status === "Approved"
+																		? "var(--primary-lighter)"
+																		: order.status === "delivered"
+																		? "var(--success-lighter)"
+																		: "var(--error-lighter)",
+															}}
+														>
+															{order.status}
+														</p>
+													</TableCell>
+													<TableCell>
+														<i className="fa fa-ellipsis-v"></i>
+													</TableCell>
+												</TableRow>
+											)
+										)
 									)
 								)}
 							</TableBody>

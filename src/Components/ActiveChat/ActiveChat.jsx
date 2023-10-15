@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./ActiveChat.css";
 import { useParams } from "react-router-dom";
-import { TextField } from "@mui/material";
+import { InputAdornment, TextField } from "@mui/material";
 import axios from "axios";
 import nochat from "../../assets/nochat.png";
 
@@ -15,8 +15,10 @@ const ActiveChat = ({
 }) => {
 	const id = useParams().id;
 	const [message, setMessage] = useState("");
+	const [modal, setModal] = useState(false);
+
 	const activeChat = chats.find((chat) => chat?._id === id);
-	// Check if activeChat is undefined
+
 	if (!activeChat) {
 		return (
 			<div className="ActiveChat">
@@ -53,8 +55,7 @@ const ActiveChat = ({
 
 	// Get the selected request
 	const selectedRequestId = selectedRequest?._id;
-	console.log("selectedRequestId", selectedRequestId);
-
+	console.log(selectedRequest);
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 
@@ -113,6 +114,9 @@ const ActiveChat = ({
 		}
 	};
 
+	const handleModal = () => {
+		setModal(!modal);
+	};
 	return (
 		<div className="ActiveChat">
 			<div className="ChatUser">
@@ -126,6 +130,90 @@ const ActiveChat = ({
 							activeChat?.conversations[0]?.messages.slice(-1)[0]?.timestamp
 						)}
 					</p>
+				</div>
+				<div className="Status">
+					<TextField
+						size="small"
+						color="success"
+						select
+						defaultValue="pending"
+						value={selectedRequest?.status}
+						disabled
+						onChange={(e) => {
+							const newRequest = {
+								...selectedRequest,
+								status: e.target.value,
+							};
+							setSelectedRequest(newRequest);
+						}}
+					>
+						<option value="pending">Pending</option>
+						<option value="accepted">Accepted</option>
+						<option value="rejected">Rejected</option>
+					</TextField>
+					<button
+						onClick={() => {
+							handleModal();
+						}}
+					>
+						<i className="fas fa-ellipsis-v"></i>
+					</button>
+					{modal && (
+						<div className="ModalCont">
+							<div className="ModalTop">
+								<span>{selectedRequest?.subject}</span>
+								<button
+									onClick={() => {
+										handleModal();
+									}}
+								>
+									<i className="fas fa-times"></i>
+								</button>
+							</div>
+							<p>{selectedRequest?.consultDescription}</p>
+							<TextField
+								size="small"
+								color="success"
+								select
+								defaultValue="pending"
+								value={selectedRequest?.status}
+								disabled
+							>
+								<option value="pending">Pending</option>
+								<option value="accepted">Accepted</option>
+								<option value="rejected">Rejected</option>
+							</TextField>
+							<TextField
+								variant="outlined"
+								size="small"
+								color="success"
+								label="Place your bid"
+								value={selectedRequest?.amountQuoted}
+								onChange={(e) => {
+									const newRequest = {
+										...selectedRequest,
+										amountQuoted: e.target.value,
+									};
+									setSelectedRequest(newRequest);
+								}}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">KES</InputAdornment>
+									),
+									endAdornment: (
+										<InputAdornment position="end">
+											<button className="UpdateBtn">Update</button>
+										</InputAdornment>
+									),
+								}}
+							/>
+							<p className="Note">
+								Note: Please update your bid before proceeding with the request.
+								Once you have updated your bid, you will not be able to change
+								it.
+							</p>
+						</div>
+					)}
 				</div>
 			</div>
 			<div className="ChatBody">

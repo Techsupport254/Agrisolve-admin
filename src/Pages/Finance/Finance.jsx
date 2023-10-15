@@ -4,21 +4,30 @@ import FinanceCards from "../../Components/FinanceCards/FinanceCards";
 import Transactions from "../../Components/Transactions/Transactions";
 import { InputAdornment, TextField } from "@mui/material";
 
-const Finance = ({ user, getTimelabel }) => {
+const Finance = ({ user, getTimelabel, earnings, users }) => {
 	return (
 		<div className="Finance">
 			<div className="Header">
 				<i className="fa fa-chart-line"></i>
 				<h3>Finance</h3>
 			</div>
-			<FinanceCards user={user} getTimelabel={getTimelabel} />
+			<FinanceCards
+				user={user}
+				getTimelabel={getTimelabel}
+				earnings={earnings}
+			/>
 			<div className="FinanceContainer">
 				<div className="Transactions">
 					<div className="Header">
 						<i className="fa fa-history"></i>
 						<h3>Transactions</h3>
 					</div>
-					<Transactions />
+					<Transactions
+						user={user}
+						users={users}
+						getTimelabel={getTimelabel}
+						earnings={earnings}
+					/>
 				</div>
 				<div className="Advert">
 					<div className="AdvertContainer">

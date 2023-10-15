@@ -196,6 +196,8 @@
 }
 
 .Management {
+    border-bottom: 1px solid var(--p-color);
+
     & .SidebarItemLink {
         width: 100%;
         height: 2rem;
@@ -220,7 +222,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top: 1px solid var(--p-color);
+    background: var(--glass);
+    padding: .5rem 0;
+    margin-top: 1rem;
+    border-radius: 8px;
+
 
     & .Upgrade {
         width: 100%;
@@ -229,11 +235,10 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: .5rem;
         margin: .5rem 0;
 
         & .Picture {
-            width: 40%;
+            width: 30%;
             height: 100%;
             display: flex;
             justify-content: center;
@@ -250,16 +255,19 @@
 }
 
 .UpgradeDetails {
-    width: 60%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
 
     & span {
-        font-size: 1rem;
+        font-size: .8rem;
         font-weight: 600;
         color: var(--white);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     & small {
@@ -278,6 +286,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    margin-top: .5rem;
 
     & button {
         width: 100%;
@@ -286,8 +295,8 @@
         align-items: center;
         border: none;
         outline: none;
-        background: var(--primary-lighter);
-        color: var(--primary-darker);
+        background: var(--success-lighter);
+        color: var(--success-darker);
         font-size: 1rem;
         font-weight: 600;
         padding: .1rem .5rem;

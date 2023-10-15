@@ -24,7 +24,6 @@ const Reports = ({ getTimeLabel }) => {
 			});
 	}, []);
 
-	console.log(newsData);
 
 	return (
 		<div className="Reports">

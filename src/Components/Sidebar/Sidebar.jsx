@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -8,9 +8,34 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import logo from "../../assets/logo.png";
 import { Badge } from "@mui/material";
 
-
 const Sidebar = ({ user, unseenCount, newRequestCount }) => {
-	const admin = __ADMIN__;
+	const [admin, setAdmin] = useState(false);
+	const [agriprofessional, setAgriprofessional] = useState(false);
+	const [agribusiness, setAgribusiness] = useState(false);
+
+	const admin_email = __ADMIN__;
+
+	// Check if user is admin
+	useEffect(() => {
+		if (user?.email === admin_email) {
+			setAdmin(true);
+		}
+	}, [user?.email, admin_email]);
+
+	// Check if user is agriprofessional
+	useEffect(() => {
+		if (user?.userType === "agriprofessional" && !admin) {
+			setAgriprofessional(true);
+		}
+	}, [user?.userType]);
+
+	// Check if user is agribusiness
+	useEffect(() => {
+		if (user?.userType === "agribusiness" && !admin) {
+			setAgribusiness(true);
+		}
+	}, [user?.userType]);
+
 	const location = useLocation();
 
 	const normalData = sidebardata.filter((item) => item.management === false);
@@ -18,6 +43,7 @@ const Sidebar = ({ user, unseenCount, newRequestCount }) => {
 	const mananagementData = sidebardata.filter(
 		(item) => item.management === true
 	);
+
 	return (
 		<SkeletonTheme
 			baseColor="rgba(255, 255, 255, 0.1)"
@@ -89,7 +115,7 @@ const Sidebar = ({ user, unseenCount, newRequestCount }) => {
 							<div className="ProfileName">
 								<span>Agrisolve</span>
 								<small>Admin Panel</small>
-								<p>{user?.userType}</p>
+								<p>{admin ? "Admin" : user?.userType}</p>
 							</div>
 						</div>
 						<div className="SidebarBottom">
@@ -100,36 +126,51 @@ const Sidebar = ({ user, unseenCount, newRequestCount }) => {
 								{normalData.map((item) => {
 									const isActive = location.pathname === item.path;
 									return (
-										<Link
-											key={item.id}
-											to={item.path}
-											className={`SidebarItemLink ${isActive ? "Active" : ""}`}
-										>
-											<motion.div
-												className="SidebarItem"
-												whileHover={{ scale: 1.05 }}
-												whileTap={{ scale: 0.95 }}
-											>
-												{item.item}
-												<div className="Icon text-teal-300">{item.icon}</div>
-												<span>{item.title}</span>
-												{item.title === "Requests" && newRequestCount > 0 && (
-													<Badge
-														badgeContent={newRequestCount}
-														color="primary"
-														className="ml-3"
-														anchorOrigin={{
-															vertical: "top",
-															horizontal: "left",
-														}}
-														sx={{
-															marginLeft: "2rem",
-															fontSize: "0.5rem",
-														}}
-													/>
-												)}
-											</motion.div>
-										</Link>
+										<>
+											{(item.title === "Users" && !admin) ||
+											(item.title === "Products" && !(admin || agribusiness)) ||
+											(item.title === "Requests" &&
+												!(admin || agriprofessional)) ||
+											(item.title === "Orders" && !(admin || agribusiness)) ? (
+												<></>
+											) : (
+												<Link
+													key={item.id}
+													to={item.path}
+													className={`SidebarItemLink ${
+														isActive ? "Active" : ""
+													}`}
+												>
+													<motion.div
+														className="SidebarItem"
+														whileHover={{ scale: 1.05 }}
+														whileTap={{ scale: 0.95 }}
+													>
+														{item.item}
+														<div className="Icon text-teal-300">
+															{item.icon}
+														</div>
+														<span>{item.title}</span>
+														{item.title === "Requests" &&
+															newRequestCount > 0 && (
+																<Badge
+																	badgeContent={newRequestCount}
+																	color="primary"
+																	className="ml-3"
+																	anchorOrigin={{
+																		vertical: "top",
+																		horizontal: "left",
+																	}}
+																	sx={{
+																		marginLeft: "2rem",
+																		fontSize: "0.5rem",
+																	}}
+																/>
+															)}
+													</motion.div>
+												</Link>
+											)}
+										</>
 									);
 								})}
 							</div>
@@ -139,7 +180,12 @@ const Sidebar = ({ user, unseenCount, newRequestCount }) => {
 								</div>
 								{mananagementData?.map((item) => {
 									const isActive = location.pathname === item.path;
-									return (
+									return (item.title === "Chats" &&
+										!(agriprofessional || admin)) ||
+										(item.title === "News" && !admin) ||
+										(item.title === "Blogs" && !admin) ? (
+										<></>
+									) : (
 										<Link
 											key={item.id}
 											to={item.path}
@@ -181,38 +227,42 @@ const Sidebar = ({ user, unseenCount, newRequestCount }) => {
 									);
 								})}
 							</div>
-							<div className="Subscription">
-								<div className="Upgrade">
-									<div className="Picture">
-										{user ? (
-											<img
-												src={user?.profilePicture ? user?.profilePicture : logo}
-												alt="profile"
-											/>
-										) : (
-											<Skeleton circle={true} height={40} width={40} />
-										)}
-									</div>
-									<div className="UpgradeDetails">
-										{user ? (
-											<>
-												<span>{user?.name}</span>
-												<small>{user?.email}</small>
-											</>
-										) : (
-											<>
-												<Skeleton width={100} />
-												<Skeleton width={100} />
-											</>
-										)}
-										<div className="UpgradeBtn">
-											<Link to="/user">
-												<button>Upgrade</button>
-											</Link>
+							{!admin && (
+								<div className="Subscription">
+									<div className="Upgrade">
+										<div className="Picture">
+											{user ? (
+												<img
+													src={
+														user?.profilePicture ? user?.profilePicture : logo
+													}
+													alt="profile"
+												/>
+											) : (
+												<Skeleton circle={true} height={40} width={40} />
+											)}
+										</div>
+										<div className="UpgradeDetails">
+											{user ? (
+												<>
+													<span>{user?.name}</span>
+													<small>{user?.email}</small>
+												</>
+											) : (
+												<>
+													<Skeleton width={100} />
+													<Skeleton width={100} />
+												</>
+											)}
+											<div className="UpgradeBtn">
+												<Link to="/user">
+													<button>Upgrade</button>
+												</Link>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+							)}
 							<div className="Version">
 								<span>Version 1.0.0</span>
 							</div>

@@ -5,16 +5,25 @@ import Stats from "../../Components/Stats/Stats";
 import DashTop from "../../Components/DashTop/DashTop";
 import DashTable from "../../Components/DashTable/DashTable";
 
-const Dashboard = ({ user, users, products, getTimeLabel }) => {
+const Dashboard = ({
+	user,
+	users,
+	products,
+	getTimeLabel,
+	orders,
+	getCustomer,
+	getProduct,
+	earnings,
+}) => {
 	return (
 		<div className="Dashboard">
 			<DashTop user={user} />
 			<div className="DashBottom">
 				<div className="DashCards">
-					<Cards />
+					<Cards user={user} products={products} earnings={earnings} />
 				</div>
 				<div className="Stats">
-					<Stats />
+					<Stats user={user} products={products} earnings={earnings} />
 				</div>
 				<div className="Table">
 					<DashTable
@@ -22,6 +31,9 @@ const Dashboard = ({ user, users, products, getTimeLabel }) => {
 						getTimeLabel={getTimeLabel}
 						user={user}
 						users={users}
+						orders={orders}
+						getCustomer={getCustomer}
+						getProduct={getProduct}
 					/>
 				</div>
 			</div>

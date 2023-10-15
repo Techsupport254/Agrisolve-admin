@@ -1,60 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Transactions.css";
 import Transaction from "../Transaction/Transaction";
 
-const Transactions = () => {
-	const transactions = [
-		{
-			id: 1,
-			title: "Sales",
-			description:
-				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-			timestamp: "2021-05-01T12:00:00.000Z",
-			amount: 10000,
-			type: "credit",
-		},
-		{
-			id: 2,
-			title: "Salary",
-			description:
-				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-			timestamp: "2021-05-01T12:00:00.000Z",
-			amount: 10000,
-			type: "credit",
-		},
-		{
-			id: 3,
-			title: "Salary",
-			description:
-				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-			timestamp: "2021-05-01T12:00:00.000Z",
-			amount: 10000,
-			type: "credit",
-		},
-		{
-			id: 4,
-			title: "Salary",
-			description:
-				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-			timestamp: "2021-05-01T12:00:00.000Z",
-			amount: 10000,
-			type: "credit",
-		},
-		{
-			id: 5,
-			title: "Salary",
-			description:
-				"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-			timestamp: "2021-05-01T12:00:00.000Z",
-			amount: 10000,
-			type: "credit",
-		},
-	];
+const Transactions = ({ earnings, user, users }) => {
+	const [admin, setAdmin] = React.useState(false);
+	const admin_email = __ADMIN__;
+
+	// Check if user is admin
+	useEffect(() => {
+		if (user?.email === admin_email) {
+			setAdmin(true);
+		}
+	}, [user?.email, admin_email]);
+
+	const userEarnings = earnings?.filter(
+		(earning) => earning?.userId === user?._id || admin
+	);
+	const userId = userEarnings?.[0]?.userId;
+	const transactions = userEarnings?.[0]?.earnings;
+	Array && transactions?.sort((a, b) => new Date(b.date) - new Date(a.date));
+
 	return (
 		<div className="TransactionsContainer">
-			{transactions.map((transaction) => (
-				<Transaction key={transaction.id} transaction={transaction} />
-			))}
+			{Array &&
+				transactions?.map((transaction) => (
+					<Transaction
+						key={transaction.id}
+						transaction={transaction}
+						admin={admin}
+						userId={userId}
+						users={users}
+					/>
+				))}
 		</div>
 	);
 };

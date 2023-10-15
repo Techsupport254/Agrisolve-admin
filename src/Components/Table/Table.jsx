@@ -78,7 +78,6 @@ const Table = ({ products, getTimeLabel }) => {
 								<span className="Wholesale">
 									Ksh. {params.row.wholesalePrice}
 								</span>
-								
 							</>
 						) : (
 							<span className="Retail">Ksh. {params.row.price}</span>
@@ -172,7 +171,15 @@ const Table = ({ products, getTimeLabel }) => {
 
 	return (
 		<div style={{ width: "100%" }}>
-			{selectedItem ? (
+			{products?.length === 0 ? (
+				<div className="NoProduct">
+					<h2>No products found</h2>
+					<p>
+						You have not added any products yet. Click 'Add Products' button
+						above to add products
+					</p>
+				</div>
+			) : selectedItem ? (
 				<div className="SelectedActions">
 					<button
 						onClick={() => console.log("Edit selected item", selectedItem.id)}
