@@ -73,6 +73,9 @@ const LoginPopup = () => {
 		}
 	};
 
+// acount validation
+
+
 	return (
 		<div className="LoginPopup">
 			<div className="LoginContainer">

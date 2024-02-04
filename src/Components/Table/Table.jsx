@@ -1,210 +1,305 @@
-import React, { useState } from "react";
+import * as React from "react";
 import "./Table.css";
-import { DataGrid } from "@mui/x-data-grid";
-import LinearProgress, {
-	linearProgressClasses,
-} from "@mui/material/LinearProgress";
-import { styled } from "@mui/material/styles";
+import {
+	Paper,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	TablePagination,
+	TextField,
+	Select,
+	MenuItem,
+	IconButton,
+	Button,
+	LinearProgress,
+	InputLabel,
+	FormControl,
+} from "@mui/material";
+import { Avatar } from "antd";
 
-const Table = ({ products, getTimeLabel }) => {
-	const [selectedItem, setSelectedItem] = useState(null);
+// Define the columns for the product table as per your design
+const columns = [
+	{
+		field: "product",
+		headerName: "Product",
+		sortable: true,
+	},
+	{
+		field: "category",
+		headerName: "Category",
+		sortable: false,
+	},
+	{
+		field: "stock",
+		headerName: "Stock",
+		sortable: false,
+	},
+	{
+		field: "productStatus",
+		headerName: "Status",
+		sortable: true,
+	},
+	{
+		field: "createdAt",
+		headerName: "Created/Updated",
+		sortable: false,
+	},
+	{
+		field: "action",
+		headerName: "Action",
+		sortable: false,
+	},
+];
 
-	if (products === null) {
-		return (
-			<div className="SpinnerLoading">
-				<i className="fa fa-spinner fa-spin" />
-			</div>
-		);
-	}
+function StickyHeadTable({ getTimeLabel, products }) {
+	const [page, setPage] = React.useState(0);
+	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-	const BorderLinearProgress = styled(LinearProgress)(({ theme, value }) => ({
-		height: 5,
-		width: 100,
-		borderRadius: 4,
-		[`&.${linearProgressClasses.colorPrimary}`]: {
-			backgroundColor:
-				value > 75
-					? "var(--success-lighter)"
-					: value > 50
-					? "var(--primary-lighter)"
-					: value > 25
-					? "var(--warning-lighter)"
-					: "var(--error-lighter)",
-		},
-		[`& .${linearProgressClasses.bar}`]: {
-			borderRadius: 4,
-			backgroundColor:
-				value > 75
-					? "var(--success-light)"
-					: value > 50
-					? "var(--primary-light)"
-					: value > 25
-					? "var(--warning-light)"
-					: "var(--error-light)",
-		},
-	}));
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
+	};
 
-	const columns = [
-		{
-			field: "product",
-			headerName: "Product",
-			width: 250,
-			sortable: true,
-			renderCell: (params) => {
-				return (
-					<div className="Product">
-						<div className="ProductImage">
-							<img src={params.row.image} alt={params.row.title} />
-						</div>
-						<div className="ProductDetails">
-							<span>{params.row.title}</span>
-							<p>{params.row.category}</p>
-							<h3>Ksh. {params.row.price}</h3>
-						</div>
-					</div>
-				);
-			},
-		},
-		{
-			field: "price",
-			headerName: "Price",
-			width: 130,
-			sortable: false,
-			renderCell: (params) => {
-				return (
-					<div className="Price">
-						{params.row.wholesale ? (
-							<>
-								<span className="Wholesale">
-									Ksh. {params.row.wholesalePrice}
-								</span>
-							</>
-						) : (
-							<span className="Retail">Ksh. {params.row.price}</span>
-						)}
-					</div>
-				);
-			},
-		},
-		{
-			field: "stock",
-			headerName: "Stock",
-			width: 130,
-			sortable: false,
-			renderCell: (params) => {
-				const value = params.row.stock;
-				return (
-					<div className="Stock">
-						<BorderLinearProgress
-							variant="determinate"
-							value={(value / 100) * 100}
-						/>
-						<span>{value} in stock</span>
-					</div>
-				);
-			},
-		},
-		{
-			field: "wholesale",
-			headerName: "Wholesale",
-			width: 150,
-			sortable: true,
-		},
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(+event.target.value);
+		setPage(0);
+	};
 
-		{
-			field: "status",
-			headerName: "Status",
-			width: 130,
-			sortable: true,
-			renderCell: (params) => {
-				return (
-					<div
-						className="PublishStatus"
-						style={{
-							backgroundColor:
-								params.row.status === "Published"
-									? "var(--success-lighter)"
-									: "var(--warning-lighter)",
-							color:
-								params.row.status === "Published"
-									? "var(--success-dark)"
-									: "var(--warning-dark)",
-						}}
-					>
-						{params.row.status === "Published" ? (
-							<span className="Available">Published</span>
-						) : (
-							<span className="Unavailable">Draft</span>
-						)}
-					</div>
-				);
-			},
-		},
-		{
-			field: "date",
-			headerName: "Created/Updated",
-			width: 180,
-			sortable: false,
-			renderCell: (params) => {
-				return (
-					<div className="Date">
-						<span>{getTimeLabel(params.row.date)}</span>
-					</div>
-				);
-			},
-		},
-	];
-
-	const rows = products.map((product) => ({
-		id: product._id,
-		title: product.productName,
-		category: product.productCategory,
-		stock: product.stock,
-		image: product.images[0],
-		status: product.productStatus,
-		date: product.updatedAt ? product.updatedAt : product.createdAt,
-		wholesale: product.wholesale,
-		price: product.price,
-		wholesale: product.wholesale,
-		wholesalePrice: product.wholesalePrice,
-	}));
+	// Function to handle the addition of a new product (you will need to implement this)
+	const handleAddProduct = () => {
+		// Your logic to handle adding a new product
+	};
 
 	return (
-		<div style={{ width: "100%" }}>
-			{products?.length === 0 ? (
-				<div className="NoProduct">
-					<h2>No products found</h2>
-					<p>
-						You have not added any products yet. Click 'Add Products' button
-						above to add products
-					</p>
+		<Paper
+			sx={{
+				width: "100%",
+				height: "100%",
+				overflow: "hidden",
+				fontSize: "10px",
+			}}
+		>
+			<div
+				style={{
+					display: "flex",
+					justifyContent: "space-between",
+					alignItems: "center",
+					padding: "0 10px",
+				}}
+			>
+				<div
+					style={{
+						display: "flex",
+						alignItems: "center",
+						gap: ".5rem",
+						width: "50%",
+					}}
+				>
+					<TextField
+						id="search"
+						label="Search for..."
+						variant="outlined"
+						size="small"
+					/>
+					<div className="SelectButton">
+						<FormControl fullWidth size="small">
+							<InputLabel id="demo-simple-select-label">Category</InputLabel>
+							<Select
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+							>
+								{products?.map((product) => (
+									<MenuItem key={product._id} value={product.productCategory}>
+										{product.productCategory}
+									</MenuItem>
+								))}
+							</Select>
+						</FormControl>
+					</div>
+					<div className="SelectButton">
+						<FormControl fullWidth size="small">
+							<InputLabel id="demo-simple-select-label">Status</InputLabel>
+							<Select
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+							>
+								{products?.map((product) => (
+									<MenuItem key={product._id} value={product.productStatus}>
+										{product.productStatus}
+									</MenuItem>
+								))}
+							</Select>
+						</FormControl>
+					</div>
 				</div>
-			) : selectedItem ? (
-				<div className="SelectedActions">
-					<button
-						onClick={() => console.log("Edit selected item", selectedItem.id)}
-					>
-						Edit
-					</button>
-					<button
-						onClick={() => console.log("Delete selected item", selectedItem.id)}
-					>
-						Delete
-					</button>
-				</div>
-			) : (
-				<DataGrid
-					rows={rows}
-					columns={columns}
-					rowHeight={80}
-					checkboxSelection
-					onRowSelected={(e) => setSelectedItem(e.isSelected ? e.data : null)}
-					disableSelectionOnClick
-					sortingOrder={["asc", "desc", null]}
-				/>
-			)}
-		</div>
-	);
-};
+				<Button
+					variant="contained"
+					onClick={handleAddProduct}
+					style={{
+						padding: ".3rem",
+						background: "var(--bg-color)",
+						color: "var(--white)",
+						fontSize: ".8rem",
+					}}
+				>
+					Add Product
+				</Button>
+			</div>
 
-export default Table;
+			<TableContainer
+				sx={{
+					width: "100%",
+					height: "85%",
+					overflow: "hidden",
+				}}
+			>
+				<Table stickyHeader aria-label="sticky table">
+					<TableHead style={{ padding: ".2rem" }}>
+						<TableRow style={{ padding: ".2rem" }}>
+							{columns.map((column) => (
+								<TableCell
+									key={column.field}
+									align="left"
+									style={{
+										padding: ".2rem",
+										background: "var(--bg-color)",
+										color: "var(--white)",
+										fontSize: ".7rem",
+									}}
+								>
+									{column.headerName}
+								</TableCell>
+							))}
+						</TableRow>
+					</TableHead>
+					<TableBody
+						style={{
+							padding: ".2rem",
+							fontSize: ".7rem",
+						}}
+					>
+						{products
+							?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+							.map((product) => (
+								<TableRow
+									key={product._id}
+									style={{
+										padding: ".2rem",
+										color: "var(--white)",
+										fontSize: ".7rem",
+									}}
+								>
+									{columns.map((column) => (
+										<TableCell
+											key={column.field}
+											align="left"
+											style={{
+												padding: ".2rem",
+												fontSize: ".7rem",
+											}}
+										>
+											{column.field === "product" && (
+												<div className="Product">
+													<div className="ProductImage">
+														<img
+															src={product.images[0]}
+															alt={product.productName}
+														/>
+													</div>
+													<div className="ProductDetails">
+														<span>{product.productName}</span>
+														<h3>
+															Ksh. {product.price} || {product.wholesalePrice}
+														</h3>
+													</div>
+												</div>
+											)}
+											{column.field === "action" && (
+												<Button
+													size="small"
+													onClick={() => {
+														console.log(product);
+														console.log(product._id);
+														console.log(product.productName);
+													}}
+												>
+													<i className="fa-solid fa-ellipsis-vertical"></i>
+												</Button>
+											)}
+											{column.field === "category" && (
+												<div className="ProductCategory">
+													<span>{product.productCategory}</span>
+													<small>{product.subCategory}</small>
+												</div>
+											)}
+											{column.field === "productStatus" && (
+												<div className="ProductStatus">
+													<span
+														style={{
+															color:
+																product.productStatus === "Published"
+																	? "var(--success-darker)"
+																	: "var(--warning-darker)",
+														}}
+													>
+														{product.productStatus}
+													</span>
+												</div>
+											)}
+											{column.field === "stock" && (
+												<span
+													style={{
+														color:
+															product.stock <= 10
+																? "var(--error-darker)"
+																: product.stock <= 20
+																? "var(--warning-darker)"
+																: "var(--success-darker)",
+													}}
+												>
+													{product.stock}
+												</span>
+											)}
+											{column.field === "createdAt" && (
+												<span>
+													{getTimeLabel(
+														product.createdAt
+															? product.createdAt
+															: product.updatedAt
+															? product.updatedAt
+															: product.createdAt
+													)}
+												</span>
+											)}
+										</TableCell>
+									))}
+								</TableRow>
+							))}
+					</TableBody>
+				</Table>
+			</TableContainer>
+
+			<TablePagination
+				rowsPerPageOptions={[10, 25, 100]}
+				component="div"
+				count={products?.length}
+				rowsPerPage={rowsPerPage}
+				page={page}
+				onPageChange={handleChangePage}
+				onRowsPerPageChange={handleChangeRowsPerPage}
+				style={{
+					display: "flex",
+					justifyContent: "flex-end",
+					alignItems: "center",
+					padding: "0",
+					margin: "0",
+					height: "3rem",
+				}}
+			/>
+		</Paper>
+	);
+}
+
+export default StickyHeadTable;

@@ -19,7 +19,9 @@ const Card = ({ title, value, barValue, icon, color, series }) => {
 			</div>
 			<div className="CardRight">
 				<span>{title}</span>
-				<div className="CardIcon">{icon}</div>
+				<div className="CardIcon">
+					<i className={icon}></i>
+				</div>
 				<div className="CardValue">
 					<p>
 						{barValue}/{value}

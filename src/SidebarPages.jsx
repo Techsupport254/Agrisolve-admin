@@ -80,6 +80,7 @@ const SidebarPages = ({
 							) : (
 								<Dashboard
 									user={user}
+									users={users}
 									products={products}
 									getTimeLabel={getTimeLabel}
 									requests={requests}

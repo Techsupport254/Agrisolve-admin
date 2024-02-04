@@ -6,6 +6,7 @@ import axios from "axios";
 
 const General = ({ user }) => {
 	const [uploading, setUploading] = useState(false);
+	const [edit, setEdit] = useState(false);
 
 	const [verificationStatus, setVerificationStatus] = useState(
 		user?.verificationStatus === "verified"
@@ -65,6 +66,10 @@ const General = ({ user }) => {
 			console.error("Error:", err);
 			setUploading(false);
 		}
+	};
+
+	const handleEdit = () => {
+		setEdit(!edit);
 	};
 
 	return (
@@ -138,6 +143,10 @@ const General = ({ user }) => {
 									color: "primary",
 								},
 							}}
+							disabled={!edit}
+							InputLabelProps={{
+								shrink: true,
+							}}
 						/>
 					</div>
 					<div className="GeneralRowItem">
@@ -149,6 +158,10 @@ const General = ({ user }) => {
 							value={user?.username}
 							size="small"
 							color="success"
+							disabled={!edit}
+							InputLabelProps={{
+								shrink: true,
+							}}
 						/>
 					</div>
 				</div>
@@ -162,6 +175,10 @@ const General = ({ user }) => {
 							value={user?.email}
 							size="small"
 							color="success"
+							disabled={!edit}
+							InputLabelProps={{
+								shrink: true,
+							}}
 						/>
 					</div>
 					<div className="GeneralRowItem">
@@ -173,6 +190,10 @@ const General = ({ user }) => {
 							value={user?.phone}
 							size="small"
 							color="success"
+							InputLabelProps={{
+								shrink: true,
+							}}
+							disabled={!edit}
 						/>
 					</div>
 				</div>
@@ -186,6 +207,10 @@ const General = ({ user }) => {
 							value={user?.location}
 							size="small"
 							color="success"
+							disabled={!edit}
+							InputLabelProps={{
+								shrink: true,
+							}}
 						/>
 					</div>
 					<div className="GeneralRowItem">
@@ -197,6 +222,10 @@ const General = ({ user }) => {
 							value={user?.location}
 							size="small"
 							color="success"
+							disabled={!edit}
+							InputLabelProps={{
+								shrink: true,
+							}}
 						/>
 					</div>
 				</div>
@@ -210,6 +239,10 @@ const General = ({ user }) => {
 							value={user?.businessName}
 							size="small"
 							color="success"
+							disabled={!edit}
+							InputLabelProps={{
+								shrink: true,
+							}}
 						/>
 					</div>
 					<div className="GeneralRowItem">
@@ -221,6 +254,10 @@ const General = ({ user }) => {
 							value={capitalize(user?.businessType)}
 							size="small"
 							color="success"
+							disabled={!edit}
+							InputLabelProps={{
+								shrink: true,
+							}}
 						/>
 					</div>
 				</div>
@@ -235,14 +272,25 @@ const General = ({ user }) => {
 							color="success"
 							multiline
 							rows={4}
+							disabled={!edit}
+							InputLabelProps={{
+								shrink: true,
+							}}
 						/>
 					</div>
 				</div>
 				<div className="EditBtn">
-					<button>
-						<i className="fa fa-edit"></i>
-						<h1>Edit</h1>
-					</button>
+					{edit ? (
+						<button onClick={handleEdit}>
+							<i className="fa fa-save"></i>
+							<h1>Save Changes</h1>
+						</button>
+					) : (
+						<button onClick={handleEdit}>
+							<i className="fa fa-edit"></i>
+							<h1>Edit</h1>
+						</button>
+					)}
 				</div>
 			</div>
 		</div>

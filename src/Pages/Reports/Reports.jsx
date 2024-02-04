@@ -5,6 +5,8 @@ import AnalyticsCards from "../../Components/AnalyticsCards/AnalyticsCards";
 import News from "../../Components/News/News";
 import History from "../../Components/History/History";
 import axios from "axios";
+import RevenueWeek from "../../Components/RevenueWeek/RevenueWeek";
+import TopProducts from "../../Components/TopProducts/TopProducts";
 
 const Reports = ({ getTimeLabel }) => {
 	const [newsData, setNewsData] = React.useState([]);
@@ -24,34 +26,45 @@ const Reports = ({ getTimeLabel }) => {
 			});
 	}, []);
 
-
 	return (
 		<div className="Reports">
 			<div className="Header">
 				<i className="fa fa-chart-line"></i>
 				<h1>Analytics</h1>
 			</div>
-			<div className="AnalyticsCards">
+			<div className="AnalyticsTop">
 				<AnalyticsCards analyticsData={analyticsData} />
 			</div>
 			<div className="ReportsBottom">
-				<div className="News">
-					<div className="Header">
-						<i className="fa fa-newspaper"></i>
-						<h1>News</h1>
+				<div className="ReportsBottomLeft">
+					<div className="RevenueWeek">
+						<RevenueWeek />
 					</div>
-					<News news={newsData} getTimeLabel={getTimeLabel} loading={loading} />
+					<TopProducts />
 				</div>
-				<div className="Timeline">
-					<div className="Header">
-						<i className="fa fa-history"></i>
-						<h1>Timeline</h1>
+				<div className="ReportsBottomRight">
+					<div className="Timeline">
+						<div className="Header">
+							<i className="fa fa-history"></i>
+							<h1>Timeline</h1>
+						</div>
+						<History
+							data={newsData}
+							getTimeLabel={getTimeLabel}
+							loading={loading}
+						/>
 					</div>
-					<History
-						data={newsData}
-						getTimeLabel={getTimeLabel}
-						loading={loading}
-					/>
+					<div className="News">
+						<div className="Header">
+							<i className="fa fa-newspaper"></i>
+							<h1>News</h1>
+						</div>
+						<News
+							news={newsData}
+							getTimeLabel={getTimeLabel}
+							loading={loading}
+						/>
+					</div>
 				</div>
 			</div>
 		</div>

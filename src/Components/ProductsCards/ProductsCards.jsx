@@ -3,8 +3,6 @@ import "./ProductsCards.css";
 import ProductsCard from "../ProductsCard/ProductsCard";
 
 const ProductsCards = ({ user, products, orders, earnings }) => {
-	console.log(products);
-	console.log(orders);
 	const categories = [
 		{ name: "applaud", value: "applaud" },
 		{ name: "stats", value: "stats" },

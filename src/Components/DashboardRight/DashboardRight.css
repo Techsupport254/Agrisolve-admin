@@ -1,0 +1,117 @@
+.DashboardsTop,
+.DashboardsBottom {
+    width: 100%;
+    box-shadow: var(--boxShadow);
+    border-radius: 5px;
+    padding: .5rem;
+}
+
+.DashboardsTop {
+    height: 45%;
+}
+
+.DashboardsBottom {
+    height: 65%;
+}
+
+.ChartContainer {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: .7rem !important;
+}
+
+.TopPerformers,
+.TopPerformer,
+.TopPerformerName,
+.TopPerformerMore,
+.PerformanceValue {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.TopPerformers {
+    gap: .3rem;
+    overflow: auto;
+    padding: .5rem;
+}
+
+.TopPerformer {
+    width: 98%;
+    height: 3rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .3rem;
+    border-radius: 5px;
+    background: #f5f5f5;
+
+    & span{
+        font-size: .8rem;
+        font-weight: 600;
+    }
+}
+
+
+.AvatarProfile {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50%;
+}
+
+.TopPerformerName {
+    flex-direction: column;
+    font-size: .7rem;
+
+    & span {
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    & small {
+        font-size: .7rem;
+        text-transform: capitalize;
+    }
+}
+
+.TopPerformerMore {
+    width: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .2rem;
+
+    & p {
+        font-size: .7rem;
+    }
+}
+
+.PerformanceValue {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .2rem;
+
+}
+
+.Individual {
+    padding: .1rem .2rem;
+    border-radius: 5px;
+    background: var(--warning-lighter);
+    font-size: .6rem;
+}
+
+.fa-caret-up {
+    color: var(--success-dark);
+}
+
+.fa-caret-down {
+    color: var(--error-dark);
+}

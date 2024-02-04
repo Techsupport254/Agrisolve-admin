@@ -1,22 +1,80 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./RequestsTable.css";
-import { DataGrid } from "@mui/x-data-grid";
-import { Badge, Modal } from "@mui/material";
+import {
+	Paper,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	TablePagination,
+	Modal,
+	Button,
+} from "@mui/material";
 import RequestModal from "../RequestModal/RequestModal";
-import { useHistory } from "react-router-use-history";
 
-const RequestsTable = ({ requests, users, getTimeLabel, user }) => {
-	const [isModalOpen, setIsModalOpen] = useState(false);
+const columns = [
+	{
+		field: "subject",
+		headerName: "Subject",
+		sortable: true,
+	},
+	{
+		field: "senderName",
+		headerName: "Sender",
+		sortable: false,
+	},
+	{
+		field: "urgency",
+		headerName: "Urgency",
+		sortable: false,
+	},
+	{
+		field: "status",
+		headerName: "Status",
+		sortable: true,
+	},
+	{
+		field: "acceptedBy",
+		headerName: "Accepted By",
+		sortable: false,
+	},
+	{
+		field: "acceptedAt",
+		headerName: "Accepted",
+		sortable: false,
+	},
+	{
+		field: "amount",
+		headerName: "Amount (KSh)",
+		sortable: false,
+	},
+	{
+		field: "action",
+		headerName: "Action",
+		sortable: false,
+	},
+];
+
+function StickyHeadTable({ getTimeLabel, requests, users, user }) {
+	const [page, setPage] = React.useState(0);
+	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	const [isModal, setIsModal] = useState(false);
 	const [selectedRequest, setSelectedRequest] = useState(null);
 	const [selectedSender, setSelectedSender] = useState(null);
-	const history = useHistory();
 
-	const handleModalOpen = () => {
-		setIsModalOpen(true);
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
 	};
 
-	const handleModalClose = () => {
-		setIsModalOpen(false);
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(+event.target.value);
+		setPage(0);
+	};
+
+	const handleModal = () => {
+		setIsModal(!isModal);
 	};
 
 	const fetchSender = (senderId) => {
@@ -31,191 +89,185 @@ const RequestsTable = ({ requests, users, getTimeLabel, user }) => {
 		}
 	}, [selectedRequest, users]);
 
-	// sort by the latest request
-	const sortedRequests = requests?.sort((a, b) => {
-		console.log("Sorting:", new Date(b.date), new Date(a.date));
-		return new Date(b.date) - new Date(a.date);
-	});
-
-	const columns = [
-		{
-			field: "subject",
-			headerName: "Subject",
-			width: 200,
-			sortable: true,
-			renderCell: (params) => {
-				return (
-					<div className="ReqCol">
-						<span>{params.row.subject}</span>
-						<p>
-							{params.row.status === "pending" ? (
-								<Badge
-									badgeContent="New"
-									color="primary"
-									anchorOrigin={{
-										vertical: "top",
-										horizontal: "left",
-									}}
-									sx={{
-										marginLeft: "16px",
-										marginRight: "30px",
-										cursor: "pointer",
-									}}
-								/>
-							) : params.row.status === "accepted" ? (
-								<p style={{ color: "#4caf50" }}>Accepted</p>
-							) : params.row.status === "rejected" ? (
-								<p
-									style={{
-										color: "#f44336",
-									}}
-								>
-									Rejected
-								</p>
-							) : (
-								<p
-									style={{
-										color: "#3f51b5",
-									}}
-								>
-									Settled
-								</p>
-							)}
-						</p>
-					</div>
-				);
-			},
-		},
-		{
-			field: "senderName",
-			headerName: "Sender",
-			width: 200,
-			sortable: true,
-			renderCell: (params) => {
-				return (
-					<div className="ReqCol">
-						<span>
-							{params.row.senderName === user.username
-								? "You"
-								: params.row.senderName}
-						</span>
-						<p
-							style={{
-								color:
-									params.row.urgency === "High"
-										? "#f44336"
-										: params.row.urgency === "Medium"
-										? "#ff9800"
-										: "#4caf50",
-							}}
-						>
-							{params.row.urgency}
-						</p>
-					</div>
-				);
-			},
-		},
-		{
-			field: "acceptedBy",
-			headerName: "Accepted By",
-			width: 200,
-			renderCell: (params) => {
-				return (
-					<div>
-						{params.row.status === "accepted" ? (
-							<span>
-								{params.row.acceptedBy === user.username
-									? "You"
-									: params.row.acceptedBy}
-							</span>
-						) : (
-							<span>N/A</span>
-						)}
-					</div>
-				);
-			},
-		},
-		{
-			field: "acceptedAt",
-			headerName: "Accepted",
-			width: 200,
-			renderCell: (params) => {
-				return (
-					<div>
-						{params.row.status === "accepted" ? (
-							<span>{params.row.acceptedAt}</span>
-						) : (
-							<span>N/A</span>
-						)}
-					</div>
-				);
-			},
-		},
-		{ field: "amount", headerName: "Amount (KSh)", width: 130, sortable: true },
-	];
-
-	const rows =
-		sortedRequests?.map((request, index) => ({
-			id: request._id || index + 1,
-			subject: request.subject,
-			senderName: request.name,
-			urgency: request.urgency,
-			status: request.status,
-			description: request.consultDescription,
-			acceptedBy: request.acceptedBy,
-			acceptedById: request.acceptedById,
-			acceptedAt: request.acceptedAt
-				? getTimeLabel(request.acceptedAt)
-				: "Not Accepted",
-			amount:
-				request.status === "settled"
-					? request.amount
-					: request.status === "accepted"
-					? request.amountQuoted
-					: request.status === "rejected"
-					? "Rejected"
-					: "Not Accepted",
-			senderId: request.refId,
-			refId: request.refId,
-		})) || [];
-
-	const handleRowClick = (params) => {
-		const selectedSender = fetchSender(params.row.senderId);
-		setSelectedRequest(params.row);
+	const handleRowClick = (request) => {
+		const selectedSender = fetchSender(request.senderId);
+		setSelectedRequest(request);
 		setSelectedSender(selectedSender);
-		handleModalOpen();
-
-		if (
-			params.row.status === "accepted" &&
-			params.row.acceptedById === user._id
-		)
-			history.push({
-				pathname: `/requests/${params.row.id}`,
-				state: { selectedRequest: params.row },
-			});
+		handleModal();
 	};
+
 	return (
-		<div className="RequestsTable" style={{ height: 600 }}>
-			<DataGrid
-				rows={rows}
-				columns={columns}
-				disableSelectionOnClick
-				sortingOrder={["asc", "desc", null]}
-				onRowClick={handleRowClick}
+		<Paper
+			sx={{
+				width: "79vw",
+				height: "100%",
+				overflow: "auto",
+				fontSize: "13px",
+				border: "1px solid var(--p-color)",
+			}}
+		>
+			<TableContainer
+				sx={{
+					width: "100%",
+					height: "93%",
+					overflow: "hidden",
+				}}
+			>
+				<Table stickyHeader aria-label="sticky table">
+					<TableHead>
+						<TableRow>
+							{columns.map((column) => (
+								<TableCell
+									key={column.field}
+									align="left"
+									style={{
+										padding: ".2rem",
+										background: "var(--bg-color)",
+										color: "var(--white)",
+										fontSize: ".8rem",
+									}}
+								>
+									{column.headerName}
+								</TableCell>
+							))}
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{requests
+							?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+							.map((request) => (
+								<TableRow
+									key={request._id}
+									onClick={() => handleRowClick(request)}
+								>
+									{columns.map((column) => (
+										<TableCell
+											key={column.field}
+											align="left"
+											style={{
+												padding: ".4rem",
+												fontSize: ".8rem",
+												cursor: "pointer",
+											}}
+											onClick={() => handleRowClick(request)}
+										>
+											{column.field === "status" && (
+												<div className="RequestStatus">
+													{request.status === "pending" && (
+														<span style={{ color: "var(--primary)" }}>New</span>
+													)}
+													{request.status === "accepted" && (
+														<span style={{ color: "#4caf50" }}>Accepted</span>
+													)}
+													{request.status === "rejected" && (
+														<span style={{ color: "#f44336" }}>Rejected</span>
+													)}
+													{request.status === "settled" && (
+														<span style={{ color: "#3f51b5" }}>Settled</span>
+													)}
+												</div>
+											)}
+											{column.field === "senderName" && (
+												<span>{request.name}</span>
+											)}
+											{column.field === "acceptedBy" && (
+												<span>
+													{request.status === "accepted"
+														? request.acceptedBy
+														: "N/A"}
+												</span>
+											)}
+											{column.field === "acceptedAt" && (
+												<span>
+													{request.status === "accepted"
+														? getTimeLabel(request.acceptedAt)
+														: "N/A"}
+												</span>
+											)}
+											{column.field === "amount" && (
+												<span>
+													{request.status === "settled"
+														? request.amount
+														: request.status === "accepted"
+														? request.amountQuoted
+														: request.status === "rejected"
+														? "Rejected"
+														: "Not Accepted"}
+												</span>
+											)}
+											{column.field === "subject" && (
+												<span>{request.subject}</span>
+											)}
+											{column.field === "urgency" && (
+												<span
+													style={{
+														color:
+															request.urgency === "High"
+																? "#f44336"
+																: request.urgency === "Medium"
+																? "#ff9800"
+																: "#4caf50",
+													}}
+												>
+													{request.urgency}
+												</span>
+											)}
+											{column.field === "action" && (
+												<Button
+													variant="basic"
+													onClick={() => {
+														handleModal();
+													}}
+													style={{
+														fontSize: ".7rem",
+													}}
+												>
+													<i className="fa-solid fa-ellipsis-vertical"></i>
+												</Button>
+											)}
+										</TableCell>
+									))}
+								</TableRow>
+							))}
+					</TableBody>
+				</Table>
+			</TableContainer>
+
+			<TablePagination
+				rowsPerPageOptions={[10, 25, 100]}
+				component="div"
+				count={requests?.length}
+				rowsPerPage={rowsPerPage}
+				page={page}
+				onPageChange={handleChangePage}
+				onRowsPerPageChange={handleChangeRowsPerPage}
+				style={{
+					display: "flex",
+					justifyContent: "flex-end",
+					alignItems: "center",
+					padding: "0",
+					margin: "0",
+					height: "2rem",
+					border: "1px solid var(--p-color)",
+				}}
 			/>
 
-			<Modal open={isModalOpen} onClose={handleModalClose}>
+			<Modal open={isModal}>
 				<RequestModal
 					selectedRequest={selectedRequest}
 					selectedSender={selectedSender}
-					handleModalClose={handleModalClose}
+					handleModalClose={() => {
+						handleModal();
+						setSelectedRequest(null);
+						setSelectedSender(null);
+					}}
 					user={user}
 					setSelectedRequest={setSelectedRequest}
 					setSelectedSender={setSelectedSender}
 				/>
 			</Modal>
-		</div>
+		</Paper>
 	);
-};
+}
 
-export default RequestsTable;
+export default StickyHeadTable;

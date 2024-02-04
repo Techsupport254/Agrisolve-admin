@@ -3,31 +3,31 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    height: 94vh;
+    height: 100vh;
+    width: 100%;
     overflow: auto;
 }
 
 .UserCards {
-    max-height: 30%;
+    height: 25%;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    gap: 1rem;
-    padding: 1rem;
+    padding: .5rem;
     overflow: auto;
 }
 
 .UsersTable {
-    height: 70%;
+    height: 75%;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     gap: 1rem;
-    padding: 1rem;
+    padding: .5rem;
     overflow: auto;
 }
 

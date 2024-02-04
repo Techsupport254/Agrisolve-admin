@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./News.css";
-import { Switch, TextField } from "@mui/material";
+import { InputAdornment, Switch, TextField } from "@mui/material";
 import select from "../../assets/select.png";
 import axios from "axios";
 
@@ -15,7 +15,7 @@ const News = () => {
 	const [checked, setChecked] = React.useState(false);
 	const [location, setLocation] = React.useState("Online");
 	const [address, setAddress] = React.useState("Online");
-	const [fee, setFee] = React.useState("");
+	const [fee, setFee] = React.useState();
 	const [online, setOnline] = React.useState(false);
 	const [selectedFiles, setSelectedFiles] = React.useState([]); // Track selected files for Cloudinary upload
 	const [productImages, setProductImages] = React.useState([]);
@@ -253,15 +253,6 @@ const News = () => {
 										value={eventDate}
 										onChange={(e) => setEventDate(e.target.value)}
 									/>
-									<h3>Online</h3>
-									<Switch
-										color="success"
-										inputProps={{ "aria-label": "checkbox with default color" }}
-										checked={online}
-										onChange={handleOnlineChange}
-									/>
-								</div>
-								<div className="Event">
 									<TextField
 										id="outlined-basic"
 										label="From"
@@ -290,39 +281,54 @@ const News = () => {
 											shrink: true,
 										}}
 									/>
+									<h3>Online</h3>
+									<Switch
+										color="success"
+										inputProps={{ "aria-label": "checkbox with default color" }}
+										checked={online}
+										onChange={handleOnlineChange}
+									/>
 								</div>
-								<TextField
-									id="outlined-basic"
-									label="Location"
-									variant="outlined"
-									size="small"
-									fullWidth
-									color="success"
-									value={location}
-									onChange={(e) => setLocation(e.target.value)}
-									disabled={online}
-								/>
-								<TextField
-									id="outlined-basic"
-									label="Address"
-									variant="outlined"
-									size="small"
-									fullWidth
-									color="success"
-									value={address}
-									onChange={(e) => setAddress(e.target.value)}
-									disabled={online}
-								/>
-								<TextField
-									id="outlined-basic"
-									label="Fee"
-									variant="outlined"
-									size="small"
-									fullWidth
-									color="success"
-									value={fee}
-									onChange={(e) => setFee(e.target.value)}
-								/>
+								<div className="Event">
+									<TextField
+										id="outlined-basic"
+										label="Location"
+										variant="outlined"
+										size="small"
+										fullWidth
+										color="success"
+										value={location}
+										onChange={(e) => setLocation(e.target.value)}
+										disabled={online}
+									/>
+									<TextField
+										id="outlined-basic"
+										label="Address"
+										variant="outlined"
+										size="small"
+										fullWidth
+										color="success"
+										value={address}
+										onChange={(e) => setAddress(e.target.value)}
+										disabled={online}
+									/>
+									<TextField
+										id="outlined-basic"
+										label="Fee"
+										variant="outlined"
+										size="small"
+										fullWidth
+										color="success"
+										value={fee}
+										type="number"
+										onChange={(e) => setFee(e.target.value)}
+										InputProps={{
+											startAdornment: (
+												<InputAdornment position="start">KES</InputAdornment>
+											),
+										}}
+									/>
+								</div>
 							</>
 						)}
 						<button onClick={handleCreate}>

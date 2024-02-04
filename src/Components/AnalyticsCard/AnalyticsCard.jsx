@@ -7,26 +7,22 @@ const AnalyticsCard = ({ data }) => {
 			<div
 				className="Icon"
 				style={{
-					color: data.color2,
-					fontSize: "2rem",
+					color: data.color,
+					backgroundColor: data.bg,
 				}}
 			>
 				{data.icon}
 			</div>
-			<p
-				style={{
-					color: data.color3,
-				}}
-			>
-				{data.value}
-			</p>
-			<span
-				style={{
-					color: data.color3,
-				}}
-			>
-				{data.title}
-			</span>
+			<div className="AnalyticDetails">
+				<p>{data.title}</p>
+				<span
+					style={{
+						color: data.color,
+					}}
+				>
+					{data.value}
+				</span>
+			</div>
 		</div>
 	);
 };

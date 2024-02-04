@@ -1,9 +1,52 @@
-.TransactionsContainer{
+.TransactionsContainer,
+.TransactionsLeft,
+.TransactionsRight {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     height: 100%;
-    width: 100%;
     border-radius: 5px;
+    box-shadow: var(--boxShadow);
+    padding: .5rem;
+    overflow: auto;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.TransactionsContainer {
+    flex-direction: row;
+    width: 100%;
+    gap: .5rem;
+}
+
+.TransactionsLeft {
+    width: 60%;
+}
+
+.TransactionsRight {
+    width: 40%;
+    align-items: center;
+    gap: 1rem;
+}
+
+.RequestedAmount {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    & span {
+        font-size: .8rem;
+        font-weight: 600;
+        color: var(--p-color);
+    }
+}
+
+.PieChart {
+    width: 100%;
 }

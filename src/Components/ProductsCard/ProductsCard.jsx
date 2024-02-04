@@ -24,24 +24,21 @@ const ProductsCard = ({ category, user, products, orders, earnings }) => {
 		<div className="ProductsCard">
 			{category?.name === "applaud" ? (
 				<div className="Applaud">
-					<div className="ApplaudBottom">
-						<div className="ApplaudLeft">
-							<div className="Congrats">
-								<p>Congratulations!</p>
-								<span>{user?.name}</span>
-							</div>
-							<p>
-								Your store is now live! You can now add products and start
-								selling to your customers. You'll be notified when you receive
-								an order.
-							</p>
-							<Link to="new">
-								<button>Add Products</button>
-							</Link>
+					<div className="ApplaudLeft">
+						<div className="Congrats">
+							<p>Congratulations!</p>
+							<span>{user?.name}</span>
 						</div>
-						<div className="ApplaudRight">
-							<img src={congrats} alt="congrats" />
-						</div>
+						<p>
+							Your store is now live! You can now add products and start selling
+							to your customers. You'll be notified when you receive an order.
+						</p>
+						<Link to="new">
+							<button>Add Products</button>
+						</Link>
+					</div>
+					<div className="ApplaudRight">
+						<img src={congrats} alt="congrats" />
 					</div>
 				</div>
 			) : category?.name === "earnings" ? (
@@ -101,16 +98,6 @@ const ProductsCard = ({ category, user, products, orders, earnings }) => {
 						<div className="BottomRow">
 							<p>
 								3 products are out of stock. <span>View Products</span>
-							</p>
-						</div>
-						<div className="BottomRow">
-							<p>
-								You have <span>2 new orders</span>
-							</p>
-						</div>
-						<div className="BottomRow">
-							<p>
-								<span>3 orders</span> were delivered today
 							</p>
 						</div>
 					</div>

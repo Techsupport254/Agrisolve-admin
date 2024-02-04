@@ -102,92 +102,145 @@ export const sidebardata = [
 		construction: true,
 	},
 ];
+function generateMonthlyFinancialData() {
+	const months = [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	];
+	const revenueData = months.map(
+		() => Math.floor(Math.random() * (2000 - 500 + 1)) + 500
+	);
+	const expensesData = months.map(
+		() => Math.floor(Math.random() * (1500 - 300 + 1)) + 300
+	);
+	const totalRevenue = revenueData.reduce((acc, val) => acc + val, 0);
+	const totalExpenses = expensesData.reduce((acc, val) => acc + val, 0);
 
-// carddata
-export const carddata = [
-	{
-		id: 1,
-		title: "Total Income",
-		icon: <i className="fas fa-dollar-sign"></i>,
-		value: 1000,
-		barValue: 500,
-		color: {
-			backGround: "linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%)",
-			boxShadow: "0px 10px 20px 0px #F9D59B",
-		},
-		series: [
-			{
-				name: "Sales",
-				data: [44, 55, 41, 67, 22, 43, 21, 49, 21, 49, 21, 49],
+	const carddata = [
+		{
+			id: 1,
+			title: "Total Income",
+			icon: "fas fa-dollar-sign",
+			value: totalRevenue - totalExpenses,
+			barValue: 500,
+			color: {
+				backGround: "linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%)",
+				boxShadow: "0px 10px 20px 0px #F9D59B",
 			},
-		],
-	},
-	{
-		id: 2,
-		title: "Total Sales",
-		icon: <i className="fas fa-shopping-cart"></i>,
-		value: 1000,
-		barValue: 350,
-		color: {
-			backGround: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
-			boxShadow: "0px 10px 20px 0px #FDC0C7",
+			series: [
+				{
+					name: "Income",
+					data: months.map(
+						(_, index) => revenueData[index] - expensesData[index]
+					),
+				},
+			],
 		},
-		series: [
-			{
-				name: "Revenue",
-				data: [10, 100, 50, 70, 80, 30, 40],
+		{
+			id: 2,
+			title: "Total Sales",
+			icon: "fas fa-shopping-cart",
+			value: totalRevenue,
+			barValue: 350,
+			color: {
+				backGround: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
+				boxShadow: "0px 10px 20px 0px #FDC0C7",
 			},
-		],
-	},
-	{
-		id: 3,
-		title: "Total Expenses",
-		icon: <i className="fas fa-money-bill-wave"></i>,
-		value: 1000,
-		barValue: 250,
-		color: {
-			backGround: "linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)",
-			boxShadow: "0px 10px 20px 0px #e0c6f5",
+			series: [
+				{
+					name: "Revenue",
+					data: revenueData,
+				},
+			],
 		},
-		series: [
-			{
-				name: "Users",
-				data: [10, 100, 50, 70, 80, 30, 40],
+		{
+			id: 3,
+			title: "Total Expenses",
+			icon: "fas fa-money-bill-wave",
+			value: totalExpenses,
+			barValue: 250,
+			color: {
+				backGround: "linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%)",
+				boxShadow: "0px 10px 20px 0px #e0c6f5",
 			},
-		],
-	},
-];
+			series: [
+				{
+					name: "Expenses",
+					data: expensesData,
+				},
+			],
+		},
+	];
+
+	return carddata;
+}
+
+// Export the result of generateMonthlyFinancialData
+export const carddata = generateMonthlyFinancialData();
+
+function getRandomValue(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Helper function to generate random values within a range
+const getRandomVal = (min, max) =>
+	Math.floor(Math.random() * (max - min + 1)) + min;
+
+// Helper function to generate random colors
+const getRandomCol = () => {
+	const letters = "0123456789ABCDEF";
+	let color = "#";
+	for (let i = 0; i < 6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
+};
 
 export const chartdata = [
-	{
-		month: "January",
-		income: 1000,
-		sales: 500,
-		expenses: 250,
-		color: "#8884d8",
-	},
-	{
-		month: "February",
-		income: 1000,
-		sales: 500,
-		expenses: 250,
-		color: "#82ca9d",
-	},
-	{
-		month: "March",
-		income: 1000,
-		sales: 500,
-		expenses: 250,
-		color: "#ffc658",
-	},
-	{
-		month: "April",
-		income: 1000,
-		sales: 500,
-		expenses: 250,
-		color: "#8884d8",
-	},
-];
+	"Jan",
+	"Feb",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"Aug",
+	"Sep",
+	"Oct",
+	"Nov",
+	"Dec",
+].map((month) => {
+	const sales = getRandomVal(400, 600);
+	const expenses = getRandomVal(200, 300);
+	const income = sales - expenses; // Income is sales minus expenses
+
+	return {
+		month,
+		income,
+		sales,
+		expenses,
+		color: getRandomCol(),
+	};
+});
+
+function getRandomColor() {
+	const letters = "0123456789ABCDEF";
+	let color = "#";
+	for (let i = 0; i < 6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
+}
 
 export const PieChartdata = [
 	{
@@ -245,53 +298,35 @@ export const requestsNavigations = [
 export const analyticsData = [
 	{
 		id: 1,
-		title: "Weekly Sales",
+		title: "Orders Completed",
 		icon: <i className="fas fa-shopping-cart"></i>,
 		value: 1000,
-		color: "rgba(0, 120, 103, 1)",
-		color2: "rgba(0, 120, 103, 1)",
-		color3: "rgba(0, 75, 80, 1)",
-		backGround: "rgba(200, 250, 214, 1)",
+		color: "var(--success-darker)",
+		bg: "var(--success-lighter)",
+	},
+	{
+		id: 1,
+		title: "Total Revenue",
+		icon: <i className="fa-solid fa-chart-column"></i>,
+		value: 50000,
+		color: "var(--primary-darker)",
+		bg: "var(--primary-lighter)",
 	},
 	{
 		id: 2,
-		title: "Weekly Income",
-		icon: <i className="fas fa-dollar-sign"></i>,
-		value: 1000,
-		color: "rgba(198, 132, 255, 1)",
-		color2: "rgba(81, 25, 183, 1)",
-		color3: "rgba(39, 9, 122, 1)",
-		backGround: "rgba(239, 214, 255, 1)",
+		title: "Total Sales",
+		icon: <i className="fas fa-shopping-cart"></i>,
+		value: 1500,
+		color: "var(--secondary-darker)",
+		bg: "var(--secondary-lighter)",
 	},
 	{
 		id: 3,
-		title: "Weekly Expenses",
-		icon: <i className="fas fa-money-bill-wave"></i>,
-		value: 1000,
-		color: "rgba(0, 108, 156, 1)",
-		color2: "rgba(0, 108, 156, 1)",
-		color3: "rgba(0, 55, 104, 1)",
-		backGround: "rgba(202, 253, 245, 1)",
-	},
-	{
-		id: 4,
-		title: "New Customers",
+		title: "Total Customers Served",
 		icon: <i className="fas fa-users"></i>,
-		value: 1000,
-		color2: "rgba(183, 110, 0, 1)",
-		color: "rgba(183, 110, 0, 1)",
-		color3: "rgba(122, 65, 0, 1)",
-		backGround: "rgba(255, 245, 204, 1)",
-	},
-	{
-		id: 5,
-		title: "Total Orders",
-		icon: <i className="fas fa-boxes"></i>,
-		value: 1000,
-		color: "rgba(91, 228, 155, 1)",
-		color2: "rgba(0, 120, 103, 1)",
-		color3: "rgba(0, 75, 80, 1)",
-		backGround: "rgba(211, 252, 210, 1)",
+		value: 300,
+		color: "var(--warning-darker)",
+		bg: "var(--warning-lighter)",
 	},
 ];
 
@@ -458,4 +493,21 @@ export const invoiceData = [
 		amount: 1000,
 		status: "pending",
 	},
+];
+
+// earnings and expenses data
+
+export const FinanceData = [
+	{ month: "January", sales: 8000, expense: 3000, income: 5000 },
+	{ month: "February", sales: 9500, expense: 3500, income: 6000 },
+	{ month: "March", sales: 11000, expense: 4000, income: 7000 },
+	{ month: "April", sales: 9300, expense: 3800, income: 5500 },
+	{ month: "May", sales: 12200, expense: 4200, income: 8000 },
+	{ month: "June", sales: 11400, expense: 3900, income: 7500 },
+	{ month: "July", sales: 13500, expense: 4500, income: 9000 },
+	{ month: "August", sales: 12600, expense: 4100, income: 8500 },
+	{ month: "September", sales: 13800, expense: 4300, income: 9500 },
+	{ month: "October", sales: 10800, expense: 3800, income: 7000 },
+	{ month: "November", sales: 11500, expense: 4000, income: 7500 },
+	{ month: "December", sales: 12700, expense: 4200, income: 8500 },
 ];

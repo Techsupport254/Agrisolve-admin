@@ -1,13 +1,12 @@
 .Card {
-    width: 30%;
+    width: 32%;
     margin: 0 auto;
-    padding: 0;
     border-radius: 5px;
     padding: 5px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 1rem;
+    gap: .5rem;
 }
 
 .CardLeft,
@@ -22,7 +21,7 @@
 
 .CardRight {
     & span {
-        font-size: 1rem;
+        font-size: .8rem;
         font-weight: 600;
     }
 

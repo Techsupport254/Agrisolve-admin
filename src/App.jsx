@@ -4,6 +4,7 @@ import Sidebar from "./Components/Sidebar/Sidebar";
 import Mainbar from "./Components/Mainbar/Mainbar";
 import axios from "axios";
 import { useHistory } from "react-router-use-history";
+import { FinanceData } from "./Data";
 
 function App() {
 	const [loggedIn, setLoggedIn] = useState(false);
@@ -223,19 +224,32 @@ function App() {
 	});
 
 	// fetch earnings
-	const fetchEarnings = async () => {
-		try {
-			const response = await axios.get("http://localhost:8000/earnings/");
-			setEarnings(response.data);
-		} catch (error) {
-			console.log(error);
-		}
-	};
+	// useEffect(() => {
+	// 	const fetchEarnings = async () => {
+	// 		try {
+	// 			// Here, you will replace FinanceData with your actual endpoint to fetch finance data
+	// 			const response = await axios.get("Your_Finance_Data_Endpoint");
+
+	// 			// Assuming finance data contains earnings information
+	// 			// Modify this according to the structure of your finance data
+	// 			const earningsData = response.data.map((entry) => ({
+	// 				month: entry.month,
+	// 				income: entry.income,
+	// 				expense: entry.expense,
+	// 			}));
+
+	// 			setEarnings(earningsData);
+	// 		} catch (error) {
+	// 			console.error("Error fetching earnings", error);
+	// 		}
+	// 	};
+
+	// 	fetchEarnings();
+	// }, []);
 
 	useEffect(() => {
-		fetchEarnings();
-	}, [user?._id]);
-
+		setEarnings(FinanceData);
+	}, []);
 	return (
 		<div className="App flex flex-col md:flex-row w-full h-screen">
 			<div className="Sidebar w-1/2 md:w-1/5 p-1 border-r-2 bg-slate-800 text-white">

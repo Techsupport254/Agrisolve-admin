@@ -83,10 +83,10 @@
     &.Active {
         color: var(--p-color);
         box-shadow: 0 0 3px var(--light-green);
-        background-color: var(--dark-green);
         transition: all .3s ease-in-out;
         margin-left: 0;
         animation: fadeIn .5s ease-in;
+        background: var(--glass);
 
         &::before {
             content: '';

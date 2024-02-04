@@ -13,14 +13,14 @@
 }
 
 .DashRight {
-    width: 40%;
+    width: 22%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
 
     & i {
-        font-size: 1.3rem;
+        font-size: 1rem;
         transition: all .3s ease-in-out;
 
         &:hover {
@@ -33,12 +33,11 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    gap: .5rem;
+    justify-content: center;
 
     & .UserImage {
-        width: 2rem;
-        height: 2rem;
+        width: 1.8rem;
+        height: 1.8rem;
 
         & img {
             width: 100%;
@@ -57,21 +56,45 @@
     padding: 0;
     gap: 0;
 
+
     & span {
-        font-size: .8rem;
+        font-size: .7rem;
         font-weight: 600;
+        margin: 0;
+        padding: 0;
+        gap: 0;
+
     }
 
     & p {
-        font-size: .7rem;
+        font-size: .6rem;
         font-weight: 500;
         color: #9e9e9e;
         text-transform: capitalize;
+        margin: 0;
+        padding: 0;
+        gap: 0;
 
 
         & i {
-            font-size: 1rem;
+            font-size: .8rem;
             color: var(--black);
         }
     }
+}
+
+.NotificationModal {
+    background: #fff;
+    width: 25%;
+    height: 90%;
+    position: absolute;
+    right: 1rem;
+    top: 2.5rem;
+    padding: .5rem;
+    border-radius: .5rem;
+    -webkit-border-radius: .5rem;
+    -moz-border-radius: .5rem;
+    -ms-border-radius: .5rem;
+    -o-border-radius: .5rem;
+    outline: none;
 }

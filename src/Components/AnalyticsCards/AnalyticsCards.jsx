@@ -7,14 +7,7 @@ const AnalyticsCards = ({ analyticsData }) => {
 		<div className="AnalyticsCardsContainer">
 			{analyticsData.map((data, index) => {
 				return (
-					<div
-						className="AnalyticsCard"
-						key={index}
-						style={{
-							background: data.backGround,
-							boxShadow: data.boxShadow,
-						}}
-					>
+					<div className="AnalyticsCard" key={index}>
 						<AnalyticsCard data={data} />
 					</div>
 				);

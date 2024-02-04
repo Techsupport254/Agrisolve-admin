@@ -1,0 +1,146 @@
+.UserCard {
+    background: linear-gradient(to right, #7474BF, #348AC7);
+    border-radius: 15px;
+    padding: .5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 45%;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.TopCard,
+.BottomCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+
+.TopCard {
+    width: 100%;
+    height: 80%;
+    flex-direction: row;
+}
+
+.BottomCard {
+    width: 100%;
+    height: 20%;
+}
+
+.UserCardInfo,
+.Request,
+.card-logo,
+.cardDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.UserCardInfo {
+    width: 60%;
+    height: 100%;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.card-logo {
+    gap: .5rem;
+    flex-direction: row;
+}
+
+.cardDetails {
+    align-items: flex-start;
+    gap: .1rem;
+
+
+    & span {
+        font-weight: 600;
+    }
+
+    & p {
+        font-weight: 600;
+        font-size: .8rem;
+    }
+
+    & small {
+        font-size: .8rem;
+        color: #f5f5f5;
+    }
+}
+
+.Request {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.Balance {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.BalanceAmount {
+    display: flex;
+    gap: .5rem;
+    justify-content: center;
+    align-items: center;
+
+    & span {
+        font-weight: 600;
+    }
+
+    & p {
+        font-size: .8rem;
+    }
+
+    & i {
+        font-size: 1rem;
+    }
+}
+
+.RequestButton {
+    background: var(--bg-color-clear) !important;
+    color: #fff !important;
+    font-size: .7rem;
+    font-weight: 600;
+}
+
+.BottomCard {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+}
+
+.Difference {
+    display: flex;
+    gap: .3rem;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+
+    & span {
+        font-size: .8rem;
+    }
+}
+
+.Incomes {
+    color: var(--success-darker);
+}
+
+.Expenses {
+    color: var(--warning-light);
+}

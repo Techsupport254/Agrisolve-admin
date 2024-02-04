@@ -3,8 +3,6 @@ import "./Stats.css";
 import BarGraph from "../BarGraph/BarGraph";
 import PieChart from "../PieChart/PieChart";
 
-
-
 const Stats = () => {
 	return (
 		<div className="StatsContainer">

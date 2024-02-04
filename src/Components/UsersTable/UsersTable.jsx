@@ -1,288 +1,219 @@
-import React, { useState, useEffect } from "react";
-import "./UsersTable.css";
-import { Avatar, Badge } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import React, { useState, useRef } from "react";
+import { useTable } from "react-table";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	Paper,
+	Avatar,
+	Button,
+	Box,
+	Typography,
+} from "@mui/material";
+import { Modal } from "antd";
+
+const style = {
+	position: "absolute",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	bgcolor: "background.paper",
+	boxShadow: 24,
+	p: 4,
+};
 
 const UsersTable = ({ users, getTimeLabel }) => {
-	const [selectedUsers, setSelectedUsers] = useState([]);
-	const [orderBy, setOrderBy] = useState("created_at");
-	const [order, setOrder] = useState("desc");
-	const [userTypeFilter, setUserTypeFilter] = useState("all");
-	const [sortedUsers, setSortedUsers] = useState([]);
+	const [open, setOpen] = useState(false);
+	const [selectedUser, setSelectedUser] = useState(null);
+	const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 });
+	const tableRef = useRef(null);
 
-	useEffect(() => {
-		const sortedData = [...users].sort((a, b) => {
-			return new Date(b.created_at) - new Date(a.created_at);
+	const handleOpen = (user, event) => {
+		const tableRect = tableRef.current.getBoundingClientRect();
+		const buttonRect = event.currentTarget.getBoundingClientRect();
+		setSelectedUser(user);
+		setModalPosition({
+			top: buttonRect.top - tableRect.top + buttonRect.height / 2,
+			left: buttonRect.left - tableRect.left + buttonRect.width / 2,
 		});
-		setSortedUsers(sortedData);
-	}, [users]);
-	const handleSelectAllClick = (event) => {
-		if (event.target.checked) {
-			const selectedIds = sortedUsers.map((user) => user._id);
-			setSelectedUsers(selectedIds);
-		} else {
-			setSelectedUsers([]);
-		}
+		setOpen(true);
 	};
 
-	const handleSelectClick = (event, id) => {
-		const selectedIndex = selectedUsers.indexOf(id);
-		let newSelected = [];
+	const handleClose = () => setOpen(false);
 
-		if (selectedIndex === -1) {
-			newSelected = newSelected.concat(selectedUsers, id);
-		} else if (selectedIndex === 0) {
-			newSelected = newSelected.concat(selectedUsers.slice(1));
-		} else if (selectedIndex === selectedUsers.length - 1) {
-			newSelected = newSelected.concat(selectedUsers.slice(0, -1));
-		} else if (selectedIndex > 0) {
-			newSelected = newSelected.concat(
-				selectedUsers.slice(0, selectedIndex),
-				selectedUsers.slice(selectedIndex + 1)
-			);
-		}
+	const data = React.useMemo(
+		() =>
+			users.map((user) => ({
+				...user,
+				created_at: user.created_at ? getTimeLabel(user.created_at) : "N/A",
+			})),
+		[users, getTimeLabel]
+	);
 
-		setSelectedUsers(newSelected);
-		console.log(selectedUsers);
-	};
-
-	const handleSortRequest = (property) => {
-		const isAsc = orderBy === property && order === "asc";
-		setOrderBy(property);
-		setOrder(isAsc ? "desc" : "asc");
-	};
-
-	const handleUserTypeFilterChange = (event) => {
-		setUserTypeFilter(event.target.value);
-	};
-
-	const filteredUsers = sortedUsers.filter((user) => {
-		if (userTypeFilter === "all") return true;
-		return user.userType === userTypeFilter;
-	});
-
-	const sortedAndFilteredUsers = filteredUsers.sort((a, b) => {
-		if (orderBy === "username") {
-			return (a.name > b.name ? 1 : -1) * (order === "asc" ? 1 : -1);
-		}
-		return (a[orderBy] > b[orderBy] ? 1 : -1) * (order === "asc" ? 1 : -1);
-	});
-	// Columns for DataGrid
-	const columns = [
-		{
-			field: "username",
-			headerName: "User",
-			width: 200,
-			sortable: true,
-			renderCell: (params) => (
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "flex-start",
-						alignItems: "center",
-						alignItems: "center",
-					}}
-				>
-					<div className="Avatar">
+	const columns = React.useMemo(
+		() => [
+			{
+				Header: "User",
+				accessor: "username",
+				Cell: ({ row }) => (
+					<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
 						<Avatar
-							src={
-								params.row.profile
-									? params.row.profile
-									: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
-							}
-							sx={{ width: 40, height: 40, marginRight: 1 }}
-							alt="Profile"
+							src={row.original.profilePicture}
+							alt={row.original.username}
 						/>
-						{/* online badge */}
-						{params.row.loggedIn && (
-							<Badge
-								badgeContent=" "
-								color="success"
-								overlap="circular"
-								variant="dot"
-								sx={{
-									position: "absolute",
-									marginLeft: 4.4,
-									marginTop: -1,
-									border: "1px solid #fff",
-									backgroundColor: "#fff",
-									// animation
-									animation: "pulse 1s infinite",
-
-									"@keyframes pulse": {
-										"0%": {
-											transform: "scale(1)",
-										},
-										"50%": {
-											transform: "scale(1.2)",
-										},
-										"100%": {
-											transform: "scale(1)",
-										},
-									},
+						<div className="UserProfileName">
+							<span
+								style={{
+									fontSize: "13px",
+									fontWeight: "600",
 								}}
-							/>
-						)}
+							>
+								{row.original.username}
+							</span>
+							<p
+								style={{
+									color: "var(--p-color)",
+									fontSize: "12px",
+								}}
+							>
+								{row.original.name}
+							</p>
+						</div>
 					</div>
-					<div className="UserName">
-						<span>{params.row.username}</span>
-						<p>{params.row.name}</p>
-					</div>
-					{params.row.hasBadge && (
-						<Badge
-							badgeContent="New"
-							color="primary"
-							overlap="circular"
-							sx={{ marginLeft: 2.5 }}
-						/>
-					)}
-				</div>
-			),
-		},
-		{
-			field: "email",
-			headerName: "Contacts",
-			width: 250,
-			sortable: true,
-			renderCell: (params) => (
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "flex-start",
-						alignItems: "center",
-					}}
-				>
-					<div className="Email">
+				),
+			},
+			{
+				Header: "Email",
+				accessor: "email",
+				Cell: ({ row }) => (
+					<div className="UserProfileName">
 						<span
 							style={{
-								color: "#3f51b5",
-								fontWeight: "bold",
-								fontSize: 12,
-								cursor: "pointer",
-								transition: "all 0.3s ease",
-
-								"&:hover": {
-									color: "#f50057",
-								},
+								fontSize: "13px",
 							}}
-							// onclick
-							onClick={() => window.open(`mailto:${params.row.email}`)}
 						>
-							{params.row.email}
+							{row.original.email}
 						</span>
 						<p
 							style={{
-								color: "#757575",
-								fontSize: 12,
-								cursor: "pointer",
+								fontSize: "13px",
+								color: "var(--primary)",
 							}}
-							onClick={() => window.open(`tel:${params.row.phone}`)}
 						>
-							{params.row.phone}
+							{row.original.phone}
 						</p>
 					</div>
-				</div>
-			),
-		},
-		{
-			field: "userType",
-			headerName: "User Type",
-			width: 140,
-			sortable: true,
-			// style
-			renderCell: (params) => (
-				<div
-					style={{
-						textTransform: "capitalize",
-						borderRadius: 5,
-						padding: 5,
-					}}
-				>
-					{params.row.userType}
-				</div>
-			),
-		},
-		{
-			field: "created_at",
-			headerName: "Joined",
-			width: 120,
-			sortable: true,
-		},
-		{
-			field: "Payment",
-			headerName: "Payment",
-			width: 130,
-			sortable: true,
-			renderCell: (params) => (
-				<div
-					style={{
-						textTransform: "capitalize",
-						borderRadius: 5,
-						padding: 5,
-						color:
-							params.row.Payment === "unpaid"
-								? "#f44336"
-								: params.row.Payment === "pending"
-								? "#ff9800"
-								: "#4caf50",
-						backgroundColor: "#f5f5f5",
-					}}
-				>
-					{params.row.Payment}
-				</div>
-			),
-		},
-		{
-			field: "actions",
-			headerName: "Actions",
-			width: 100,
-			sortable: false,
-			renderCell: (params) => (
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-					}}
-				>
-					<button>
-						<i className="fas fa-edit"></i>
-					</button>
-					&nbsp; &nbsp; &nbsp;
-					<button>
-						<i className="fas fa-trash"></i>
-					</button>
-				</div>
-			),
-		},
-	];
+				),
+			},
+			{
+				Header: "User Type",
+				accessor: "userType",
+			},
+			{
+				Header: "Joined",
+				accessor: "created_at",
+			},
+			{
+				Header: "Message",
+				Cell: () => (
+					<Button
+						variant="contained"
+						color="primary"
+						size="small"
+						style={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+							fontSize: "10px",
+						}}
+					>
+						Message
+					</Button>
+				),
+			},
+			{
+				Header: "Action",
+				accessor: "actions",
+				Cell: ({ row }) => (
+					<Button onClick={(e) => handleOpen(row.original, e)}>
+						<i className="fas fa-ellipsis-vertical"></i>
+					</Button>
+				),
+			},
+		],
+		[]
+	);
 
-	// Rows for DataGrid
-	const rows = sortedAndFilteredUsers.map((user) => ({
-		id: user._id,
-		username: user.username,
-		profile: user.profilePicture,
-		name: user.name,
-		email: user.email,
-		userType: user.userType,
-		created_at: user.created_at ? getTimeLabel(user.created_at) : "N/A",
-		Payment: user.paymentStatus,
-		hasBadge: user.newUser === true,
-		loggedIn: user.loginStatus === "loggedIn",
-		phone: user.phone,
-	}));
+	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+		useTable({ columns, data });
 
 	return (
-		<div style={{ height: 600, width: "100%" }}>
-			<DataGrid
-				rows={rows}
-				columns={columns}
-				checkboxSelection
-				onSelectionModelChange={(newSelection) =>
-					setSelectedUsers(newSelection.selectionModel)
-				}
-			/>
-		</div>
+		<>
+			<TableContainer component={Paper} ref={tableRef}>
+				<Table
+					{...getTableProps()}
+					aria-label="simple table"
+					style={{
+						overflow: "hidden",
+					}}
+				>
+					<TableHead
+						style={{
+							backgroundColor: "var(--bg-color)",
+							overflow: "hidden",
+						}}
+					>
+						{headerGroups.map((headerGroup) => (
+							<TableRow
+								{...headerGroup.getHeaderGroupProps()}
+								style={{
+									overflow: "hidden",
+								}}
+							>
+								{headerGroup.headers.map((column) => (
+									<TableCell
+										style={{
+											fontSize: "13px",
+											fontWeight: "600",
+											color: "var(--white)",
+											padding: "5px",
+										}}
+										{...column.getHeaderProps()}
+									>
+										{column.render("Header")}
+									</TableCell>
+								))}
+							</TableRow>
+						))}
+					</TableHead>
+					<TableBody {...getTableBodyProps()}>
+						{rows.map((row, i) => {
+							prepareRow(row);
+							return (
+								<TableRow {...row.getRowProps()}>
+									{row.cells.map((cell) => {
+										return (
+											<TableCell
+												{...cell.getCellProps()}
+												style={{
+													fontSize: "13px",
+													padding: "7px",
+												}}
+											>
+												{cell.render("Cell")}
+											</TableCell>
+										);
+									})}
+								</TableRow>
+							);
+						})}
+					</TableBody>
+				</Table>
+			</TableContainer>
+		</>
 	);
 };
 

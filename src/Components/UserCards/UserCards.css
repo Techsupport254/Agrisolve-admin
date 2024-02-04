@@ -3,10 +3,10 @@
     height: 100%;
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .UserCard {
@@ -17,13 +17,12 @@
     align-items: center;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-    padding: 10px;
-    margin: 10px;
+    box-shadow: var(--boxShadow);
+    padding: .5rem;
     transition: all 0.3s ease-in-out;
     cursor: pointer;
 
-    & h3{
+    & h3 {
         font-size: 1rem;
         font-weight: 600;
     }

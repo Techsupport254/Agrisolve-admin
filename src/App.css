@@ -18,6 +18,7 @@
   --gray: #6c757d;
   --gray-dark: #343a40;
   --glass: rgba(255, 255, 255, 0.2);
+  --glass2: rgba(255, 255, 255, 0.7);
   --bg-clear: rgba(255, 255, 255, 0.1);
   --txt-teal: #64ffda;
   --p-color: #94A3B8;
@@ -51,11 +52,13 @@
   --error-light: rgba(255, 172, 130, 1);
   --error-dark: rgba(183, 29, 24, 1);
   --error-darker: rgba(122, 9, 22, 1);
+  --color-fade: #9e9e9e;
 }
 
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .App {
@@ -88,7 +91,7 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background:var(--p-color);
+  background: var(--p-color);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -183,3 +186,13 @@ textarea {
   bottom: 5%;
   right: 5%;
 }
+
+.FlexDisplay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* mobile responsiveness */
