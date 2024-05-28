@@ -73,8 +73,7 @@ const LoginPopup = () => {
 		}
 	};
 
-// acount validation
-
+	// acount validation
 
 	return (
 		<div className="LoginPopup">

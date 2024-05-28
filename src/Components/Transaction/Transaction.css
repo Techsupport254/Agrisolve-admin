@@ -4,6 +4,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
+    height: auto;
     border-bottom: 1px solid #ccc;
 }
 
@@ -15,51 +16,64 @@
     width: 100%;
 
     & h3 {
-        font-size: .8rem;
+        font-size: .7rem;
         font-weight: 600;
     }
 
     & p {
-        font-size: .8rem;
+        font-size: .6rem;
         color: #777;
     }
 }
 
 .TransactionDescription {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
 
+    & .TransactionDescriptionLeft {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: 90%;
 
-    & span {
-        font-size: .8rem;
-    }
+        & h3 {
+            font-size: .7rem;
+            font-weight: 600;
+        }
 
-    & p {
-        font-size: .8rem;
-        color: #777;
-    }
+        & span {
+            font-size: .8rem;
+        }
 
-    & small {
-        font-size: .7rem;
-        padding: .1rem .2rem;
-        border-radius: 5px;
-    }
+        & p {
+            font-size: .8rem;
+            color: #777;
+        }
 
-    & i {
-        font-size: 1rem;
-        padding: .1rem.2rem;
-        border-radius: 5px;
-        font-weight: 600;
+        & small {
+            font-size: .7rem;
+            padding: .1rem .2rem;
+            border-radius: 5px;
+        }
+
+        & i {
+            font-size: 1rem;
+            padding: .1rem.2rem;
+            border-radius: 5px;
+            font-weight: 600;
+        }
     }
 }
 
 .TBottom {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: 30%;
+    height: 100%;
 }

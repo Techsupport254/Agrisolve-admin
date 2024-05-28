@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./Orders.css";
 import {
 	InputAdornment,
@@ -13,56 +13,62 @@ import {
 import axios from "axios";
 import nochat from "../../assets/nochat.png";
 import { useHistory } from "react-router-use-history";
+import PropTypes from "prop-types";
 
-const Orders = ({ user, users, products, getTimeLabel }) => {
+const Orders = ({ user, users, getTimeLabel }) => {
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
 	const history = useHistory();
 
-	// Fetch orders
+	// Fetch orders by ownerId
 	const fetchOrders = async () => {
+		setLoading(true); // Set loading before the operation
 		try {
-			const response = await axios.get("https://agrisolve.vercel.app/order");
-			setOrders(response.data);
-			setLoading(false);
+			const response = await axios.get(
+				`http://localhost:8000/order/owner/${user._id}`
+			);
+			if (response.data && Array.isArray(response.data)) {
+				// Sort and filter operations inside the async function to ensure they're applied to updated data
+				const sortedFilteredOrders = response.data
+					.sort((a, b) => new Date(b.date) - new Date(a.date))
+					.map((order) => ({
+						...order,
+						products: order.products.filter(
+							(product) => product.productId.refId === user._id
+						),
+					}))
+					.filter((order) => order.products.length > 0); // Filter out orders with no products after filtering
+
+				setOrders(sortedFilteredOrders);
+			}
 		} catch (error) {
-			console.log(error);
+			console.error("Failed to fetch orders:", error);
+		} finally {
+			setLoading(false); // Ensure loading is set to false both on success and failure
 		}
 	};
 
 	useEffect(() => {
-		fetchOrders();
-	}, [user?._id]);
-
-	// Function to get user by userId
-	const getCustomer = (userId) => {
-		if (!users) return null;
-		return users.find((user) => user._id === userId);
-	};
-
-	// Function to get product by productId
-	const getProduct = (productId) => {
-		if (!products) return null;
-		return products.find((product) => product._id === productId);
-	};
+		if (user && user._id) {
+			fetchOrders();
+		} else {
+			console.log("User or user ID is undefined.");
+		}
+	}, [user?._id]); // Dependency on user._id to refetch when it changes
 
 	// sort orders by date
-	orders.sort((a, b) => {
+	orders?.sort((a, b) => {
 		return new Date(b.date) - new Date(a.date);
 	});
 
-	// filter products to display where ownerId === user._id
-	orders.forEach((order) => {
-		order.products = order.products.filter(
-			(product) => product?.ownerId === user?._id
-		);
-	});
-
-	const productsLength = orders?.map((order) => order.products.length);
-	const LenghtNumber = parseInt(productsLength);
-
+	// Get customer by userId with fallback
+	const getCustomer = (userId) => {
+		const customer = users.find((user) => user._id === userId);
+		return customer || { name: "Unknown", email: "No email provided" };
+	};
+	console.log(orders);
 	return (
 		<div className="Orders">
 			<div className="Header">
@@ -77,7 +83,7 @@ const Orders = ({ user, users, products, getTimeLabel }) => {
 				</div>
 			</div>
 			<div className="OrdersContainer">
-				{LenghtNumber === 0 ? (
+				{!orders || orders.length === 0 ? (
 					<div className="NoOrder">
 						<img src={nochat} alt="" />
 						<h3>No orders yet</h3>
@@ -158,7 +164,7 @@ const Orders = ({ user, users, products, getTimeLabel }) => {
 								}}
 							>
 								<TableRow>
-									<TableCell>Order</TableCell>
+									<TableCell>SN</TableCell>
 									<TableCell>Customer</TableCell>
 									<TableCell>Product</TableCell>
 									<TableCell>Quantity</TableCell>
@@ -180,122 +186,103 @@ const Orders = ({ user, users, products, getTimeLabel }) => {
 										</TableCell>
 									</TableRow>
 								) : (
-									orders.map((order) =>
-										order.products.map((product) =>
-											!product ? (
-												<p>No product</p>
-											) : (
-												<TableRow
-													key={order._id}
-													onClick={() => history.push(`/orders/${order._id}`)}
-												>
-													<TableCell>{order.orderId}</TableCell>
-													<TableCell>
-														<div className="Customer">
-															<div className="Avatar">
-																<img
-																	src={
-																		getCustomer(order.userId)?.profilePicture
-																	}
-																	alt=""
-																/>
-															</div>
-															<div className="CustomerDetails">
-																<span>{getCustomer(order.userId)?.name}</span>
-																<p>{getCustomer(order.userId)?.email}</p>
-																<h3>{getTimeLabel(order?.date)}</h3>
-															</div>
+									orders.flatMap((order) =>
+										order.products.map((product, index) => (
+											<TableRow
+												key={`${order._id}-${index}`}
+												onClick={() => history.push(`/orders/${order._id}`)}
+											>
+												<TableCell>{orders.indexOf(order) + 1}</TableCell>
+												<TableCell>
+													<div className="Customer">
+														<div className="Avatar">
+															<img
+																src={getCustomer(order.userId)?.profilePicture}
+																alt=""
+															/>
 														</div>
-													</TableCell>
-													<TableCell>
-														<div className="Customer">
-															<div className="ProductImage">
-																<img
-																	src={getProduct(product.productId)?.images[0]}
-																	alt={
-																		getProduct(product.productId)?.productName
-																	}
-																/>
-															</div>
-															<div className="CustomerDetails">
-																<span>
-																	{getProduct(product.productId)?.productName}
-																</span>
-																<h3>
-																	{
-																		getProduct(product.productId)
-																			?.productCategory
-																	}
-																</h3>
-																<p>
-																	{getProduct(product.productId)?.brandName}
-																</p>
-															</div>
+														<div className="CustomerDetails">
+															<span>{getCustomer(order.userId)?.name}</span>
+															<p>{getCustomer(order.userId)?.email}</p>
+															<h3>{getTimeLabel(order?.date)}</h3>
 														</div>
-													</TableCell>
-													<TableCell>{product.quantity}</TableCell>
-													<TableCell>
-														{"KES" +
-															" " +
-															getProduct(product.productId)
-																?.price.toString()
-																.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-													</TableCell>
-													<TableCell>
-														{"KES" +
-															" " +
-															(
-																product.quantity *
-																getProduct(product.productId)?.price
-															)
+													</div>
+												</TableCell>
+												<TableCell>
+													<div className="Customer">
+														<div className="ProductImage">
+															<img
+																src={product?.productId.images[0]}
+																alt={product?.productId.productName}
+															/>
+														</div>
+														<div className="CustomerDetails">
+															<span>{product?.productId.productName}</span>
+															<h3>{product?.productId.productCategory}</h3>
+															<p>{product?.productId.brandName}</p>
+														</div>
+													</div>
+												</TableCell>
+												<TableCell>{product.quantity}</TableCell>
+												<TableCell>
+													{product?.productId.price
+														? `KES ${product.productId.price
 																.toString()
-																.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-													</TableCell>
-													<TableCell>
-														<p
-															style={{
-																color:
-																	order.payment === "Pending"
-																		? "var(--warning-dark)"
-																		: order.payment === "Paid"
-																		? "var(--success-dark)"
-																		: "var(--error-dark)",
-															}}
-														>
-															{order.payment}
-														</p>
-													</TableCell>
-													<TableCell>
-														<p
-															style={{
-																color:
-																	order.status === "Pending"
-																		? "var(--warning-darker)"
-																		: order.status === "Approved"
-																		? "var(--primary-darker)"
-																		: order.status === "delivered"
-																		? "var(--success-darker)"
-																		: "var(--error-darker)",
+																.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+														: "No price available"}
+												</TableCell>
 
-																backgroundColor:
-																	order.status === "pending"
-																		? "var(--warning-lighter)"
-																		: order.status === "Approved"
-																		? "var(--primary-lighter)"
-																		: order.status === "delivered"
-																		? "var(--success-lighter)"
-																		: "var(--error-lighter)",
-															}}
-														>
-															{order.status}
-														</p>
-													</TableCell>
-													<TableCell>
-														<i className="fa fa-ellipsis-v"></i>
-													</TableCell>
-												</TableRow>
-											)
-										)
+												<TableCell>
+													{"KES" +
+														" " +
+														(product.quantity * product?.productId.price)
+															.toString()
+															.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+												</TableCell>
+												<TableCell>
+													<p
+														style={{
+															color:
+																order.payment.status === "Pending"
+																	? "var(--warning-dark)"
+																	: order.payment.status === "Paid"
+																	? "var(--success-dark)"
+																	: "var(--error-dark)",
+														}}
+													>
+														{order.payment.status}
+													</p>
+												</TableCell>
+												<TableCell>
+													<p
+														style={{
+															color:
+																order.status === "Pending"
+																	? "var(--warning-darker)"
+																	: order.status === "Approved"
+																	? "var(--primary-darker)"
+																	: order.status === "Delivered"
+																	? "var(--success-darker)"
+																	: "var(--error-darker)",
+
+															backgroundColor:
+																order.status === "Pending"
+																	? "var(--warning-lighter)"
+																	: order.status === "Approved"
+																	? "var(--primary-lighter)"
+																	: order.status === "Delivered"
+																	? "var(--success-lighter)"
+																	: "var(--error-lighter)",
+														}}
+													>
+														{order.status}
+													</p>
+												</TableCell>
+												<TableCell>
+													<i className="fa fa-ellipsis-v"></i>
+												</TableCell>
+											</TableRow>
+										))
 									)
 								)}
 							</TableBody>
@@ -308,3 +295,19 @@ const Orders = ({ user, users, products, getTimeLabel }) => {
 };
 
 export default Orders;
+
+// validate props
+
+Orders.propTypes = {
+	orders: PropTypes.array.isRequired,
+	users: PropTypes.array.isRequired,
+	loading: PropTypes.bool.isRequired,
+	getOrders: PropTypes.func.isRequired,
+	getUsers: PropTypes.func.isRequired,
+	history: PropTypes.object.isRequired,
+	user: PropTypes.object.isRequired,
+	match: PropTypes.object.isRequired,
+	product: PropTypes.object.isRequired,
+	products: PropTypes.array.isRequired,
+	getTimeLabel: PropTypes.func.isRequired,
+};

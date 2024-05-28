@@ -109,10 +109,10 @@ const Transactions = ({ earnings, user, users, totalExpense, totalIncome }) => {
 		datasets: [
 			{
 				label: "Income vs Expenses",
-				data: [totalIncome, -totalExpense], // Assuming totalExpense is negative
-				backgroundColor: ["rgba(75, 192, 192, 0.6)", "rgba(255, 99, 132, 0.6)"],
-				borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
-				borderWidth: 1,
+				data: [totalIncome, -totalExpense],
+				backgroundColor: ["#82ca9d", "#ffc658", "#8884d8"],
+				borderColor: ["#fff", "#fff", "#fff"],
+				borderWidth: 2,
 			},
 		],
 	};

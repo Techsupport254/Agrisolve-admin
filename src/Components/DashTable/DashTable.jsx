@@ -1,6 +1,6 @@
-import React from "react";
 import "./DashTable.css";
 import { DataGrid } from "@mui/x-data-grid";
+import PropTypes from "prop-types";
 
 const DashTable = ({ orders, getTimeLabel, getCustomer, getProduct, user }) => {
 	if (!orders?.products) {
@@ -110,3 +110,13 @@ const DashTable = ({ orders, getTimeLabel, getCustomer, getProduct, user }) => {
 };
 
 export default DashTable;
+
+// validation of props
+
+DashTable.propTypes = {
+	orders: PropTypes.array.isRequired,
+	getTimeLabel: PropTypes.func.isRequired,
+	getCustomer: PropTypes.func.isRequired,
+	getProduct: PropTypes.func.isRequired,
+	user: PropTypes.object.isRequired,
+};

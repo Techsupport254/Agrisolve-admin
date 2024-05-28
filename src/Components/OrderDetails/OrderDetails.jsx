@@ -1,29 +1,37 @@
 import React from "react";
 import "./OrderDetails.css";
 
-const OrderDetails = ({ order, getCustomer, getProduct }) => {
-	console.log("order", order);
+const OrderDetails = ({ order, getCustomer }) => {
+
 	return (
 		<div className="OrderDetails">
 			<div className="Header">
 				<h3>Details</h3>
 			</div>
 			<div className="OrderProduct">
-				{order?.products?.map(
-					(product) => (
-						console.log("product", product),
-						(
-							<div className="OrderItem">
+				{order?.products && order.products.length > 0 ? (
+					order.products.map((product) => {
+						const productDetails = product?.productId;
+						if (!productDetails) {
+							console.log(
+								"Product details not found for product ID:",
+								product.productId
+							);
+							return <p key={product._id}>Product details not available.</p>;
+						}
+
+						return (
+							<div key={product._id} className="OrderItem">
 								<div className="ProductImage">
 									<img
-										src={getProduct(product.productId)?.images[0]}
-										alt={getProduct(product.productId)?.productName}
+										src={productDetails.images[0]}
+										alt={productDetails.productName || "Product"}
 									/>
 								</div>
 								<div className="ProductDetail">
 									<div className="ProductInfo">
-										<span>{getProduct(product.productId)?.productName}</span>
-										<p>{getProduct(product.productId)?.brandName}</p>
+										<span>{productDetails.productName}</span>
+										<p>{productDetails.brandName}</p>
 									</div>
 									<div className="ProductPrice">
 										<span>
@@ -31,20 +39,18 @@ const OrderDetails = ({ order, getCustomer, getProduct }) => {
 											{product.quantity}
 										</span>
 										<span>
-											{"KES" +
-												" " +
+											{"KES " +
 												(
-													getProduct(product.productId)?.price *
-													product.quantity
-												)
-													.toString()
-													.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+													productDetails.price * product.quantity
+												).toLocaleString()}
 										</span>
 									</div>
 								</div>
 							</div>
-						)
-					)
+						);
+					})
+				) : (
+					<p>No products in this order.</p>
 				)}
 			</div>
 		</div>

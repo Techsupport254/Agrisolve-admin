@@ -1,5 +1,6 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import PropTypes from "prop-types";
 
 // Lazy-loaded components
 const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
@@ -136,7 +137,11 @@ const SidebarPages = ({
 							loading ? (
 								<LoadingFallback />
 							) : (
-								<Reports user={user} getTimeLabel={getTimeLabel} />
+								<Reports
+									user={user}
+									getTimeLabel={getTimeLabel}
+									products={products}
+								/>
 							)
 						}
 					/>
@@ -344,3 +349,19 @@ const SidebarPages = ({
 };
 
 export default SidebarPages;
+
+// props validation
+
+SidebarPages.propTypes = {
+	user: PropTypes.object,
+	users: PropTypes.array,
+	products: PropTypes.array,
+	getTimeLabel: PropTypes.func,
+	requests: PropTypes.array,
+	chats: PropTypes.array,
+	messages: PropTypes.array,
+	orders: PropTypes.array,
+	getCustomer: PropTypes.func,
+	getProduct: PropTypes.func,
+	earnings: PropTypes.array,
+};

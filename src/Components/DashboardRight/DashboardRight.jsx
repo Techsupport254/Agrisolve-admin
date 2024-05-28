@@ -12,9 +12,9 @@ const DashboardRight = ({ users }) => {
 				label: "Order Summary",
 				data: [200, 120, 50],
 				backgroundColor: [
-					"rgba(75, 192, 192, 0.6)",
-					"rgba(255, 206, 86, 0.6)",
-					"rgba(255, 99, 132, 0.6)",
+					"#82ca9d",
+					"#ffc658",
+					"#8884d8",
 				],
 				borderColor: ["#fff", "#fff", "#fff"],
 				borderWidth: 2,

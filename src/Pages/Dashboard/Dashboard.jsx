@@ -1,10 +1,11 @@
-import React from "react";
 import "./Dashboard.css";
 import Cards from "../../Components/Cards/Cards";
 import Stats from "../../Components/Stats/Stats";
 import DashTop from "../../Components/DashTop/DashTop";
 import DashTable from "../../Components/DashTable/DashTable";
 import DashboardRight from "../../Components/DashboardRight/DashboardRight";
+
+import PropTypes from "prop-types";
 
 const Dashboard = ({
 	user,
@@ -16,7 +17,6 @@ const Dashboard = ({
 	getProduct,
 	earnings,
 }) => {
-	console.log(users);
 	return (
 		<div className="Dashboard">
 			<DashTop user={user} />
@@ -48,3 +48,16 @@ const Dashboard = ({
 };
 
 export default Dashboard;
+
+// props validation
+
+Dashboard.propTypes = {
+	user: PropTypes.object.isRequired,
+	users: PropTypes.array.isRequired,
+	products: PropTypes.array.isRequired,
+	getTimeLabel: PropTypes.func.isRequired,
+	orders: PropTypes.array.isRequired,
+	getCustomer: PropTypes.func.isRequired,
+	getProduct: PropTypes.func.isRequired,
+	earnings: PropTypes.array.isRequired,
+};

@@ -1,63 +1,57 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./Order.css";
-import { useParams } from "react-router-dom";
-import { useHistory } from "react-router-use-history";
+import { useParams } from "react-router-dom"; // Corrected import
 import axios from "axios";
-import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import OrderDetails from "../../Components/OrderDetails/OrderDetails";
 import OrderHistory from "../../Components/OrderHistory/OrderHistory";
 import OrderRight from "../../Components/OrderRight/OrderRight";
+import PropTypes from "prop-types";
 
 const Order = ({ users, user, products, getTimeLabel }) => {
 	const { id } = useParams();
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState("");
-	const [success, setSuccess] = useState("");
-	const history = useHistory();
+	const [error, setError] = useState(""); // Added state to handle errors
 
 	// Fetch orders
 	const fetchOrders = async () => {
 		try {
-			const response = await axios.get("https://agrisolve.vercel.app/order");
+			const response = await axios.get(
+				`http://localhost:8000/order/owner/${user?._id}` // Fixed string interpolation
+			);
 			setOrders(response.data);
-			setLoading(false);
 		} catch (error) {
-			console.log(error);
+			console.error("Failed to fetch orders:", error);
+			setError("Failed to load orders.");
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	useEffect(() => {
-		fetchOrders();
+		if (user?._id) {
+			fetchOrders();
+		}
 	}, [user?._id]);
+	console.log("orders", orders);
 
-	console.log(orders);
-
-	// filter id to get order
+	// Filter id to get order
 	const order = orders?.find((order) => order?._id === id);
+
 	// Function to get user by userId
 	const getCustomer = (userId) => {
 		if (!users) return null;
 		return users.find((user) => user._id === userId);
 	};
 
-	// Function to get product by productId
-	const getProduct = (productId) => {
-		if (!products) return null;
-		return products.find((product) => product._id === productId);
-	};
-
-	// sort orders by date
+	// Sort orders by date
 	orders.sort((a, b) => {
 		return new Date(b.date) - new Date(a.date);
 	});
 
-	// filter products to display where ownerId === user._id
-	orders.forEach((order) => {
-		order.products = order.products.filter(
-			(product) => product?.ownerId === user?._id
-		);
-	});
+	if (loading) return <p>Loading...</p>;
+	if (error) return <p>{error}</p>;
 
 	return (
 		<div className="OrderParent">
@@ -74,7 +68,6 @@ const Order = ({ users, user, products, getTimeLabel }) => {
 					<p>{getTimeLabel(order?.date)}</p>
 				</div>
 				<div className="OrderButtons">
-					{/* display statuses that can be selected */}
 					<TextField
 						id="outlined-select-currency-native"
 						select
@@ -120,24 +113,15 @@ const Order = ({ users, user, products, getTimeLabel }) => {
 			</div>
 			<div className="OrderContainer">
 				<div className="OrderLeft">
-					<OrderDetails
-						order={order}
-						getCustomer={getCustomer}
-						getProduct={getProduct}
-					/>
+					<OrderDetails order={order} getCustomer={getCustomer} />
 					<OrderHistory
 						order={order}
 						getCustomer={getCustomer}
-						getProduct={getProduct}
-                        getTimeLabel={getTimeLabel}
+						getTimeLabel={getTimeLabel}
 					/>
 				</div>
 				<div className="OrderRight">
-					<OrderRight
-						order={order}
-						getCustomer={getCustomer}
-						getProduct={getProduct}
-					/>
+					<OrderRight order={order} getCustomer={getCustomer} />
 				</div>
 			</div>
 		</div>
@@ -145,3 +129,13 @@ const Order = ({ users, user, products, getTimeLabel }) => {
 };
 
 export default Order;
+
+// prop validation
+
+Order.propTypes = {
+	user: PropTypes.object.isRequired,
+	users: PropTypes.array.isRequired,
+	products: PropTypes.array.isRequired,
+	getTimeLabel: PropTypes.func.isRequired,
+	orders: PropTypes.array.isRequired,
+};

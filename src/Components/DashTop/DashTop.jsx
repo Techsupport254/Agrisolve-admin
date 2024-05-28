@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./DashTop.css";
 import { Badge, Modal, Backdrop, Fade } from "@mui/material";
 import "react-loading-skeleton/dist/skeleton.css";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import Notifications from "./../Notifications/Notifications";
+import PropTypes from "prop-types";
 
 const DashTop = ({ user }) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +27,7 @@ const DashTop = ({ user }) => {
 			message:
 				"A part of notification dropdown for Earth Fund project which we're working on. Hope you guys like it.",
 			timestamp: "1 hour ago",
-			status: "read"
+			status: "read",
 		},
 	];
 
@@ -166,3 +167,9 @@ const DashTop = ({ user }) => {
 };
 
 export default DashTop;
+
+// props validation
+
+DashTop.propTypes = {
+	user: PropTypes.object,
+};

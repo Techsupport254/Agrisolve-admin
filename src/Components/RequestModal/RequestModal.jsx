@@ -25,11 +25,13 @@ const RequestModal = forwardRef(
 		const [errorMessage, setErrorMessage] = useState("");
 		const history = useHistory();
 
+		console.log(selectedRequest);
+
 		const handleAcceptRequest = async () => {
 			try {
 				setLoading(true);
 				const response = await axios.patch(
-					`https://agrisolve-techsupport254.vercel.app/consults/consults/${selectedRequest.id}`,
+					`https://agrisolve-techsupport254.vercel.app/consults/consults/${selectedRequest._id}`,
 					{
 						status: "accepted",
 						acceptedBy: user.name,
@@ -44,57 +46,55 @@ const RequestModal = forwardRef(
 				);
 
 				if (response.status === 200) {
-					// Show success message and loading spinner
-					setSuccess(true);
-					setSuccessMessage("Request accepted");
-					setLoading(false);
-
-					// Wait for a brief period before removing the success message
-					setTimeout(() => {
-						setSuccess(false);
-						setSuccessMessage("");
-
-						// Navigate to /requests
-						history.push({
-							pathname: `/requests/${selectedRequest.id}`,
-							state: { selectedRequest, setSelectedRequest },
+					// Update requests list only if it is not null
+					if (requests) {
+						const updatedRequests = requests.map((request) => {
+							if (request.id === selectedRequest.id) {
+								return {
+									...request,
+									status: "accepted",
+									acceptedBy: user.name,
+									acceptedById: user._id,
+								};
+							}
+							return request;
 						});
-					}, 3000);
-
-					window.location.reload();
-
-					// Update requests list
-					const updatedRequests = requests.map((request) => {
-						if (request._id === selectedRequest._id) {
-							return {
-								...request,
-								status: "accepted",
-								acceptedBy: user.username,
-								acceptedById: selectedSender._id,
-							};
-						}
-						return request;
-					});
-					setRequests(updatedRequests);
+						setRequests(updatedRequests);
+					}
 
 					// Reset selectedRequest and selectedSender
 					setSelectedRequest(null);
 					setSelectedSender(null);
 
-					// Close the modal
-					handleModalClose();
+					// Close the modal after a brief delay
+					setTimeout(() => {
+						setLoading(false);
+						setSuccess(true);
+						setSuccessMessage("Request accepted");
+
+						// Navigate to /requests after closing the modal
+						history.push({
+							pathname: `/requests/${selectedRequest._id}`,
+							state: { selectedRequest, setSelectedRequest },
+						});
+
+						// Reload the window
+						window.location.reload();
+					}, 3000);
 				}
 			} catch (error) {
 				setLoading(false);
 				setError(true);
 				setErrorMessage("Error accepting request");
+
+				// Debugging: Log the error
+				console.error("Error accepting request", error);
+
+				// Hide error message after a brief delay
 				setTimeout(() => {
 					setError(false);
 					setErrorMessage("");
 				}, 3000);
-
-				// Debugging: Log the error
-				console.error("Error accepting request", error);
 			}
 		};
 
@@ -158,7 +158,7 @@ const RequestModal = forwardRef(
 										<TextField
 											label="Description"
 											outlined
-											value={selectedRequest.description}
+											value={selectedRequest.consultDescription}
 											disabled
 											size="small"
 											multiline

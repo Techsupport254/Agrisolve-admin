@@ -1,7 +1,8 @@
-import React from "react";
 import "./OrderRight.css";
+import PropTypes from "prop-types";
 
-const OrderRight = ({ order, getCustomer, getProductgetProduct }) => {
+const OrderRight = ({ order, getCustomer }) => {
+	console.log(order);
 	const delivery = [
 		{
 			label: "Ship By",
@@ -9,55 +10,99 @@ const OrderRight = ({ order, getCustomer, getProductgetProduct }) => {
 		},
 		{
 			label: "Type",
-			value: "Express",
+			value: `${order.shipping.method}`,
 		},
 		{
 			label: "Tracking ID",
-			value: "1234567890",
+			value: `${order.shipping.trackingNumber}`,
 		},
 		{
 			label: "Expected Delivery",
-			value: "12/10/2021",
+			value: `${new Date(order.shipping.estimatedDelivery)
+				.toLocaleString("en-US", {
+					year: "numeric",
+					month: "short",
+					day: "numeric",
+				})
+				.replace(",", "")}`,
 		},
 	];
 
 	const shipping = [
 		{
-			label: "Address",
-			value: "123, Lorem Ipsum, Lorem Ipsum, Lorem Ipsum",
+			label: "Street",
+			value: `${order.shippingAddress.street}`,
 		},
 		{
 			label: "City",
-			value: "Nairobi",
+			value: `${order.shippingAddress.city}`,
 		},
 		{
 			label: "State",
-			value: "Nairobi",
+			value: `${order.shippingAddress.state}`,
 		},
 		{
 			label: "Zip Code",
-			value: "123456",
+			value: `${order.shippingAddress.zipCode}`,
 		},
 	];
 
 	const payment = [
 		{
 			label: "Method",
-			value: "Credit Card",
+			value: `${order.payment.method}`,
 		},
 		{
 			label: "Card Number",
-			value: "1234 5678 9101 1121",
+			value: `${order.payment.number}`,
 		},
 		{
 			label: "Card Holder",
-			value: "John Doe",
+			value: `${order.payment.holder}`,
 		},
 		{
-			label: "Expiry Date",
-			value: "12/10/2021",
+			label: "Payment Date",
+			value: `${new Date(order.payment.date).toLocaleString("en-US", {
+				year: "numeric",
+				month: "short",
+				day: "numeric",
+				hour: "numeric",
+				minute: "numeric",
+				hour12: true,
+			})}`,
+		},
+		{
+			label: "Payment Status",
+			value: `${order.payment.status}`,
 		},
 	];
+
+	const discounts = [
+		{
+			label: "Discount Code",
+			value: `${order.discounts[0].code}`,
+		},
+		{
+			label: "Discount Amount",
+			value: `${order.discounts[0].amount}`,
+		},
+	];
+
+	const tax = [
+		{
+			label: "Tax Amount",
+			value: `${order.tax.amount}`,
+		},
+		{
+			label: "Tax Rate",
+			value: `${order.tax.rate}`,
+		},
+		{
+			label: "Tax Status",
+			value: `${order.tax.status}`,
+		},
+	];
+
 	return (
 		<div className="OrderRightCont">
 			<div className="Header">
@@ -112,8 +157,42 @@ const OrderRight = ({ order, getCustomer, getProductgetProduct }) => {
 					))}
 				</div>
 			</div>
+			<div className="OrderPayment">
+				<div className="Header">
+					<h3>Discounts </h3>
+				</div>
+				<div className="PaymentInfo">
+					{discounts.map((item, index) => (
+						<div className="PaymentItem" key={index}>
+							<span>{item.label}</span>
+							<p>{item.value}</p>
+						</div>
+					))}
+				</div>
+			</div>
+			<div className="OrderPayment">
+				<div className="Header">
+					<h3>Tax </h3>
+				</div>
+				<div className="PaymentInfo">
+					{tax.map((item, index) => (
+						<div className="PaymentItem" key={index}>
+							<span>{item.label}</span>
+							<p>{item.value}</p>
+						</div>
+					))}
+				</div>
+			</div>
 		</div>
 	);
 };
 
 export default OrderRight;
+
+// validate props
+
+OrderRight.propTypes = {
+	order: PropTypes.object,
+	getCustomer: PropTypes.func,
+	getProduct: PropTypes.func,
+};

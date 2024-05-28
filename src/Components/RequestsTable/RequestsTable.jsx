@@ -82,19 +82,19 @@ function StickyHeadTable({ getTimeLabel, requests, users, user }) {
 		return sender;
 	};
 
-	useEffect(() => {
-		if (selectedRequest) {
-			const sender = fetchSender(selectedRequest.senderId);
-			setSelectedSender(sender);
-		}
-	}, [selectedRequest, users]);
-
 	const handleRowClick = (request) => {
-		const selectedSender = fetchSender(request.senderId);
 		setSelectedRequest(request);
-		setSelectedSender(selectedSender);
 		handleModal();
 	};
+
+	useEffect(() => {
+		if (selectedRequest) {
+			const sender = fetchSender(selectedRequest.refId);
+			setSelectedSender(sender);
+			console.log(selectedRequest);
+			console.log(sender);
+		}
+	}, [selectedRequest, users]);
 
 	return (
 		<Paper

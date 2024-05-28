@@ -1,48 +1,102 @@
 import React from "react";
-import "./RevenueWeek.css";
 import {
-	LineChart,
-	Line,
+	AreaChart,
+	Area,
 	XAxis,
-	YAxis,
-	CartesianGrid,
 	Tooltip,
 	ResponsiveContainer,
+	ReferenceLine,
+	ReferenceDot,
 } from "recharts";
+import "./RevenueWeek.css";
 
-// Sample data
-const data = [
-	{ month: "June", revenue: 4000 },
-	{ month: "July", revenue: 3000 },
-	{ month: "August", revenue: 5000 },
-	{ month: "September", revenue: 6000 },
-	{ month: "October", revenue: 8792 },
-];
+const generateRandomRevenueForAllMonths = () => {
+	const currentDate = new Date();
+	const currentMonthIndex = currentDate.getMonth();
+	const months = [
+		"Jan",
+		"Feb",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"Aug",
+		"Sept",
+		"Oct",
+		"Nov",
+		"Dec",
+	];
+	const monthsUpToCurrent = months.slice(0, currentMonthIndex + 1);
+	const randomData = monthsUpToCurrent.map((month) => {
+		const randomRevenue = Math.floor(Math.random() * 10000); // Generating random revenue value up to 10000
+		return { name: month, revenue: randomRevenue };
+	});
+	return randomData;
+};
 
 const RevenueWeek = () => {
+	const randomDataForAllMonths = generateRandomRevenueForAllMonths();
+
+	// Find the current month's revenue data
+	const currentDate = new Date();
+	const currentMonthIndex = currentDate.getMonth();
+	const currentMonthRevenue = randomDataForAllMonths[currentMonthIndex];
+
 	return (
-		<div className="RevenueContainer">
-			<div className="Header">
-				<i className="fa fa-line-chart" aria-hidden="true"></i>
-				<h1>Revenue This Week</h1>
-			</div>
-			<ResponsiveContainer width="100%" height={300}>
-				<LineChart
-					data={data}
-					margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+		<div className="revenue-week">
+			<ResponsiveContainer
+				width="100%"
+				height={250}
+				className="ResponsiveContainer"
+			>
+				<AreaChart
+					data={randomDataForAllMonths}
+					margin={{
+						top: 5,
+						right: 7,
+						left: 5,
+						bottom: -9,
+					}}
 				>
-					<CartesianGrid strokeDasharray="3 3" />
-					<XAxis dataKey="month" />
-					<YAxis />
+					<XAxis
+						dataKey="name"
+						axisLine={true}
+						tickLine={false}
+						tick={{ fill: "#8884d8" }}
+					/>
 					<Tooltip />
-					<Line
+					<Area
 						type="monotone"
 						dataKey="revenue"
 						stroke="#8884d8"
-						activeDot={{ r: 8 }}
+						fillOpacity={1}
+						fill="url(#colorUv)"
 					/>
-				</LineChart>
+					<ReferenceLine
+						x={currentMonthRevenue.name}
+						stroke="#8884d8"
+						strokeDasharray="3 3"
+					/>
+					<ReferenceDot
+						x={currentMonthRevenue.name}
+						y={currentMonthRevenue.revenue}
+						r={6}
+						fill="#8884d8"
+						stroke="none"
+					/>
+					<defs>
+						<linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+							<stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+							<stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+						</linearGradient>
+					</defs>
+				</AreaChart>
 			</ResponsiveContainer>
+			<div className="revenue-info">
+				<p className="revenue-amount">Revenue this month</p>
+				<p className="revenue-value">${currentMonthRevenue.revenue}</p>
+			</div>
 		</div>
 	);
 };

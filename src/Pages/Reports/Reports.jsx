@@ -7,8 +7,9 @@ import History from "../../Components/History/History";
 import axios from "axios";
 import RevenueWeek from "../../Components/RevenueWeek/RevenueWeek";
 import TopProducts from "../../Components/TopProducts/TopProducts";
+import CustomersInsights from "../../Components/CustomersInsights/CustomersInsights";
 
-const Reports = ({ getTimeLabel }) => {
+const Reports = ({ getTimeLabel, users, products }) => {
 	const [newsData, setNewsData] = React.useState([]);
 	const [loading, setLoading] = React.useState(false);
 
@@ -40,15 +41,19 @@ const Reports = ({ getTimeLabel }) => {
 					<div className="RevenueWeek">
 						<RevenueWeek />
 					</div>
-					<TopProducts />
+					<TopProducts
+						products={products}
+						users={users}
+						getTimeLabel={getTimeLabel}
+					/>
 				</div>
 				<div className="ReportsBottomRight">
 					<div className="Timeline">
 						<div className="Header">
 							<i className="fa fa-history"></i>
-							<h1>Timeline</h1>
+							<h1>Customers Insights</h1>
 						</div>
-						<History
+						<CustomersInsights
 							data={newsData}
 							getTimeLabel={getTimeLabel}
 							loading={loading}

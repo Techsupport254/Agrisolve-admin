@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 const OrderHistory = ({ order, getTimeLabel }) => {
+	console.log(order);
 	const steps = [
 		{
 			label: "Order Placed",
@@ -119,17 +120,10 @@ const OrderHistory = ({ order, getTimeLabel }) => {
 				</div>
 				<div className="HistoryLeft">
 					<div className="TimeLine">
-						{timeHistory.map((step, index) => (
-							<div
-								key={index}
-								className={`TimeLineItem ${
-									index <= currentStep ? "show" : "hide"
-								}`}
-							>
-								<span>{step.label}</span>
-								<p>{getTimeLabel(step.date)}</p>
-							</div>
-						))}
+						<div className="Header">
+							<h3>Customer Note</h3>
+						</div>
+						<p>{order?.notes}</p>
 					</div>
 				</div>
 			</div>

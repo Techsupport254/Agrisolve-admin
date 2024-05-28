@@ -7,6 +7,12 @@
     align-items: flex-start;
     gap: .5rem;
     overflow: auto;
+
+    & .Header {
+        width: 20%;
+        justify-content: flex-start;
+        align-items: center;
+    }
 }
 
 .ProductsTop {
@@ -14,13 +20,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: .5rem;
 }
 
-
-.ProductsCards {
+.TopProductBtns {
+    width: 75%;
     display: flex;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
-    width: 100%;
-    height: 25%;
+    justify-content: space-between;
+    gap: .5rem;
 }
+
+.TopProductBtnsLeft {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+}
+
+.TopProductBtnsLeft {
+    width: 80%;
+}
+
+.SelectButton {
+    border-radius: 5px;
+}
+
