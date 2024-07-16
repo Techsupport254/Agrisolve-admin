@@ -110,7 +110,7 @@ const News = () => {
 				};
 
 				const response = await axios.post(
-					"https://agrisolve.vercel.app/news",
+					"http://localhost:8000/news",
 					newsData
 				);
 

@@ -16,7 +16,7 @@ const Reports = ({ getTimeLabel, users, products }) => {
 	React.useEffect(() => {
 		setLoading(true);
 		axios
-			.get("https://agrisolve.vercel.app/news")
+			.get("http://localhost:8000/news")
 			.then((res) => {
 				setNewsData(res.data);
 				setLoading(false);

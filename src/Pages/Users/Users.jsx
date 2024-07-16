@@ -25,9 +25,9 @@ const Users = ({ users, getTimeLabel }) => {
 				<i className="fa fa-users"></i>
 				<h2>Users</h2>
 			</div>
-			<div className="UserCards">
+			{/* <div className="UserCards">
 				<UserCards users={usersWithNewUserFlag} />
-			</div>
+			</div> */}
 			<div className="UsersTable">
 				<UsersTable users={usersWithNewUserFlag} getTimeLabel={getTimeLabel} />
 			</div>

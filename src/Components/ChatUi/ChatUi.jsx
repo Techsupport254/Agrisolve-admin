@@ -3,13 +3,19 @@ import "./ChatUi.css";
 import { TextField } from "@mui/material";
 import axios from "axios";
 
-const ChatUi = ({ sender, chats, selectedRequest, getTimeLabel, user, handleModal }) => {
+const ChatUi = ({
+	sender,
+	chats,
+	selectedRequest,
+	getTimeLabel,
+	user,
+	handleModal,
+}) => {
 	const [groupedMessages, setGroupedMessages] = useState({});
 	const [messages, setMessages] = useState([]);
 	const [message, setMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [currentMessages, setCurrentMessages] = useState([]);
-	
 
 	useEffect(() => {
 		if (chats && chats.length > 0 && selectedRequest) {
@@ -56,12 +62,12 @@ const ChatUi = ({ sender, chats, selectedRequest, getTimeLabel, user, handleModa
 			recipient: selectedRequest?.acceptedById,
 			recipientName: selectedRequest?.acceptedBy,
 			sender: user?._id,
-			senderName: user?.username,
+			senderName: user?.name,
 			message: message,
 		};
 
 		axios
-			.post("https://agrisolve-techsupport254.vercel.app/chats/add", newMessage)
+			.post("http://localhost:8000/chats/chats/add", newMessage)
 			.then((response) => {
 				console.log(response.data);
 				fetchChatMessages();
@@ -71,9 +77,9 @@ const ChatUi = ({ sender, chats, selectedRequest, getTimeLabel, user, handleModa
 			});
 
 		setMessage("");
-	};
 
-	
+		console.log("Message sent:", newMessage);
+	};
 
 	return (
 		<div className="ChatUi">
@@ -99,7 +105,7 @@ const ChatUi = ({ sender, chats, selectedRequest, getTimeLabel, user, handleModa
 						{messages.map((message, index) => (
 							<div
 								className={`message ${
-									message.senderName === user.username
+									message.senderName === user?.name || user?.username
 										? "SenderMessage"
 										: "ReceiverMessage"
 								}`}
@@ -109,37 +115,45 @@ const ChatUi = ({ sender, chats, selectedRequest, getTimeLabel, user, handleModa
 									className="MessageContent"
 									style={{
 										backgroundColor: `${
-											message.senderName === user.username
+											message.senderName === user?.name || user?.username
 												? "var(--success-lighter)"
 												: "#f1f0f0"
 										}`,
 
 										color: `${
-											message.senderName === user.username
+											message.senderName === user?.name || user?.username
 												? "var(--success-darker)"
 												: "#333"
 										}`,
 
 										borderRadius: `${
-											message.senderName === user.username
+											message.senderName === user?.name || user?.username
 												? "10px 0 10px 10px"
 												: "0 10px 10px 10px"
 										}`,
 
 										marginLeft: `${
-											message.senderName === user.username ? "auto" : "0"
+											message.senderName === user?.name || user?.username
+												? "auto"
+												: "0"
 										}`,
 
 										marginRight: `${
-											message.senderName === user.username ? "0" : "auto"
+											message.senderName === user?.name || user?.username
+												? "0"
+												: "auto"
 										}`,
 
 										marginBottom: `${
-											message.senderName === user.username ? "10px" : "0"
+											message.senderName === user?.name || user?.username
+												? "10px"
+												: "0"
 										}`,
 
 										marginTop: `${
-											message.senderName === user.username ? "10px" : "0"
+											message.senderName === user?.name || user?.username
+												? "10px"
+												: "0"
 										}`,
 									}}
 								>

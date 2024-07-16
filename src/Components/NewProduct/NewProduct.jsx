@@ -109,7 +109,7 @@ const NewProduct = ({ user }) => {
 				};
 
 				const productResponse = await axios.post(
-					"https://agrisolve.vercel.app/products/new",
+					"http://localhost:8000/products/new",
 					productData
 				);
 

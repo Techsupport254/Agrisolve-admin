@@ -48,7 +48,7 @@ const General = ({ user }) => {
 			console.log("Upload Response:", uploadResponse.data);
 
 			const updateResponse = await axios.patch(
-				`https://agrisolve-techsupport254.vercel.app/auth/user/${user.email}`,
+				`http://localhost:8000/auth/user/${user.email}`,
 				{
 					profilePicture: uploadResponse.data.secure_url,
 				},

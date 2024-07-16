@@ -10,6 +10,7 @@ const Mainbar = ({
 	getTimeLabel,
 	requests,
 	chats,
+	setChats,
 	messages,
 	orders,
 	getCustomer,
@@ -28,6 +29,7 @@ const Mainbar = ({
 						getTimeLabel={getTimeLabel}
 						requests={requests}
 						chats={chats}
+						setChats={setChats}
 						messages={messages}
 						orders={orders}
 						getCustomer={getCustomer}

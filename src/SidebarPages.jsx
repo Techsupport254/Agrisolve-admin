@@ -32,6 +32,7 @@ const SidebarPages = ({
 	getTimeLabel,
 	requests,
 	chats,
+	setChats,
 	messages,
 	orders,
 	getCustomer,
@@ -256,6 +257,7 @@ const SidebarPages = ({
 										users={users}
 										getTimeLabel={getTimeLabel}
 										chats={chats}
+										setChats={setChats}
 									/>
 								)
 							}
@@ -273,6 +275,7 @@ const SidebarPages = ({
 										users={users}
 										getTimeLabel={getTimeLabel}
 										chats={chats}
+										setChats={setChats}
 									/>
 								)
 							}

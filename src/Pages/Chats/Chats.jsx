@@ -6,20 +6,17 @@ import { useHistory } from "react-router-use-history";
 import axios from "axios";
 import nochat from "../../assets/nochat.png";
 
-const Chats = ({ chats, user, users, getTimeLabel }) => {
+const Chats = ({ chats, setChats, user, users, getTimeLabel }) => {
 	const [activeChat, setActiveChat] = useState(null);
 	const [search, setSearch] = useState("");
 	const history = useHistory();
 	const [consults, setConsults] = useState([]);
 	const [selectedRequest, setSelectedRequest] = useState(null);
-	const [chatId, setChatId] = useState(null);
 
 	// Get all consults
 	useEffect(() => {
 		const getConsults = async () => {
-			const res = await axios.get(
-				"https://agrisolve-techsupport254.vercel.app/consults/consults"
-			);
+			const res = await axios.get("http://localhost:8000/consults/consults");
 			setConsults(res.data);
 		};
 		getConsults();
@@ -36,16 +33,15 @@ const Chats = ({ chats, user, users, getTimeLabel }) => {
 	const handleSearch = (e) => {
 		setSearch(e.target.value);
 	};
+
 	const updateChat = async (selectedChat) => {
+		console.log("Updating chat:", selectedChat);
 		try {
 			const conversationId = selectedChat.conversations[0].id;
-			await axios.patch(
-				`https://agrisolve-techsupport254.vercel.app/chats/chats/${conversationId}`,
-				{
-					id: conversationId,
-					status: "read",
-				}
-			);
+			await axios.patch(`http://localhost:8000/chats/chats/${conversationId}`, {
+				id: conversationId,
+				status: "read",
+			});
 
 			setChats((prevChats) =>
 				prevChats.map((prevChat) => {
@@ -71,30 +67,32 @@ const Chats = ({ chats, user, users, getTimeLabel }) => {
 			console.error("Error updating chat:", error);
 		}
 	};
+
 	const handleChatClick = (chat) => {
 		setActiveChat(chat);
-		// Mark all the messages as read
+		markMessagesAsRead(chat);
+		updateSelectedRequest(chat);
+		history.push(`/chats/${chat._id}`);
+	};
+
+	const markMessagesAsRead = (chat) => {
 		const unreadMessages = chat?.conversations[0]?.messages.filter(
 			(message) => message.status !== "read" && message.sender !== user?._id
 		);
 		unreadMessages.forEach((message) => {
 			message.status = "read";
 		});
+		if (chat?.conversations[0]?.messages.slice(-1)[0]?.sender !== user?._id) {
+			updateChat(chat);
+		}
+	};
 
-		// Update the chat
-		updateChat(chat);
-
+	const updateSelectedRequest = (chat) => {
 		const activechatId = chat?.conversations?.[0].id;
-		setChatId(activechatId);
-
-		// Update selectedRequest immediately
 		const selectedConsult = consults.find(
 			(consult) => consult._id === activechatId
 		);
 		setSelectedRequest(selectedConsult);
-
-		// navigate to the chat
-		history.push(`/chats/${chat._id}`);
 	};
 
 	// Get user details for a chat

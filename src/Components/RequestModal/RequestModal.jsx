@@ -31,7 +31,7 @@ const RequestModal = forwardRef(
 			try {
 				setLoading(true);
 				const response = await axios.patch(
-					`https://agrisolve-techsupport254.vercel.app/consults/consults/${selectedRequest._id}`,
+					`http://localhost:8000/consults/consults/${selectedRequest._id}`,
 					{
 						status: "accepted",
 						acceptedBy: user.name,

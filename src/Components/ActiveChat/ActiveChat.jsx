@@ -55,7 +55,6 @@ const ActiveChat = ({
 
 	// Get the selected request
 	const selectedRequestId = selectedRequest?._id;
-	console.log(selectedRequest);
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 
@@ -70,7 +69,7 @@ const ActiveChat = ({
 		};
 
 		axios
-			.post("https://agrisolve.vercel.app/chats/add", newMessage)
+			.post("http://localhost:8000/chats/chats/add", newMessage)
 			.then((response) => {
 				console.log(response.data);
 			})
@@ -84,13 +83,10 @@ const ActiveChat = ({
 	const updateChat = async (selectedChat) => {
 		try {
 			const conversationId = selectedChat.conversations[0].id;
-			await axios.patch(
-				`https://agrisolve-techsupport254.vercel.app/chats/chats/${conversationId}`,
-				{
-					id: conversationId,
-					status: "read",
-				}
-			);
+			await axios.patch(`http://localhost:8000/chats/chats/${conversationId}`, {
+				id: conversationId,
+				status: "read",
+			});
 
 			setChats((prevChats) =>
 				prevChats.map((prevChat) => {

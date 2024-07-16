@@ -58,6 +58,15 @@
     }
 }
 
+.ErrorMessage,
+.SuccessMessage,
+.InfoMessage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+}
+
 .ErrorMessage {
     display: flex;
     justify-content: center;

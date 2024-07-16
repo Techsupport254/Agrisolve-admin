@@ -29,7 +29,7 @@ const DialogModal = ({
 		setLoading(true);
 		try {
 			const response = await axios.patch(
-				`https://agrisolve-techsupport254.vercel.app/consults/consults/${selectedRequest._id}`,
+				`http://localhost:8000/consults/consults/${selectedRequest._id}`,
 				{
 					status: "quoted",
 					amountQuoted: quotedAmount,

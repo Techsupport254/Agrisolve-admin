@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Login.css";
+import logo from "../../assets/logo.png";
 
 const LoginPopup = () => {
 	const [email, setEmail] = useState("");
@@ -8,6 +9,7 @@ const LoginPopup = () => {
 	const [success, setSuccess] = useState(null);
 	const [loading, setLoading] = useState(false);
 
+	// Handle login submission
 	const handleLogin = async (e) => {
 		e.preventDefault();
 
@@ -21,47 +23,36 @@ const LoginPopup = () => {
 		setLoading(true);
 
 		try {
-			const response = await fetch(
-				"https://agrisolve-techsupport254.vercel.app/auth/login",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ email, password }),
-				}
-			);
+			// Send login request
+			const response = await fetch("http://localhost:8000/auth/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ email, password }),
+			});
 
+			// Handle successful login
 			if (response.ok) {
 				const data = await response.json();
 
-				// User logged in successfully
+				// Clear error and set success message
 				setError(null);
 				setSuccess("Login successful");
 
-				// save the user data in local storage
+				// Save user data in local storage
 				localStorage.setItem("agrisolveData", JSON.stringify(data));
 
 				// Update login status in the database
-				await fetch(
-					`https://agrisolve-techsupport254.vercel.app/auth/user/${email}`,
-					{
-						method: "PATCH",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({ loginStatus: "loggedIn" }),
-					}
-				);
+				await updateUserLoginStatus(email);
 
-				// Set loading to false after 3 seconds
+				// Redirect to the home page after 1 second
 				setTimeout(() => {
 					setLoading(false);
-					// Redirect to the home page after 3 seconds
 					window.location.href = "/";
 				}, 1000);
 			} else {
-				// Error logging in
+				// Handle login error
 				const data = await response.json();
 				setError(data.message);
 				setLoading(false);
@@ -73,17 +64,30 @@ const LoginPopup = () => {
 		}
 	};
 
-	// acount validation
+	// Update user login status
+	const updateUserLoginStatus = async (email) => {
+		try {
+			await fetch(`http://localhost:8000/auth/users/${email}`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ loginStatus: "loggedIn" }),
+			});
+		} catch (error) {
+			console.error("Error updating login status", error);
+		}
+	};
+
+	const storedUser = JSON.parse(localStorage.getItem("agrisolveData"));
+	console.log(storedUser);
 
 	return (
 		<div className="LoginPopup">
 			<div className="LoginContainer">
 				<div className="LoginLeft bg-gray-200">
 					<h3>Hi, Welcome Back</h3>
-					<img
-						src="https://minimals.cc/assets/illustrations/illustration_dashboard.png"
-						alt="Login"
-					/>
+					<img src={logo} alt="Login" />
 				</div>
 				<div className="LoginRight bg-white">
 					<h3>Login To Agrisolve</h3>
@@ -92,21 +96,23 @@ const LoginPopup = () => {
 						<a href="/signup">Create an account</a>
 					</div>
 					<div className="Notification">
-						{error ? (
-							<>
-								<i className="fas fa-exclamation-circle ErrorMessage"></i>
-								<p className="ErrorMessage">{error}</p>
-							</>
-						) : success ? (
-							<>
-								<i className="fas fa-check-circle SuccessMessage"></i>
-								<p className="SuccessMessage">{success}</p>
-							</>
-						) : (
-							<>
-								<i className="fas fa-info-circle InfoMessage"></i>
+						{error && (
+							<div className="ErrorMessage">
+								<i className="fas fa-exclamation-circle"></i>
+								<p>{error}</p>
+							</div>
+						)}
+						{success && (
+							<div className="SuccessMessage">
+								<i className="fas fa-check-circle"></i>
+								<p>{success}</p>
+							</div>
+						)}
+						{!error && !success && (
+							<div className="InfoMessage">
+								<i className="fas fa-info-circle"></i>
 								<p>Please login to continue</p>
-							</>
+							</div>
 						)}
 					</div>
 					<form onSubmit={handleLogin}>
@@ -116,6 +122,8 @@ const LoginPopup = () => {
 								placeholder="Enter your email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
+								aria-label="Email"
+								required
 							/>
 							<i className="fas fa-envelope"></i>
 						</div>
@@ -125,6 +133,8 @@ const LoginPopup = () => {
 								placeholder="Enter your password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
+								aria-label="Password"
+								required
 							/>
 							<i className="fas fa-lock"></i>
 						</div>
@@ -132,7 +142,7 @@ const LoginPopup = () => {
 							<a href="/forgot">Forgot Password?</a>
 						</div>
 						<div className="LoginBtn">
-							<button type="submit" disabled={loading}>
+							<button type="submit" disabled={loading} aria-busy={loading}>
 								{loading ? <i className="fas fa-spinner fa-spin"></i> : "Login"}
 							</button>
 						</div>

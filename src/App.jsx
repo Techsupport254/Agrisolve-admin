@@ -7,7 +7,7 @@ import { useHistory } from "react-router-use-history";
 import { FinanceData } from "./Data";
 
 function App() {
-	const [loggedIn, setLoggedIn] = useState(false);
+	// const [loggedIn, setLoggedIn] = useState(false);
 	const [user, setUser] = useState(null);
 	const [token, setToken] = useState(null);
 	const [users, setUsers] = useState([]);
@@ -18,6 +18,8 @@ function App() {
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [earnings, setEarnings] = useState([]);
+	const [unseenCount, setUnseenCount] = useState(0);
+	const [newRequestCount, setNewRequestCount] = useState(0);
 
 	useEffect(() => {
 		const path = "/login";
@@ -28,7 +30,7 @@ function App() {
 			} else {
 				try {
 					const response = await axios.get(
-						`https://agrisolve-techsupport254.vercel.app/auth/user/${storedUser.email}`,
+						`http://localhost:8000/auth/users/${storedUser.email}`,
 						{
 							headers: {
 								"x-auth-token": storedUser.token,
@@ -36,13 +38,9 @@ function App() {
 						}
 					);
 
-					if (response.data.loginStatus === "loggedIn") {
+					if (response.data) {
 						setUser(response.data);
 						setToken(storedUser.token);
-						setLoggedIn(true);
-					} else if (response.data.loginStatus === "loggedOut") {
-						console.log("User logged out");
-						history.push(path);
 					}
 				} catch (error) {
 					console.error("Error checking login status", error);
@@ -60,7 +58,7 @@ function App() {
 				if (token) {
 					// Fetch all users
 					const usersResponse = await axios.get(
-						"https://agrisolve-techsupport254.vercel.app/auth/users",
+						"http://localhost:8000/auth/users",
 						{
 							headers: {
 								"x-auth-token": token,
@@ -71,7 +69,7 @@ function App() {
 
 					// Fetch products
 					const productsResponse = await axios.get(
-						"https://agrisolve-techsupport254.vercel.app/products"
+						"http://localhost:8000/products"
 					);
 					// where refId === user._id
 					const filteredProducts = productsResponse.data.filter(
@@ -85,7 +83,7 @@ function App() {
 		};
 
 		fetchData();
-	}, [token]);
+	}, [token, user?._id]);
 
 	const getTimeLabel = (time) => {
 		const timeDiffInMilliseconds = Date.now() - new Date(time).getTime();
@@ -120,16 +118,16 @@ function App() {
 	};
 
 	useEffect(() => {
-		const fetchRequest = async (url, method, data) => {
+		const fetchRequest = async () => {
 			try {
-				const response = await axios({
-					url,
-					method,
-					data,
-					headers: {
-						"x-auth-token": token,
-					},
-				});
+				const response = await axios.get(
+					"http://localhost:8000/consults/consults",
+					{
+						headers: {
+							"x-auth-token": token,
+						},
+					}
+				);
 				const filteredRequests = response.data.filter(
 					(request) => request.refId !== user?._id
 				);
@@ -140,116 +138,132 @@ function App() {
 		};
 
 		if (user) {
-			fetchRequest(
-				"https://agrisolve-techsupport254.vercel.app/consults/consults",
-				"GET"
-			);
+			fetchRequest();
 		}
 	}, [user, token]);
 
-	// new request count
-	const newRequestCount = requests?.filter(
-		(request) => request.newConsult === true
-	).length;
+	// New request count http://localhost:8000/consults/consults/unread/:id
+	useEffect(() => {
+		const fetchNewRequestCount = async () => {
+			try {
+				const response = await axios.get(
+					`http://localhost:8000/consults/consults/unread/${user?._id}`,
+					{
+						headers: {
+							"x-auth-token": token,
+						},
+					}
+				);
+				setNewRequestCount(response.data);
+			} catch (error) {
+				console.error("Error fetching new request count", error);
+			}
+		};
+		if (user && token) {
+			fetchNewRequestCount();
+			const interval = setInterval(fetchNewRequestCount, 500);
+			return () => clearInterval(interval);
+		}
+	}, [user, token]);
 
-	// fetch chats
+	// Fetch chats
 	useEffect(() => {
 		const fetchChats = async () => {
 			try {
 				const response = await axios.get(
-					"https://agrisolve-techsupport254.vercel.app/chats/chats"
+					`http://localhost:8000/chats/chats/user/${user?._id}`,
+					{
+						headers: {
+							"x-auth-token": token,
+						},
+					}
 				);
-				setChats(response.data.filter((chat) => chat.recipient === user?._id));
+				setChats(response.data);
 			} catch (error) {
 				console.error("Error fetching chats", error);
 			}
 		};
+		if (user && token) {
+			fetchChats();
+			const interval = setInterval(fetchChats, 500);
+			return () => clearInterval(interval);
+		}
+	}, [user, token]);
 
-		fetchChats();
-
-		const interval = setInterval(fetchChats, 1000);
-
-		return () => clearInterval(interval);
-	}, [user?._id]);
-
-	// messages map
+	// Messages map
 	const messagesMap = new Map();
-
 	chats.forEach((chat) => {
 		messagesMap.set(chat.refId, chat?.conversations[0].messages);
 	});
-
-	// flatten messages
 	const messages = Array.from(messagesMap.values()).flat();
-	const unseenCount = messages.filter(
-		(message) => message.status !== "read" && message.sender !== user?._id
-	).length;
 
-	// Fetch orders
-	const fetchOrders = async () => {
-		try {
-			const response = await axios.get("https://agrisolve.vercel.app/order");
-			setOrders(response.data);
-			setLoading(false);
-		} catch (error) {
-			console.log(error);
-		}
-	};
+	// Unseen messages count
+	// fetch here http://localhost:8000/chats/unread/:id
 
 	useEffect(() => {
-		fetchOrders();
-	}, [user?._id]);
-	// Function to get user by userId
+		const fetchUnseenCount = async () => {
+			try {
+				const response = await axios.get(
+					`http://localhost:8000/chats/unread/${user?._id}`,
+					{
+						headers: {
+							"x-auth-token": token,
+						},
+					}
+				);
+				setUnseenCount(response.data);
+			} catch (error) {
+				console.error("Error fetching unseen messages count", error);
+			}
+		};
+		if (user && token) {
+			fetchUnseenCount();
+			const interval = setInterval(fetchUnseenCount, 500);
+			return () => clearInterval(interval);
+		}
+	}, [user, token]);
+
+	// Fetch orders
+	useEffect(() => {
+		const fetchOrders = async () => {
+			try {
+				const response = await axios.get("http://localhost:8000/orders");
+				setOrders(response.data);
+				setLoading(false);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		if (user) {
+			fetchOrders();
+		}
+	}, [user]);
+
+	// Get customer by userId
 	const getCustomer = (userId) => {
-		if (!users) return null;
-		return users.find((user) => user?._id === userId);
+		return users.find((user) => user._id === userId) || null;
 	};
 
-	// Function to get product by productId
+	// Get product by productId
 	const getProduct = (productId) => {
-		if (!products) return null;
-		return products.find((product) => product?._id === productId);
+		return products.find((product) => product._id === productId) || null;
 	};
 
-	// sort orders by date
-	orders.sort((a, b) => {
-		return new Date(b.date) - new Date(a.date);
-	});
+	// Sort orders by date
+	orders.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-	// filter products to display where ownerId === user._id
+	// Filter products to display where ownerId === user._id
 	orders.forEach((order) => {
 		order.products = order.products.filter(
-			(product) => product?.ownerId === user?._id
+			(product) => product.ownerId === user?._id
 		);
 	});
 
-	// fetch earnings
-	// useEffect(() => {
-	// 	const fetchEarnings = async () => {
-	// 		try {
-	// 			// Here, you will replace FinanceData with your actual endpoint to fetch finance data
-	// 			const response = await axios.get("Your_Finance_Data_Endpoint");
-
-	// 			// Assuming finance data contains earnings information
-	// 			// Modify this according to the structure of your finance data
-	// 			const earningsData = response.data.map((entry) => ({
-	// 				month: entry.month,
-	// 				income: entry.income,
-	// 				expense: entry.expense,
-	// 			}));
-
-	// 			setEarnings(earningsData);
-	// 		} catch (error) {
-	// 			console.error("Error fetching earnings", error);
-	// 		}
-	// 	};
-
-	// 	fetchEarnings();
-	// }, []);
-
+	// Set earnings once from static data
 	useEffect(() => {
 		setEarnings(FinanceData);
 	}, []);
+
 	return (
 		<div className="App flex flex-col md:flex-row w-full h-screen">
 			<div className="Sidebar w-1/2 md:w-1/5 p-1 border-r-2 bg-slate-800 text-white">
@@ -267,6 +281,7 @@ function App() {
 					getTimeLabel={getTimeLabel}
 					requests={requests}
 					chats={chats}
+					setChats={setChats}
 					messages={messages}
 					orders={orders}
 					getCustomer={getCustomer}
