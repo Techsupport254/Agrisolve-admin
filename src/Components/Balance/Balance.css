@@ -116,6 +116,17 @@
     color: #fff !important;
     font-size: .7rem;
     font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.Disabled {
+    background: var(--gray) !important;
+    color: #fff !important;
+    font-size: .7rem;
+    font-weight: 600;
+    cursor: not-allowed;
+    border: none;
 }
 
 .BottomCard {

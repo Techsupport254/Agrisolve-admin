@@ -16,7 +16,7 @@
     width: 100%;
     border-bottom: 1px solid #ccc;
     margin-top: 1rem;
-    padding: .5rem 0;
+    padding: .2rem 0;
     gap: 1rem;
 }
 
@@ -34,11 +34,11 @@
     border-bottom: 2px solid transparent;
 
     & i {
-        font-size: 1.3rem;
+        font-size: 1rem;
     }
 
     & h1 {
-        font-size: 1rem;
+        font-size: .8rem;
         font-weight: 600;
     }
 
@@ -46,9 +46,8 @@
         color: var(--black);
     }
 
-    &.Active {
-        color: rgba(33, 43, 54, 1);
-        border-bottom: 2px solid rgba(33, 43, 54, 1);
+    &.NavActive {
+        color: var(--success-dark);
         transition: border-bottom 0.3s ease-in-out, color 0.3s ease-in-out;
     }
 }

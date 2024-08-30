@@ -7,21 +7,14 @@
     justify-content: flex-start;
     height: 100%;
     border-radius: 5px;
-    box-shadow: var(--boxShadow);
-    padding: .5rem;
     overflow: auto;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
 }
 
 .TransactionsContainer {
     flex-direction: row;
     width: 100%;
     gap: .5rem;
-    
+
 }
 
 .TransactionsLeft {
@@ -32,7 +25,7 @@
     width: 40%;
     align-items: center;
     gap: 1rem;
-    
+
 }
 
 .RequestedAmount {

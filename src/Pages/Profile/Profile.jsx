@@ -1,6 +1,7 @@
 import React from "react";
 import "./Profile.css";
 import { profileData } from "../../Data";
+import PropTypes from "prop-types";
 
 const Profile = ({ user, getTimeLabel }) => {
 	const initialActiveIndex = 0;
@@ -9,17 +10,20 @@ const Profile = ({ user, getTimeLabel }) => {
 	return (
 		<div className="Profile">
 			<div className="Header">
-				<i className="fa fa-user"></i>
-				<h1>
-					Profile <span>Overview</span>&nbsp;&nbsp;
-					<i className="fa fa-chevron-right"></i>&nbsp;&nbsp;
-					{user?.name}
-				</h1>
+				<i className="fa fa-percent"></i>
+				<h2>Discounts</h2>
+			</div>
+			<div className="ProductDiscount">
+				<ul>
+					<li>Dashboard</li>
+					<li>Profile</li>
+					<li>{user?.username}</li>
+				</ul>
 			</div>
 			<div className="ProfileNav">
 				{profileData.map((item, index) => (
 					<div
-						className={`ProfileNavItem ${index === active ? "Active" : ""}`}
+						className={`ProfileNavItem ${index === active ? "NavActive" : ""}`}
 						key={index}
 						onClick={() => setActive(index)}
 					>
@@ -39,3 +43,9 @@ const Profile = ({ user, getTimeLabel }) => {
 };
 
 export default Profile;
+
+// props validation
+Profile.propTypes = {
+	user: PropTypes.object,
+	getTimeLabel: PropTypes.func,
+};

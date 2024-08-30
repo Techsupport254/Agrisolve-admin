@@ -9,79 +9,34 @@
     overflow: auto;
 }
 
-.RequestTop {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 30%;
-}
-
-.RequestsLeft {
+.RequestsTop {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    width: 50%;
-    height: 100%;
+    width: 100%;
     gap: 1rem;
-    overflow: hidden;
-    background: rgba(200, 250, 214, 1);
-    border-radius: 5px;
-    padding: .5rem;
-
-    & .RequestTopText {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        gap: .3rem;
-        width: 100%;
-
-        & h3 {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        & span {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-    }
-
-    & img {
-        width: 15rem;
-        object-fit: cover;
-    }
 }
 
-.ExportBtn {
-    width: auto;
-    height: 100%;
+.TopRequestsBtns {
     display: flex;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
-    padding: .1rem .5rem;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    border-radius: 5px;
-    background: rgba(6, 94, 73, 1);
-    color: #fff;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
 
-    &:hover {
-        transform: scale(1.1);
-    }
 }
 
-.RequestsRight {
+
+.TopRequestsRight {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     justify-content: center;
-    width: 50%;
     height: 100%;
-    gap: .5rem;
+    gap: 1rem;
 }
 
 .RequestTopItem {
@@ -90,7 +45,7 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.1rem .3rem;
+    padding: 0.2rem .5rem;
     border-radius: 0.5rem;
     background-color: #E5E5E5;
     cursor: pointer;

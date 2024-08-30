@@ -17,6 +17,8 @@ const Mainbar = ({
 	getProduct,
 	loading,
 	earnings,
+	allDiscounts,
+	userDiscounts,
 }) => {
 	return (
 		<React.Fragment>
@@ -36,6 +38,8 @@ const Mainbar = ({
 						getProduct={getProduct}
 						loading={loading}
 						earnings={earnings}
+						allDiscounts={allDiscounts}
+						userDiscounts={userDiscounts}
 					/>
 				</div>
 			</div>

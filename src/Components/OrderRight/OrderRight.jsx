@@ -2,7 +2,6 @@ import "./OrderRight.css";
 import PropTypes from "prop-types";
 
 const OrderRight = ({ order, getCustomer }) => {
-	console.log(order);
 	const delivery = [
 		{
 			label: "Ship By",
@@ -80,11 +79,19 @@ const OrderRight = ({ order, getCustomer }) => {
 	const discounts = [
 		{
 			label: "Discount Code",
-			value: `${order.discounts[0].code}`,
+			value: `${
+				order?.discounts && order.discounts.length > 0
+					? order.discounts[0].code
+					: "No Discount"
+			}`,
 		},
 		{
 			label: "Discount Amount",
-			value: `${order.discounts[0].amount}`,
+			value: `${
+				order?.discounts && order.discounts.length > 0
+					? order.discounts[0].amount
+					: "No Discount"
+			}`,
 		},
 	];
 

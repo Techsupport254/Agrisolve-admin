@@ -7,64 +7,57 @@ import {
 	StepLabel,
 	Stepper,
 	Typography,
+	StepConnector,
 } from "@mui/material";
 
 const OrderHistory = ({ order, getTimeLabel }) => {
-	console.log(order);
-	const steps = [
-		{
-			label: "Order Placed",
-			date: order?.datePlaced,
-		},
-		{
-			label: "Order Confirmed",
-			date: order?.dateConfirmed,
-		},
-		{
-			label: "Order Shipped",
-			date: order?.dateShipped,
-		},
-		{
-			label: "Order Delivered",
-			date: order?.dateDelivered,
-		},
-	];
-
-	const timeHistory = [
-		{
-			label: "Order Placed",
-			date: order?.date,
-		},
-		{
-			label: "Order Confirmed",
-			date: order?.dateConfirmed,
-		},
-		{
-			label: "Order Shipped",
-			date: order?.dateShipped,
-		},
-		{
-			label: "Order Delivered",
-			date: order?.dateDelivered,
-		},
-	];
-
-	const getStatusStep = () => {
-		switch (order?.status) {
-			case "Pending":
-				return 0;
-			case "Approved":
-				return 1;
-			case "OnWay":
-				return 2;
+	// Function to get badge color based on status
+	const getBadgeColor = (status) => {
+		switch (status) {
+			case "Confirmed":
+				return "primary";
+			case "Out for Delivery":
+				return "secondary";
 			case "Delivered":
-				return 3;
+				return "success";
 			default:
-				return 0;
+				return "warning";
 		}
 	};
 
-	const currentStep = getStatusStep();
+	// Define the steps explicitly
+	const steps = [
+		{
+			label: "Order Placed",
+			date:
+				order?.timeline?.find((t) => t.type === "Pending")?.date ||
+				order?.createdAt,
+			color: "warning",
+		},
+		{
+			label: "Confirmed",
+			date: order?.timeline?.find((t) => t.type === "Confirmed")?.date,
+			color: getBadgeColor("Confirmed"),
+		},
+		{
+			label: "Out for Delivery",
+			date: order?.timeline?.find((t) => t.type === "Out for Delivery")?.date,
+			color: getBadgeColor("Out for Delivery"),
+		},
+		{
+			label: "Delivered",
+			date: order?.timeline?.find((t) => t.type === "Delivered")?.date,
+			color: getBadgeColor("Delivered"),
+		},
+	];
+
+	// Find the index of the current step
+	const getCurrentStep = () => {
+		const currentStep = steps.findIndex((step) => !step.date);
+		return currentStep === -1 ? steps.length - 1 : currentStep - 1;
+	};
+
+	const currentStep = getCurrentStep();
 
 	return (
 		<div className="OrderHistory">
@@ -73,47 +66,25 @@ const OrderHistory = ({ order, getTimeLabel }) => {
 			</div>
 			<div className="HistoryCont">
 				<div className="HistoryRight">
-					<Stepper orientation="vertical" activeStep={currentStep}>
+					<Stepper
+						orientation="vertical"
+						activeStep={currentStep}
+						connector={<StepConnector />}
+					>
 						{steps.map((step, index) => (
-							<Step
-								key={index}
-								connector={<StepConnector />}
-								completed={index < currentStep}
-								disabled={index > currentStep}
-							>
+							<Step key={index} completed={!!step.date}>
 								<StepLabel
-									className="StepLabel"
-									icon={
-										<Badge
-											variant="dot"
-											color={index === currentStep ? "success" : "secondary"}
-											className="Badge"
-											style={{ backgroundColor: "var(--bg-color)" }}
-										/>
-									}
+									StepIconComponent={() => (
+										<Badge variant="dot" color={step.color} className="Badge" />
+									)}
 								>
-									{step.label}
-								</StepLabel>
-								<StepContent>
-									<Typography
-										className={`Typography ${
-											index <= currentStep ? "show" : "hide"
-										}`}
-									>
-										{order?.date
-											? new Date(order.date)
-													.toLocaleString("en-US", {
-														year: "numeric",
-														month: "short",
-														day: "numeric",
-														hour: "numeric",
-														minute: "numeric",
-														hour12: true,
-													})
-													.replace(/,/g, "")
-											: "Not Available"}
+									<Typography variant="h6">{step.label}</Typography>
+									<Typography variant="body2">
+										{step.date
+											? getTimeLabel(new Date(step.date))
+											: "Order not yet reached this stage"}
 									</Typography>
-								</StepContent>
+								</StepLabel>
 							</Step>
 						))}
 					</Stepper>
@@ -130,7 +101,5 @@ const OrderHistory = ({ order, getTimeLabel }) => {
 		</div>
 	);
 };
-
-const StepConnector = () => <div className="connector-line"></div>;
 
 export default OrderHistory;

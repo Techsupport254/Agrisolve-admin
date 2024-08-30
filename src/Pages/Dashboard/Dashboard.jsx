@@ -23,10 +23,20 @@ const Dashboard = ({
 			<div className="DashBottom">
 				<div className="DashboardLeft">
 					<div className="DashCards">
-						<Cards user={user} products={products} earnings={earnings} />
+						<Cards
+							user={user}
+							products={products}
+							earnings={earnings}
+							orders={orders}
+						/>
 					</div>
 					<div className="Stats">
-						<Stats user={user} products={products} earnings={earnings} />
+						<Stats
+							user={user}
+							products={products}
+							earnings={earnings}
+							orders={orders}
+						/>
 					</div>
 
 					<div className="Table">
@@ -41,7 +51,7 @@ const Dashboard = ({
 						/>
 					</div>
 				</div>
-				<DashboardRight user={user} users={users} />
+				<DashboardRight user={user} users={users} orders={orders} />
 			</div>
 		</div>
 	);

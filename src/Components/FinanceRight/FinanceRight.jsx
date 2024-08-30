@@ -7,9 +7,11 @@ const FinanceRight = ({
 	getTimelabel,
 	earnings,
 	balance,
-	totalIncome,
-	totalExpense,
+	totalEarnings,
+	netEarnings,
+	totalExpenses,
 }) => {
+	const formattedBalance = new Intl.NumberFormat().format(balance);
 	return (
 		<div className="FinanceRight">
 			<div className="UserProfile">
@@ -26,7 +28,7 @@ const FinanceRight = ({
 						variant="contained"
 						color="primary"
 						onClick={() => window.location.reload(false)}
-                        className="UpgradeBttn"
+						className="UpgradeBttn"
 					>
 						Upgrade
 					</Button>
@@ -38,7 +40,7 @@ const FinanceRight = ({
 						</div>
 						<div className="IncomeValue">
 							<p>Income</p>
-							<span>KES. {totalIncome ? totalIncome : 0}</span>
+							<span>KES. {netEarnings ? netEarnings : 0}</span>
 						</div>
 						<i className="fas fa-ellipsis"></i>
 					</div>
@@ -49,7 +51,7 @@ const FinanceRight = ({
 
 						<div className="ExpenseValue">
 							<p>Expenses</p>
-							<span>KES. {totalExpense ? totalExpense : 0}</span>
+							<span>KES. {totalExpenses ? totalExpenses : 0}</span>
 						</div>
 						<i className="fas fa-ellipsis"></i>
 					</div>

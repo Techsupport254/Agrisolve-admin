@@ -1,9 +1,8 @@
 import React from "react";
 import "./Transaction.css";
 
-const Transaction = ({ transaction, admin, userId, users }) => {
-	// filter the user
-	const user = users?.filter((user) => user._id === userId);
+const Transaction = ({ transaction }) => {
+	console.log(transaction);
 	return (
 		<div className="Transaction">
 			<div className="TransactionDescription">
@@ -44,7 +43,6 @@ const Transaction = ({ transaction, admin, userId, users }) => {
 						</p>
 					</div>
 					<>
-						<p>{admin ? user?.[0]?.email : null}</p>
 						<small
 							style={{
 								color:

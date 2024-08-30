@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./Login.css";
 import logo from "../../assets/logo.png";
 
@@ -21,6 +21,8 @@ const LoginPopup = () => {
 
 		// Set loading to true
 		setLoading(true);
+		setError(null);
+		setSuccess(null);
 
 		try {
 			// Send login request
@@ -32,55 +34,45 @@ const LoginPopup = () => {
 				body: JSON.stringify({ email, password }),
 			});
 
+			console.log("Login response status:", response.status); // Debugging line
+
 			// Handle successful login
 			if (response.ok) {
 				const data = await response.json();
 
-				// Clear error and set success message
-				setError(null);
-				setSuccess("Login successful");
+				// Check for token in the response
+				if (data.token) {
+					console.log("Received token:", data.token); // Debugging line
 
-				// Save user data in local storage
-				localStorage.setItem("agrisolveData", JSON.stringify(data));
+					// Save token and user data in local storage
+					localStorage.setItem("token", data.token);
 
-				// Update login status in the database
-				await updateUserLoginStatus(email);
+					// Clear error and set success message
+					setError(null);
+					setSuccess("Login successful");
 
-				// Redirect to the home page after 1 second
-				setTimeout(() => {
+					// Redirect to the home page after 1 second
+					setTimeout(() => {
+						setLoading(false);
+						window.location.href = "/";
+					}, 1000);
+				} else {
+					setError("Token not received. Please try again.");
 					setLoading(false);
-					window.location.href = "/";
-				}, 1000);
+				}
 			} else {
 				// Handle login error
 				const data = await response.json();
-				setError(data.message);
+				console.log("Login error message:", data.message); // Debugging line
+				setError(data.message || "Login failed. Please try again.");
 				setLoading(false);
 			}
 		} catch (error) {
-			console.error("Error fetching data", error);
-			setError("An error occurred during login");
+			console.error("Error during login:", error); // Debugging line
+			setError("An error occurred during login. Please try again later.");
 			setLoading(false);
 		}
 	};
-
-	// Update user login status
-	const updateUserLoginStatus = async (email) => {
-		try {
-			await fetch(`http://localhost:8000/auth/users/${email}`, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ loginStatus: "loggedIn" }),
-			});
-		} catch (error) {
-			console.error("Error updating login status", error);
-		}
-	};
-
-	const storedUser = JSON.parse(localStorage.getItem("agrisolveData"));
-	console.log(storedUser);
 
 	return (
 		<div className="LoginPopup">

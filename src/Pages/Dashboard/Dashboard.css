@@ -29,11 +29,10 @@
 
 .DashBottom {
     width: 100%;
-    height: 93vh;
+    height: 100%;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
-    overflow: auto;
 }
 
 .DashboardLeft {
@@ -41,6 +40,8 @@
     height: 100%;
     justify-content: flex-start;
     box-shadow: var(--boxShadow);
+    overflow: auto;
+
 }
 
 .DashboardRight {
@@ -48,6 +49,8 @@
     height: 100%;
     gap: .5rem;
     box-shadow: var(--boxShadow);
+    overflow: auto;
+
 }
 
 .DashCards {
@@ -60,7 +63,7 @@
 
 .Stats {
     width: 100%;
-    height: 40%;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -73,5 +76,4 @@
     align-items: flex;
     justify-content: flex-start;
     gap: 1rem;
-
 }

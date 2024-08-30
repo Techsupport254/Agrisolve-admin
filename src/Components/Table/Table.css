@@ -5,6 +5,12 @@
     gap: .5rem;
 }
 
+.ProductsTable,
+.ProductsPaper,
+.ProductsTableContainer {
+    width: 100%;
+}
+
 .SelectButton {
     display: flex;
     align-items: center;

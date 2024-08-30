@@ -3,120 +3,127 @@ import "./Requests.css";
 import { requestsNavigations } from "../../Data";
 import { Badge } from "@mui/material";
 import RequestsTable from "../../Components/RequestsTable/RequestsTable";
-import req from "../../assets/req.png";
+import PropTypes from "prop-types";
 
 const Requests = ({ requests, user, users, getTimeLabel }) => {
-	const [active, setActive] = React.useState(
-		requestsNavigations[0].name.toLowerCase()
-	);
+	const [active, setActive] = React.useState("all");
+	const [searchQuery, setSearchQuery] = React.useState("");
+	const [selectedCategory, setSelectedCategory] = React.useState("");
+
+	// Filter requests based on active status
+	const filterRequests = (status) => {
+		let filteredRequests = requests;
+		if (status === "new") {
+			filteredRequests = requests.filter(
+				(request) => request.newConsult === true
+			);
+		} else if (status === "accepted") {
+			filteredRequests = requests.filter(
+				(request) => request.acceptedById === user._id
+			);
+		} else if (status === "pending") {
+			filteredRequests = requests.filter(
+				(request) => request.status === "pending"
+			);
+		} else if (status === "approved") {
+			filteredRequests = requests.filter(
+				(request) => request.status === "accepted"
+			);
+		} else if (status === "rejected") {
+			filteredRequests = requests.filter(
+				(request) => request.status === "rejected"
+			);
+		}
+		return filteredRequests;
+	};
+
+	// Combined filtering logic for active status, search query, and selected category
+	const filteredRequests = filterRequests(active)
+		.filter((request) => {
+			// Apply the search query filter
+			const requestName = request.subject || ""; // Assuming 'subject' is the name field to search
+			return requestName.toLowerCase().includes(searchQuery.toLowerCase());
+		})
+		.filter((request) => {
+			// Check if selected category matches the request's status
+			if (!selectedCategory || selectedCategory === "all") return true;
+			return request.status.toLowerCase() === selectedCategory;
+		});
 
 	const handleActive = (name) => {
 		setActive(name);
+		setSelectedCategory(""); // Reset category when changing active tab
 	};
 
-	let acceptedRequests =
-		requests?.filter((request) => request.acceptedById === user._id) || [];
-
-	let newRequests =
-		requests?.filter((request) => request.newConsult === true) || [];
-	let pendingRequests =
-		requests?.filter((request) => request.status === "pending") || [];
-	let approvedRequests =
-		requests?.filter((request) => request.status === "accepted") || [];
-	let rejectedRequests =
-		requests?.filter((request) => request.status === "rejected") || [];
-
-	// filter requests by active status
-	const filterRequests = (status) => {
-		if (status === "all") {
-			return requests;
-		} else if (status === "new") {
-			return newRequests;
-		} else if (status === "accepted") {
-			return acceptedRequests;
-		} else if (status === "pending") {
-			return pendingRequests;
-		} else if (status === "approved") {
-			return approvedRequests;
-		} else if (status === "rejected") {
-			return rejectedRequests;
-		}
+	const handleClearFilters = () => {
+		setSearchQuery("");
+		setActive("all");
+		setSelectedCategory("");
 	};
 
 	return (
 		<div className="Requests">
-			<div className="Header">
-				<i className="fa fa-clipboard-list" />
-				<h3>Requests</h3>
-			</div>
-			<div className="RequestTop">
-				<div className="RequestsLeft">
-					<div className="RequestTopText">
-						<h3>Congratulations!</h3>
-						<span>{user?.name}</span>
-						<p>
-							You have <span>{newRequests?.length}</span> requests. You can
-							attend to them by clicking on the "Accept" badge.
-						</p>
-						{/* <button className="ExportBtn">Export</button> */}
+			<div className="RequestsTop">
+				<div className="Header">
+					<i className="fa fa-clipboard-list" />
+					<h2>Requests</h2>
+				</div>
+				<div className="TopRequestsBtns">
+					<div className="TopRequestsBtnsLeft">
+						<input
+							type="text"
+							placeholder="Search for..."
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+							style={{
+								width: "180px",
+								padding: "6px",
+								fontSize: "1rem",
+								border: "1px solid #ccc",
+								borderRadius: "4px",
+								marginRight: "10px",
+							}}
+						/>
+						<select
+							value={selectedCategory}
+							onChange={(e) => setSelectedCategory(e.target.value)}
+							style={{
+								padding: "6px",
+								fontSize: "1rem",
+								border: "1px solid #ccc",
+								borderRadius: "4px",
+								minWidth: "140px",
+							}}
+						>
+							<option value="">
+								<em>All</em>
+							</option>
+							{requestsNavigations.map((nav) => (
+								<option key={nav.name} value={nav.name.toLowerCase()}>
+									{nav.name}
+								</option>
+							))}
+						</select>
 					</div>
-					<img src={req} alt="requests" className="RequestTopImg" />
-				</div>
-				<div className="RequestsRight">
-					{requestsNavigations.map((nav, index) => {
-						return (
-							<div
-								className={
-									nav.name.toLowerCase() === active
-										? "RequestTopItem RequestTopItemActive"
-										: "RequestTopItem"
-								}
-								key={index}
-								onClick={() => handleActive(nav.name.toLowerCase())}
-							>
-								<div
-									className="RequestTopItemIcon"
-									style={{ color: nav.color }}
-								>
-									{nav.icon}
-								</div>
-								<Badge
-									badgeContent={
-										nav.name === "All"
-											? newRequests.length
-											: nav.name === "Pending"
-											? pendingRequests.length
-											: nav.name === "Approved"
-											? approvedRequests.length
-											: 0
-									}
-									color={
-										nav.name === "All"
-											? "secondary"
-											: nav.name === "Accepted"
-											? "primary"
-											: nav.name === "Pending"
-											? "warning"
-											: nav.name === "Approved"
-											? "success"
-											: "error"
-									}
-									overlap="circular"
-									anchorOrigin={{
-										vertical: "top",
-										horizontal: "right",
-									}}
-								>
-									<div className="RequestTopItemTitle">{nav.name}</div>
-								</Badge>
-							</div>
-						);
-					})}
+					<div className="TopRequestsRight">
+						<button
+							style={{
+								color: "var(--warning-dark)",
+								fontSize: "1rem",
+								padding: "4px 8px",
+								background: "none",
+								cursor: "pointer",
+							}}
+							onClick={handleClearFilters}
+						>
+							Clear <i className="fa fa-filter"></i>
+						</button>
+					</div>
 				</div>
 			</div>
-			<div className="RequestBottom">
+			<div className="RequestsTable">
 				<RequestsTable
-					requests={filterRequests(active)}
+					requests={filteredRequests}
 					users={users}
 					getTimeLabel={getTimeLabel}
 					user={user}
@@ -127,3 +134,11 @@ const Requests = ({ requests, user, users, getTimeLabel }) => {
 };
 
 export default Requests;
+
+// props validation
+Requests.propTypes = {
+	requests: PropTypes.array.isRequired,
+	user: PropTypes.object.isRequired,
+	users: PropTypes.array.isRequired,
+	getTimeLabel: PropTypes.func.isRequired,
+};

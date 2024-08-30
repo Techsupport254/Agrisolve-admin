@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import "./Order.css";
-import { useParams } from "react-router-dom"; // Corrected import
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, MenuItem, Snackbar, Alert } from "@mui/material";
 import OrderDetails from "../../Components/OrderDetails/OrderDetails";
 import OrderHistory from "../../Components/OrderHistory/OrderHistory";
 import OrderRight from "../../Components/OrderRight/OrderRight";
@@ -10,9 +10,15 @@ import PropTypes from "prop-types";
 
 const Order = ({ users, user, products, getTimeLabel }) => {
 	const { id } = useParams();
+
 	const [orders, setOrders] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(""); // Added state to handle errors
+	const [error, setError] = useState("");
+	const [editMode, setEditMode] = useState(false);
+	const [selectedStatus, setSelectedStatus] = useState("");
+	const [snackbarOpen, setSnackbarOpen] = useState(false);
+	const [snackbarMessage, setSnackbarMessage] = useState("");
+	const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
 	// Fetch orders
 	const fetchOrders = async () => {
@@ -34,7 +40,6 @@ const Order = ({ users, user, products, getTimeLabel }) => {
 			fetchOrders();
 		}
 	}, [user?._id]);
-	console.log("orders", orders);
 
 	// Filter id to get order
 	const order = orders?.find((order) => order?._id === id);
@@ -53,6 +58,48 @@ const Order = ({ users, user, products, getTimeLabel }) => {
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>{error}</p>;
 
+	const handleEditMode = () => {
+		setEditMode(!editMode);
+	};
+
+	const handleStatusChange = (event) => {
+		setSelectedStatus(event.target.value);
+	};
+
+	const currentTimeline = order?.timeline[order?.timeline?.length - 1];
+
+	// Update the order status
+	const updateOrderStatus = async (status) => {
+		try {
+			await axios.put(`http://localhost:8000/order/${order?.orderId}/status`, {
+				status,
+			});
+			fetchOrders();
+			setSnackbarMessage("Order status updated successfully!");
+			setSnackbarSeverity("success");
+		} catch (error) {
+			console.error("Failed to update order status:", error);
+			setError("Failed to update order status.");
+			setSnackbarMessage("Failed to update order status.");
+			setSnackbarSeverity("error");
+		} finally {
+			setSnackbarOpen(true);
+		}
+	};
+
+	const handleSaveStatus = () => {
+		if (selectedStatus && selectedStatus !== currentTimeline?.type) {
+			updateOrderStatus(selectedStatus);
+		}
+		setEditMode(false);
+	};
+
+	const handleSnackbarClose = () => {
+		setSnackbarOpen(false);
+	};
+
+	// disabled mode for status change
+
 	return (
 		<div className="OrderParent">
 			<div className="Header">
@@ -63,7 +110,23 @@ const Order = ({ users, user, products, getTimeLabel }) => {
 				<div className="OrderInfo">
 					<span>
 						{order?.orderId}
-						<small>{order?.status}</small>
+						<small
+							style={{
+								backgroundColor: `${
+									currentTimeline?.type === "Pending"
+										? "var(--warning)"
+										: currentTimeline?.type === "Confirmed"
+										? "var(--info)"
+										: currentTimeline?.type === "Out for Delivery"
+										? "var(--success)"
+										: currentTimeline?.type === "Delivered"
+										? "var(--success)"
+										: "var(--error)"
+								}`,
+							}}
+						>
+							{currentTimeline?.type}
+						</small>
 					</span>
 					<p>{getTimeLabel(order?.date)}</p>
 				</div>
@@ -72,31 +135,49 @@ const Order = ({ users, user, products, getTimeLabel }) => {
 						id="outlined-select-currency-native"
 						select
 						label="Status"
-						value={order?.status}
+						value={selectedStatus || currentTimeline?.type}
+						onChange={handleStatusChange}
 						SelectProps={{
-							native: true,
+							native: false,
 						}}
 						size="small"
 						variant="outlined"
 						sx={{ width: 200 }}
 						color="success"
+						disabled={
+							!editMode ||
+							(currentTimeline?.type === "Delivered" && !user.isAdmin)
+						}
 					>
-						<option value="Pending">Pending</option>
-						<option value="In Transit">In Transit</option>
-						<option value="Delivered">Delivered</option>
+						<MenuItem value="Pending" disabled>
+							Pending
+						</MenuItem>
+						<MenuItem
+							value="Confirmed"
+							disabled={
+								currentTimeline?.type === "Confirmed" ||
+								currentTimeline?.type === "Out for Delivery" ||
+								currentTimeline?.type === "Delivered"
+							}
+						>
+							Confirmed
+						</MenuItem>
+						<MenuItem
+							value="Out for Delivery"
+							disabled={
+								currentTimeline?.type === "Out for Delivery" ||
+								currentTimeline?.type === "Delivered"
+							}
+						>
+							Out for Delivery
+						</MenuItem>
+						<MenuItem
+							value="Delivered"
+							disabled={currentTimeline?.type === "Delivered"}
+						>
+							Delivered
+						</MenuItem>
 					</TextField>
-
-					<Button
-						variant="contained"
-						sx={{ marginLeft: "1rem" }}
-						style={{
-							backgroundColor: "transparent",
-							color: "var(--bg-color)",
-							fontWeight: "bold",
-						}}
-					>
-						<i className="fa fa-print"></i>&nbsp; Print
-					</Button>
 					<Button
 						variant="contained"
 						sx={{ marginLeft: "1rem" }}
@@ -106,8 +187,17 @@ const Order = ({ users, user, products, getTimeLabel }) => {
 							color: "var(--white)",
 							fontWeight: "bold",
 						}}
+						onClick={editMode ? handleSaveStatus : handleEditMode}
 					>
-						<i className="fas fa-pen"></i>&nbsp; Edit
+						{editMode ? (
+							<>
+								<i className="fa fa-save"></i> &nbsp; Save
+							</>
+						) : (
+							<>
+								<i className="fa fa-edit"></i> &nbsp; Edit
+							</>
+						)}
 					</Button>
 				</div>
 			</div>
@@ -124,18 +214,29 @@ const Order = ({ users, user, products, getTimeLabel }) => {
 					<OrderRight order={order} getCustomer={getCustomer} />
 				</div>
 			</div>
+			<Snackbar
+				open={snackbarOpen}
+				autoHideDuration={6000}
+				onClose={handleSnackbarClose}
+			>
+				<Alert
+					onClose={handleSnackbarClose}
+					severity={snackbarSeverity}
+					sx={{ width: "100%" }}
+				>
+					{snackbarMessage}
+				</Alert>
+			</Snackbar>
 		</div>
 	);
 };
 
 export default Order;
 
-// prop validation
-
+// Prop validation
 Order.propTypes = {
 	user: PropTypes.object.isRequired,
 	users: PropTypes.array.isRequired,
 	products: PropTypes.array.isRequired,
 	getTimeLabel: PropTypes.func.isRequired,
-	orders: PropTypes.array.isRequired,
 };

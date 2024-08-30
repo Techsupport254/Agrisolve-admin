@@ -195,4 +195,9 @@ textarea {
   gap: .5rem;
 }
 
+.MuiTableCell-root.MuiTableCell-body.MuiTableCell-sizeMedium,
+.MuiTableCell-root.MuiTableCell-head.MuiTableCell-stickyHeader {
+  padding: .5rem;
+}
+
 /* mobile responsiveness */

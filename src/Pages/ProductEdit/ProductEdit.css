@@ -1,0 +1,270 @@
+.ProductEdit {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .5rem;
+    height: 98vh;
+
+
+    .NewItem {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: .5rem;
+        padding: 1rem;
+    }
+
+    .NewItemLeft {
+        width: 30%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: .5rem;
+        padding: 1rem;
+
+        & p {
+            font-size: .8rem;
+            color: var(--black);
+        }
+    }
+
+    .NewItemRight {
+        width: 70%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: .5rem;
+        box-shadow: var(--boxShadow);
+        padding: 1rem;
+    }
+
+    .ImageInput {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: .5rem;
+
+        & span {
+            font-size: .8rem;
+            color: var(--black);
+            font-weight: 600;
+        }
+    }
+
+    .InputField {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        background: var(--success-lighter);
+        border-radius: 5px;
+        padding: 1rem;
+        cursor: pointer;
+
+        & img {
+            width: 50%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        & p {
+            font-size: .8rem;
+            color: var(--black);
+
+            &>span {
+                font-size: .8rem;
+                font-weight: 600;
+                color: var(--success-darker);
+            }
+        }
+
+    }
+
+    .ProductRow {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 1rem;
+    }
+
+    .TogleSwitch {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        margin-bottom: 1rem;
+
+        & p {
+            font-size: .8rem;
+            color: var(--success-dark);
+        }
+    }
+
+    .NewItemBtn {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: flex-end;
+        gap: .5rem;
+        box-shadow: var(--boxShadow);
+        padding: 1rem;
+    }
+
+    .NewBtns {
+        width: 70%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+
+
+        & button {
+            border-radius: 5px;
+            padding: .2rem .3rem;
+            font-weight: 600;
+            font-size: .8rem;
+            transition: all .3s ease-in-out;
+        }
+
+        & button:first-child {
+            background: var(--error-light);
+            color: var(--error-darker);
+
+            &:hover {
+                background: var(--error-lighter);
+                color: var(--error-dark);
+            }
+        }
+
+        & button:last-child {
+            border: 1px solid var(--primary-dark);
+            color: var(--success-dark);
+
+            &:hover {
+                background: var(--success-lighter);
+                color: var(--success-dark);
+            }
+        }
+
+
+        & p {
+            font-size: .8rem;
+            color: var(--success-dark);
+            font-weight: 600;
+        }
+
+        & i {
+            font-size: 1rem;
+            color: var(--success-dark);
+        }
+    }
+
+    .ToggleSwitch {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .SelectedImages {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: .5rem;
+        background: var(--success-lighter);
+        border-radius: 5px;
+        padding: 1rem;
+        cursor: pointer;
+    }
+
+    .SelectedImage {
+        max-width: 24%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: .5rem;
+        padding: .2rem;
+        border-radius: 5px;
+        cursor: pointer;
+        border: 1px solid var(--success-dark);
+
+
+        & img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        & p {
+            font-size: .8rem;
+            color: var(--black);
+            font-weight: 600;
+        }
+    }
+
+    .UploadBtn {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        border-radius: 5px;
+        cursor: pointer;
+
+        & p {
+            font-size: .8rem;
+            color: var(--success-dark);
+            font-weight: 600;
+        }
+
+        & i {
+            font-size: 1rem;
+            color: var(--success-dark);
+        }
+    }
+
+    .FileName {
+        width: 100%;
+        height: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 .2rem;
+        background: var(--success-lighter);
+
+        & p {
+            font-size: .7rem;
+            color: var(--success-dark);
+            font-weight: 600;
+        }
+
+        & i {
+            font-size: .6rem;
+            color: var(--error-dark);
+            cursor: pointer;
+
+        }
+    }
+}

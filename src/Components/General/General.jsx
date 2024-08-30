@@ -1,38 +1,87 @@
 import React, { useState } from "react";
-import "./General.css";
-import TextField from "@mui/material/TextField";
-import Switch from "@mui/material/Switch";
+import PropTypes from "prop-types";
 import axios from "axios";
+import { Switch, TextField, Snackbar, Alert, styled } from "@mui/material";
+import "./General.css";
+
+const IOSSwitch = styled((props) => (
+	<Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+	width: 42,
+	height: 26,
+	padding: 0,
+	"& .MuiSwitch-switchBase": {
+		padding: 0,
+		margin: 2,
+		transitionDuration: "300ms",
+		"&.Mui-checked": {
+			transform: "translateX(16px)",
+			color: "#fff",
+			"& + .MuiSwitch-track": {
+				backgroundColor: theme.palette.mode === "dark" ? "#2ECA45" : "#65C466",
+				opacity: 1,
+				border: 0,
+			},
+		},
+		"&.Mui-focusVisible .MuiSwitch-thumb": {
+			color: "#33cf4d",
+			border: "6px solid #fff",
+		},
+	},
+	"& .MuiSwitch-thumb": {
+		width: 22,
+		height: 22,
+	},
+	"& .MuiSwitch-track": {
+		borderRadius: 26 / 2,
+		backgroundColor: theme.palette.mode === "light" ? "#E9E9EA" : "#39393D",
+		opacity: 1,
+		transition: theme.transitions.create(["background-color"], {
+			duration: 500,
+		}),
+	},
+}));
 
 const General = ({ user }) => {
 	const [uploading, setUploading] = useState(false);
 	const [edit, setEdit] = useState(false);
+	const [responseMessage, setResponseMessage] = useState("");
+	const [responseError, setResponseError] = useState("");
 
-	const [verificationStatus, setVerificationStatus] = useState(
-		user?.verificationStatus === "verified"
-	);
+	const token = localStorage.getItem("token");
 
 	const capitalize = (str) => {
-		if (typeof str !== "string") return "";
-		return str.charAt(0).toUpperCase() + str.slice(1);
+		return typeof str === "string"
+			? str.charAt(0).toUpperCase() + str.slice(1)
+			: "";
 	};
 
-	const handleVerificationToggle = () => {
-		setVerificationStatus(!verificationStatus);
-	};
+	const handleVerificationToggle = async () => {
+		if (user.verificationStatus === "verified") {
+			setResponseMessage("Your email is already verified.");
+			return;
+		}
 
-	const handleBrowseClick = () => {
-		// Trigger the hidden input element's click event
-		const fileInput = document.getElementById("file-input");
-		if (fileInput) {
-			fileInput.click();
+		try {
+			const response = await axios.get(
+				`http://localhost:8000/auth/sendVerification`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			setResponseMessage(response.data.message);
+		} catch (error) {
+			console.error("Verification error:", error);
+			setResponseError(error.response?.data?.error || "An error occurred.");
 		}
 	};
 
 	const handleFileInputChange = async (event) => {
 		const file = event.target.files[0];
-		const CLOUD_NAME = __CLOUD_NAME__;
-		const PRESET_NAME = __UPLOAD_PRESET__;
+		const CLOUD_NAME = process.env.REACT_APP_CLOUD_NAME;
+		const PRESET_NAME = process.env.REACT_APP_UPLOAD_PRESET;
 		setUploading(true);
 
 		try {
@@ -45,25 +94,23 @@ const General = ({ user }) => {
 				formData
 			);
 
-			console.log("Upload Response:", uploadResponse.data);
-
-			const updateResponse = await axios.patch(
+			await axios.patch(
 				`http://localhost:8000/auth/user/${user.email}`,
 				{
 					profilePicture: uploadResponse.data.secure_url,
 				},
 				{
 					headers: {
-						"x-auth-token": user.token,
+						Authorization: `Bearer ${token}`,
 					},
 				}
 			);
 
-			console.log("Update Response:", updateResponse.data);
-
-			setUploading(false);
+			setResponseMessage("Profile picture updated successfully!");
 		} catch (err) {
-			console.error("Error:", err);
+			console.error("Error updating profile picture:", err);
+			setResponseError("Failed to update profile picture.");
+		} finally {
 			setUploading(false);
 		}
 	};
@@ -78,13 +125,16 @@ const General = ({ user }) => {
 				{uploading ? (
 					<div className="Uploading">
 						<div className="ProfilePhoto">
-							<img src={user?.profilePicture} alt="ProfilePhoto" />
+							<img src={user?.profilePicture} alt="Profile" />
 						</div>
 					</div>
 				) : (
 					<div className="ProfilePhoto">
-						<img src={user?.profilePicture} alt="ProfilePhoto" />
-						<div className="UpdatePhoto" onClick={handleBrowseClick}>
+						<img src={user?.profilePicture} alt="Profile" />
+						<div
+							className="UpdatePhoto"
+							onClick={() => document.getElementById("file-input").click()}
+						>
 							<i className="fa fa-camera"></i>
 							<h1>Update photo</h1>
 						</div>
@@ -102,20 +152,16 @@ const General = ({ user }) => {
 						<span>{user?.username}</span>
 						<p>{user?.userType}</p>
 						<div className="Verified">
-							<label htmlFor="verificationStatus">
-								<span>
-									{user?.verificationStatus === "verified"
-										? "Verified"
-										: "Verify"}
-								</span>
-								<Switch
-									id="verificationStatus"
-									checked={verificationStatus}
-									onChange={handleVerificationToggle}
-									inputProps={{ "aria-label": "controlled" }}
-									color="success"
-								/>
-							</label>
+							<IOSSwitch
+								id="verificationStatus"
+								checked={user?.verificationStatus === "verified"}
+								onChange={handleVerificationToggle}
+							/>
+							<span>
+								{user?.verificationStatus === "verified"
+									? "Verified"
+									: "Verify"}
+							</span>
 						</div>
 					</div>
 				</div>
@@ -129,20 +175,9 @@ const General = ({ user }) => {
 							label="Full Name"
 							variant="outlined"
 							fullWidth
-							value={user?.name}
+							value={user?.name || ""}
 							size="small"
 							color="success"
-							hover="success"
-							sx={{
-								"& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-									{
-										borderColor: "primary",
-									},
-
-								"& .MuiInputLabel-outlined.Mui-focused": {
-									color: "primary",
-								},
-							}}
 							disabled={!edit}
 							InputLabelProps={{
 								shrink: true,
@@ -155,7 +190,7 @@ const General = ({ user }) => {
 							label="Username"
 							variant="outlined"
 							fullWidth
-							value={user?.username}
+							value={user?.username || ""}
 							size="small"
 							color="success"
 							disabled={!edit}
@@ -172,7 +207,7 @@ const General = ({ user }) => {
 							label="Email"
 							variant="outlined"
 							fullWidth
-							value={user?.email}
+							value={user?.email || ""}
 							size="small"
 							color="success"
 							disabled={!edit}
@@ -187,24 +222,24 @@ const General = ({ user }) => {
 							label="Phone"
 							variant="outlined"
 							fullWidth
-							value={user?.phone}
+							value={user?.phone || ""}
 							size="small"
 							color="success"
+							disabled={!edit}
 							InputLabelProps={{
 								shrink: true,
 							}}
-							disabled={!edit}
 						/>
 					</div>
 				</div>
 				<div className="GeneralRow">
 					<div className="GeneralRowItem">
 						<TextField
-							id="Location"
+							id="location"
 							label="Location"
 							variant="outlined"
 							fullWidth
-							value={user?.location}
+							value={user?.location || ""}
 							size="small"
 							color="success"
 							disabled={!edit}
@@ -215,11 +250,11 @@ const General = ({ user }) => {
 					</div>
 					<div className="GeneralRowItem">
 						<TextField
-							id="City"
+							id="city"
 							label="City"
 							variant="outlined"
 							fullWidth
-							value={user?.location}
+							value={user?.city || ""}
 							size="small"
 							color="success"
 							disabled={!edit}
@@ -236,7 +271,7 @@ const General = ({ user }) => {
 							label="Business Name"
 							variant="outlined"
 							fullWidth
-							value={user?.businessName}
+							value={user?.businessName || ""}
 							size="small"
 							color="success"
 							disabled={!edit}
@@ -251,7 +286,7 @@ const General = ({ user }) => {
 							label="Business Type"
 							variant="outlined"
 							fullWidth
-							value={capitalize(user?.businessType)}
+							value={capitalize(user?.businessType) || ""}
 							size="small"
 							color="success"
 							disabled={!edit}
@@ -268,7 +303,7 @@ const General = ({ user }) => {
 							label="Business Description"
 							variant="outlined"
 							fullWidth
-							value={user?.businessDescription}
+							value={user?.businessDescription || ""}
 							color="success"
 							multiline
 							rows={4}
@@ -280,21 +315,36 @@ const General = ({ user }) => {
 					</div>
 				</div>
 				<div className="EditBtn">
-					{edit ? (
-						<button onClick={handleEdit}>
-							<i className="fa fa-save"></i>
-							<h1>Save Changes</h1>
-						</button>
-					) : (
-						<button onClick={handleEdit}>
-							<i className="fa fa-edit"></i>
-							<h1>Edit</h1>
-						</button>
-					)}
+					<button onClick={handleEdit}>
+						<i className={`fa ${edit ? "fa-save" : "fa-edit"}`}></i>
+						<h1>{edit ? "Save Changes" : "Edit"}</h1>
+					</button>
 				</div>
 			</div>
+			<Snackbar
+				open={Boolean(responseMessage) || Boolean(responseError)}
+				autoHideDuration={6000}
+				onClose={() => {
+					setResponseMessage("");
+					setResponseError("");
+				}}
+			>
+				<Alert
+					severity={responseError ? "error" : "success"}
+					onClose={() => {
+						setResponseMessage("");
+						setResponseError("");
+					}}
+				>
+					{responseError || responseMessage}
+				</Alert>
+			</Snackbar>
 		</div>
 	);
 };
 
 export default General;
+
+General.propTypes = {
+	user: PropTypes.object.isRequired,
+};

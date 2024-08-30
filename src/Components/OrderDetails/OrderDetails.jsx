@@ -2,7 +2,6 @@ import React from "react";
 import "./OrderDetails.css";
 
 const OrderDetails = ({ order, getCustomer }) => {
-
 	return (
 		<div className="OrderDetails">
 			<div className="Header">
@@ -10,7 +9,7 @@ const OrderDetails = ({ order, getCustomer }) => {
 			</div>
 			<div className="OrderProduct">
 				{order?.products && order.products.length > 0 ? (
-					order.products.map((product) => {
+					order?.products?.map((product) => {
 						const productDetails = product?.productId;
 						if (!productDetails) {
 							console.log(
@@ -35,10 +34,21 @@ const OrderDetails = ({ order, getCustomer }) => {
 									</div>
 									<div className="ProductPrice">
 										<span>
+											{product?.price
+												? "KES " + product.price.toLocaleString()
+												: "KES " + productDetails.price.toLocaleString()}
+										</span>
+									</div>
+									<div className="ProductPrice">
+										<span>
 											<i className="fa fa-times"></i>&nbsp;
 											{product.quantity}
 										</span>
-										<span>
+										<span
+											style={{
+												fontWeight: "bold",
+											}}
+										>
 											{"KES " +
 												(
 													productDetails.price * product.quantity

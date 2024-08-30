@@ -10,12 +10,21 @@ const Card = ({ title, value, barValue, icon, color, series }) => {
 		boxShadow: color?.boxShadow || "none",
 	};
 
+	const hasData = value !== null && value !== undefined && value !== 0;
+
 	return (
 		<div className="Card" style={cardStyle}>
 			<div className="CardLeft">
-				<div className="ProgressBar">
-					<CircularBar barValue={barValue} value={value} series={series} />
-				</div>
+				{hasData ? (
+					<div className="ProgressBar">
+						<CircularBar barValue={barValue} value={value} series={series} />
+					</div>
+				) : (
+					<Stack sx={{ color: "grey.500" }} spacing={2} direction="row">
+						<CircularProgress color="inherit" />
+						<p>No data available</p>
+					</Stack>
+				)}
 			</div>
 			<div className="CardRight">
 				<span>{title}</span>
@@ -23,9 +32,13 @@ const Card = ({ title, value, barValue, icon, color, series }) => {
 					<i className={icon}></i>
 				</div>
 				<div className="CardValue">
-					<p>
-						{barValue}/{value}
-					</p>
+					{hasData ? (
+						<p>
+							{barValue}/{value}
+						</p>
+					) : (
+						<p>--/--</p>
+					)}
 				</div>
 			</div>
 		</div>

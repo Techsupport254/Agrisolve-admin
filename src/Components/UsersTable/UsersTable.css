@@ -1,3 +1,14 @@
+.UsersTableContainer,
+.TableContainer {
+    width: 100%;
+    height: 100%;
+}
+
+.UsersTableHeader,
+.UsersTableHeader {
+    background-color: #f5f5f5;
+}
+
 .UserProfileName {
     display: flex;
     flex-direction: column !important;

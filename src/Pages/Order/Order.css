@@ -24,7 +24,6 @@
     justify-content: flex-start;
     align-items: flex-start;
 
-
     & span {
         display: flex;
         flex-direction: row;
@@ -39,8 +38,8 @@
             font-weight: 400;
             padding: .1rem .2rem;
             border-radius: 5px;
-            background-color: var(--primary-lighter);
-            color: var(--primary-darker);
+            color: #fff;
+            font-weight: 600;
         }
     }
 
@@ -60,6 +59,7 @@
     overflow: auto;
     gap: 1rem;
     padding: 1rem;
+
 }
 
 .OrderLeft {

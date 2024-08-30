@@ -17,14 +17,7 @@
     margin-right: .7rem;
 }
 
-.Typography {
-    font-size: .8rem !important;
-    font-weight: 600;
-    color: #666 !important;
-    position: relative;
-    left: -15px;
-    top: -5px;
-}
+
 
 .HistoryLeft,
 .HistoryRight {
@@ -56,4 +49,8 @@
         left: -15px;
         top: -5px;
     }
+}
+
+.Badge {
+    height: 20px;
 }

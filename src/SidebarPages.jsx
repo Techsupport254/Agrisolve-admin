@@ -1,6 +1,8 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import PropTypes from "prop-types";
+import NewDiscount from "./Pages/NewDiscount/NewDiscount";
+import VerifyEmail from "./Pages/VerifyEmail/VerifyEmail";
 
 // Lazy-loaded components
 const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
@@ -9,7 +11,8 @@ const Products = lazy(() => import("./Pages/Products/Products"));
 const Reports = lazy(() => import("./Pages/Reports/Reports"));
 const Requests = lazy(() => import("./Pages/Requests/Requests"));
 const Login = lazy(() => import("./Components/Login/Login"));
-const NewProduct = lazy(() => import("./Components/NewProduct/NewProduct"));
+const NewProduct = lazy(() => import("./Pages/NewProduct/NewProduct"));
+const EditProduct = lazy(() => import("./Pages/ProductEdit/ProductEdit"));
 const Chats = lazy(() => import("./Pages/Chats/Chats"));
 const Finance = lazy(() => import("./Pages/Finance/Finance"));
 const News = lazy(() => import("./Pages/News/News"));
@@ -18,6 +21,9 @@ const NotFound = lazy(() => import("./Components/404/NotFound"));
 const Profile = lazy(() => import("./Pages/Profile/Profile"));
 const Orders = lazy(() => import("./Pages/Orders/Orders"));
 const Order = lazy(() => import("./Pages/Order/Order"));
+const Discount = lazy(() => import("./Pages/Discount/Discount"));
+const Discounts = lazy(() => import("./Pages/Discounts/Discounts"));
+const EditDiscount = lazy(() => import("./Pages/EditDiscount/EditDiscount"));
 
 const LoadingFallback = () => (
 	<div className="SpinnerLoading">
@@ -38,13 +44,15 @@ const SidebarPages = ({
 	getCustomer,
 	getProduct,
 	earnings,
+	allDiscounts,
+	userDiscounts,
 }) => {
 	const [loading, setLoading] = useState(true);
 	const [admin, setAdmin] = useState(false);
 	const [agriprofessional, setAgriprofessional] = useState(false);
 	const [agribusiness, setAgribusiness] = useState(false);
 	const admin_email = __ADMIN__;
-	console.log(user?.email, admin_email);
+
 	// Check if user is admin
 	useEffect(() => {
 		if (user?.email === admin_email) {
@@ -122,6 +130,7 @@ const SidebarPages = ({
 									<Products
 										products={products}
 										user={user}
+										users={users}
 										getTimeLabel={getTimeLabel}
 										orders={orders}
 										getCustomer={getCustomer}
@@ -132,6 +141,27 @@ const SidebarPages = ({
 							}
 						/>
 					)}
+					{(admin || agribusiness) && (
+						<Route
+							path="/product/edit/:id"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<EditProduct
+										products={products}
+										user={user}
+										getTimeLabel={getTimeLabel}
+										orders={orders}
+										getCustomer={getCustomer}
+										getProduct={getProduct}
+										earnings={earnings}
+									/>
+								)
+							}
+						/>
+					)}
+
 					<Route
 						path="/reports"
 						element={
@@ -293,6 +323,7 @@ const SidebarPages = ({
 										users={users}
 										getTimeLabel={getTimeLabel}
 										products={products}
+										orders={orders}
 									/>
 								)
 							}
@@ -300,7 +331,7 @@ const SidebarPages = ({
 					)}
 					{(agribusiness || admin) && (
 						<Route
-							path="orders/:id"
+							path="order/:id"
 							element={
 								loading ? (
 									<LoadingFallback />
@@ -315,6 +346,95 @@ const SidebarPages = ({
 							}
 						/>
 					)}
+					{(agribusiness || admin) && (
+						<Route
+							path="discounts"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<Discounts
+										user={user}
+										users={users}
+										getTimeLabel={getTimeLabel}
+										products={products}
+										allDiscounts={allDiscounts}
+										userDiscounts={userDiscounts}
+									/>
+								)
+							}
+						/>
+					)}
+					{(agribusiness || admin) && (
+						<Route
+							path="discounts/add"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<NewDiscount
+										user={user}
+										users={users}
+										getTimeLabel={getTimeLabel}
+										products={products}
+										allDiscounts={allDiscounts}
+										userDiscounts={userDiscounts}
+									/>
+								)
+							}
+						/>
+					)}
+					{(agribusiness || admin) && (
+						<Route
+							path="discount/edit/"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<EditDiscount
+										user={user}
+										users={users}
+										getTimeLabel={getTimeLabel}
+										products={products}
+										allDiscounts={allDiscounts}
+										userDiscounts={userDiscounts}
+									/>
+								)
+							}
+						/>
+					)}
+					{(agribusiness || admin) && (
+						<Route
+							path="discount/:id"
+							element={
+								loading ? (
+									<LoadingFallback />
+								) : (
+									<Discount
+										user={user}
+										users={users}
+										getTimeLabel={getTimeLabel}
+										products={products}
+									/>
+								)
+							}
+						/>
+					)}
+					{/* verify  */}
+					<Route
+						path="verify"
+						element={
+							loading ? (
+								<LoadingFallback />
+							) : (
+								<VerifyEmail
+									user={user}
+									users={users}
+									getTimeLabel={getTimeLabel}
+								/>
+							)
+						}
+					/>
 					{/* 404 */}
 					<Route
 						path="*"

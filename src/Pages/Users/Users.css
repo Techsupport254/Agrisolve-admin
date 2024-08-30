@@ -8,6 +8,22 @@
     overflow: auto;
 }
 
+.UsersTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+.TopUsersBtns {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+}
+
 .UserCards {
     height: 25%;
     width: 100%;
@@ -26,8 +42,6 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 1rem;
-    padding: .5rem;
     overflow: auto;
 }
 
@@ -54,4 +68,59 @@
     width: 2rem;
     height: 2rem;
     border-radius: 50%;
+}
+
+.Discounts {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: .5rem;
+    overflow: auto;
+
+    & .Header {
+        width: auto;
+        justify-content: flex-start;
+        align-items: center;
+    }
+}
+
+.ProductDiscount {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem;
+    gap: 1rem;
+
+    ul {
+        width: 50%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: .5rem;
+        gap: 1rem;
+
+        li {
+            list-style: disc;
+            margin-left: 1rem;
+        }
+    }
+
+    button {
+        background-color: var(--bg-color);
+        border: none;
+        padding: .5rem;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+}
+
+.TopUsersRight {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
 }

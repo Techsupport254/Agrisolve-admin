@@ -97,12 +97,6 @@
         font-weight: 600;
     }
 
-    & span {
-        font-size: .8rem;
-        font-weight: 400;
-        color: var(--p-color);
-    }
-
     & p {
         text-transform: capitalize;
         font-size: .8rem;
@@ -112,12 +106,18 @@
 
     & .Verified {
         margin-top: 1rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+
     }
 }
 
 .DangerBtn {
-    background: rgba(255, 233, 213, 1);
-    color: rgba(122, 9, 22, 1);
+    background: var(--error-lighter);
+    color: var(--danger);
     border: none;
     padding: .3rem .5rem;
     border-radius: 5px;
@@ -127,7 +127,7 @@
     align-self: center;
 
     &:hover {
-        background: rgba(255, 172, 130, 1);
+        background: var(--error-light);
     }
 }
 

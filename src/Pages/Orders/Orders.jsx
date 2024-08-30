@@ -1,74 +1,332 @@
-import { useState, useEffect } from "react";
-import "./Orders.css";
-import {
-	InputAdornment,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-	TextField,
-} from "@mui/material";
-import axios from "axios";
-import nochat from "../../assets/nochat.png";
+import { useState, useEffect, useCallback } from "react";
+import { Table, Tag, Button } from "antd";
+import { DownOutlined, RightOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-use-history";
 import PropTypes from "prop-types";
+import "./Orders.css";
+import { InputAdornment, TextField } from "@mui/material";
+import nochat from "../../assets/nochat.png";
 
-const Orders = ({ user, users, getTimeLabel }) => {
-	const [orders, setOrders] = useState([]);
+const Orders = ({ user, users, getTimeLabel, orders }) => {
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState("");
-	const [success, setSuccess] = useState("");
+	const [expandedKeys, setExpandedKeys] = useState([]);
+	const [searchTerm, setSearchTerm] = useState("");
+	const [paymentFilter, setPaymentFilter] = useState("All");
+	const [statusFilter, setStatusFilter] = useState("All");
 	const history = useHistory();
 
-	// Fetch orders by ownerId
-	const fetchOrders = async () => {
-		setLoading(true); // Set loading before the operation
-		try {
-			const response = await axios.get(
-				`http://localhost:8000/order/owner/${user._id}`
-			);
-			if (response.data && Array.isArray(response.data)) {
-				// Sort and filter operations inside the async function to ensure they're applied to updated data
-				const sortedFilteredOrders = response.data
-					.sort((a, b) => new Date(b.date) - new Date(a.date))
-					.map((order) => ({
-						...order,
-						products: order.products.filter(
-							(product) => product.productId.refId === user._id
-						),
-					}))
-					.filter((order) => order.products.length > 0); // Filter out orders with no products after filtering
+	const adminEmail = __ADMIN__;
 
-				setOrders(sortedFilteredOrders);
-			}
-		} catch (error) {
-			console.error("Failed to fetch orders:", error);
-		} finally {
-			setLoading(false); // Ensure loading is set to false both on success and failure
-		}
-	};
+	const isAdmin = user?.email === adminEmail;
 
 	useEffect(() => {
-		if (user && user._id) {
-			fetchOrders();
-		} else {
-			console.log("User or user ID is undefined.");
+		if (orders.length > 0) {
+			setLoading(false);
 		}
-	}, [user?._id]); // Dependency on user._id to refetch when it changes
+	}, [orders]);
 
-	// sort orders by date
-	orders?.sort((a, b) => {
-		return new Date(b.date) - new Date(a.date);
-	});
+	const handleRowClick = (record) => {
+		const newExpandedKeys = [...expandedKeys];
+		const index = newExpandedKeys.indexOf(record._id);
+		if (index > -1) {
+			newExpandedKeys.splice(index, 1);
+		} else {
+			newExpandedKeys.push(record._id);
+		}
+		setExpandedKeys(newExpandedKeys);
+	};
 
-	// Get customer by userId with fallback
 	const getCustomer = (userId) => {
 		const customer = users.find((user) => user._id === userId);
 		return customer || { name: "Unknown", email: "No email provided" };
 	};
-	console.log(orders);
+
+	const filteredOrders = orders.filter((order) => {
+		const customer = getCustomer(order.userId);
+		const matchesSearchTerm =
+			order.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			customer.email.toLowerCase().includes(searchTerm.toLowerCase());
+
+		const matchesPaymentFilter =
+			paymentFilter === "All" || order.payment.status === paymentFilter;
+
+		const matchesStatusFilter =
+			statusFilter === "All" ||
+			order.timeline[order.timeline.length - 1].type === statusFilter;
+
+		return matchesSearchTerm && matchesPaymentFilter && matchesStatusFilter;
+	});
+
+	// formatted price
+	const formatPrice = (price) => {
+		return price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	};
+
+	const columns = [
+		{
+			title: "Order",
+			dataIndex: "orderId",
+			key: "orderId",
+			render: (text, record) => (
+				<a
+					onClick={() => history.push(`/order/${record._id}`)}
+					style={{
+						color: "var(--primary-dark)",
+						fontSize: "1rem",
+						cursor: "pointer",
+					}}
+				>
+					View
+				</a>
+			),
+		},
+		{
+			title: "Customer",
+			dataIndex: "userId",
+			key: "customer",
+			render: (userId) => {
+				const customer = getCustomer(userId);
+				return (
+					<div className="Customer">
+						<div className="Avatar">
+							<img src={customer.profilePicture} alt="" className="avatar" />
+						</div>
+						<div className="CustomerDetails">
+							<span>{customer.name}</span>
+							<p>{customer.email}</p>
+						</div>
+					</div>
+				);
+			},
+		},
+		{
+			title: "Products",
+			dataIndex: "products",
+			key: "products",
+			render: (products) => (
+				<div className="image-container">
+					{products.slice(0, 3).map((product, index) => (
+						<img
+							key={product.productId._id}
+							src={product.productId.images?.[0] || "https://picsum.photos/200"}
+							alt={product.productId.productName || product.title}
+							className="circular-image"
+							style={{ zIndex: 10 - index }}
+						/>
+					))}
+					{products.length > 3 && (
+						<div className="more-images">+{products.length - 3}</div>
+					)}
+				</div>
+			),
+		},
+		{
+			title: "Amount (ksh)",
+			dataIndex: "amounts",
+			key: "total",
+			render: (amounts, order) => (
+				<>
+					{isAdmin
+						? formatPrice(amounts?.totalAmount)
+						: formatPrice(
+								order?.products?.reduce(
+									(acc, product) => acc + product.price * product.quantity,
+									0
+								)
+						  )}
+				</>
+			),
+		},
+		{
+			title: isAdmin ? "Delivery (ksh)" : null,
+			dataIndex: "amounts",
+			key: "total",
+			render: (amounts) => (
+				<>{isAdmin ? formatPrice(amounts?.deliveryFee) : null}</>
+			),
+		},
+		{
+			title: "Fees (ksh)",
+			dataIndex: "amounts",
+			key: "total",
+			render: (amounts, order) => {
+				const tax = Number(amounts?.tax || 0);
+				const discounts = Number(amounts?.discounts || 0);
+
+				// Calculate product discounts for each product in the order
+				const productDiscounts =
+					order?.products?.reduce((acc, product) => {
+						const productDiscountsSum = product?.productId?.discounts?.reduce(
+							(discountAcc, discount) =>
+								discountAcc + (discount.discountAmount || 0),
+							0
+						);
+						return acc + (productDiscountsSum || 0);
+					}, 0) || 0;
+
+				const totalFees = isAdmin ? tax + discounts : productDiscounts;
+				return <>{formatPrice(totalFees)}</>;
+			},
+		},
+
+		{
+			title: "Total (ksh)",
+			dataIndex: "amounts",
+			key: "total",
+			render: (amounts) => <>{formatPrice(amounts?.totalAmount)}</>,
+		},
+		{
+			title: "Payment",
+			dataIndex: "payment",
+			key: "payment",
+			render: (payment) => (
+				<p
+					style={{
+						backgroundColor:
+							payment.status === "Pending"
+								? "var(--warning-dark)"
+								: payment.status === "Paid"
+								? "var(--success-dark)"
+								: "var(--error-dark)",
+						color: "#fff",
+					}}
+				>
+					{payment.status}
+				</p>
+			),
+		},
+		{
+			title: "Date",
+			dataIndex: "date",
+			key: "date",
+			render: (date) => getTimeLabel(date),
+		},
+		{
+			title: "Status",
+			dataIndex: "timeline",
+			key: "status",
+			render: (timeline) => {
+				const latestTimeline = timeline[timeline.length - 1];
+				const c = "#fff";
+
+				const bg =
+					latestTimeline.type === "Pending"
+						? "var(--warning-dark)"
+						: latestTimeline.type === "Confirmed"
+						? "var(--primary-dark)"
+						: latestTimeline.type === "Delivered"
+						? "var(--success-dark)"
+						: "var(--info-dark)";
+
+				return (
+					<Tag color={c} style={{ backgroundColor: bg }}>
+						{latestTimeline.type}
+					</Tag>
+				);
+			},
+		},
+	];
+
+	const expandedRowRender = (order) => {
+		const productColumns = [
+			{
+				title: "Product Name",
+				dataIndex: "productName",
+				key: "productName",
+				render: (text, product) => (
+					<div className="Customer">
+						<div className="ProductImage">
+							<img
+								src={
+									product.productId?.images?.[0]
+										? product.productId.images[0]
+										: "https://picsum.photos/200"
+								}
+								alt={product.productId?.productName || "Product Image"}
+							/>
+						</div>
+						<div className="CustomerDetails">
+							<span>{product.productId?.productName || text}</span>
+							<h3>
+								{product.productId?.productCategory} |{" "}
+								{product.productId?.subCategory}
+							</h3>
+							<p>{product.productId?.brandName}</p>
+						</div>
+					</div>
+				),
+			},
+			{
+				title: "Images",
+				dataIndex: "image",
+				key: "image",
+				render: (text, product) => (
+					<div className="image-container">
+						{product.productId?.images?.slice(0, 3).map((imgSrc, index) => (
+							<img
+								key={index}
+								src={imgSrc || "https://picsum.photos/200"}
+								alt={product.productId?.productName || product.title}
+								className="circular-image"
+							/>
+						))}
+						{product.productId?.images?.length > 3 && (
+							<div className="more-images">
+								+{product.productId?.images?.length - 3}
+							</div>
+						)}
+					</div>
+				),
+			},
+			{
+				title: "Qty",
+				dataIndex: "quantity",
+				key: "quantity",
+			},
+			{
+				title: "Price",
+				dataIndex: "price",
+				key: "price",
+				render: (text, product) => `ksh. ${formatPrice(product.price)}`,
+			},
+			{
+				title: "Total",
+				dataIndex: "total",
+				key: "total",
+				render: (text, product) => {
+					const productDetails = product.productId || {};
+					return `ksh. ${formatPrice(productDetails.price * product.quantity)}`;
+				},
+			},
+			{
+				title: "Owner",
+				dataIndex: "owner",
+				key: "owner",
+				// find the owner of the product by refId
+				render: (text, product) => {
+					const owner = users.find((user) => user._id === product.refId);
+					return owner ? owner.username : "Unknown";
+				},
+			},
+		];
+
+		return (
+			<Table
+				columns={productColumns}
+				dataSource={order.products}
+				pagination={false}
+				rowKey="productId"
+			/>
+		);
+	};
+
+	const handleClearFilters = useCallback(() => {
+		setSearchTerm("");
+		setPaymentFilter("All");
+		setStatusFilter("All");
+	}, []);
+
 	return (
 		<div className="Orders">
 			<div className="Header">
@@ -81,6 +339,85 @@ const Orders = ({ user, users, getTimeLabel }) => {
 					<li>Orders</li>
 					<li>Lists</li>
 				</div>
+				<div className="TableTop">
+					<TextField
+						size="small"
+						placeholder="Search for order or customer"
+						color="success"
+						value={searchTerm}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						InputProps={{
+							startAdornment: (
+								<InputAdornment position="start">
+									<i
+										className="fa fa-search"
+										style={{
+											fontSize: "1.2rem",
+											cursor: "pointer",
+										}}
+									></i>
+								</InputAdornment>
+							),
+						}}
+					/>
+					<TextField
+						size="small"
+						color="success"
+						select
+						value={paymentFilter}
+						onChange={(e) => setPaymentFilter(e.target.value)}
+						SelectProps={{
+							native: true,
+						}}
+						InputProps={{
+							startAdornment: (
+								<InputAdornment position="start">
+									<p className="Payment">Payment</p>
+								</InputAdornment>
+							),
+						}}
+					>
+						<option value="All">All</option>
+						<option value="Pending">Pending</option>
+						<option value="Paid">Paid</option>
+					</TextField>
+					<TextField
+						size="small"
+						color="success"
+						select
+						value={statusFilter}
+						onChange={(e) => setStatusFilter(e.target.value)}
+						SelectProps={{
+							native: true,
+						}}
+						InputProps={{
+							startAdornment: (
+								<InputAdornment position="start">
+									<p className="Payment">Status</p>
+								</InputAdornment>
+							),
+						}}
+					>
+						<option value="All">All</option>
+						<option value="Pending">Pending</option>
+						<option value="Confirmed">Confirmed</option>
+						<option value="OnWay">On the way</option>
+						<option value="Delivered">Delivered</option>
+					</TextField>
+					<button
+						style={{
+							color: "var(--warning-dark)",
+							fontSize: "1rem",
+							padding: "4px 8px",
+							background: "none",
+							cursor: "pointer",
+						}}
+						onClick={handleClearFilters}
+					>
+						Clear &nbsp;
+						<i className="fa fa-filter"></i>
+					</button>
+				</div>
 			</div>
 			<div className="OrdersContainer">
 				{!orders || orders.length === 0 ? (
@@ -89,225 +426,34 @@ const Orders = ({ user, users, getTimeLabel }) => {
 						<h3>No orders yet</h3>
 					</div>
 				) : (
-					<TableContainer>
-						<div className="TableTop">
-							<TextField
-								size="small"
-								placeholder="Search for order or customer"
-								color="success"
-								InputProps={{
-									endAdornment: (
-										<InputAdornment position="end">
-											<i
-												className="fa fa-search"
-												style={{
-													color: "#000",
-													fontSize: "1.2rem",
-													cursor: "pointer",
-												}}
-											></i>
-										</InputAdornment>
-									),
-								}}
-							/>
-							<div className="Filter">
-								<i className="fa fa-filter"></i>
-								<p>Filter</p>
-							</div>
-							<TextField
-								size="small"
-								color="success"
-								select
-								SelectProps={{
-									native: true,
-								}}
-								InputProps={{
-									startAdornment: (
-										<InputAdornment position="start">
-											<p className="Payment">Payment</p>
-										</InputAdornment>
-									),
-								}}
-							>
-								<option value="All">All</option>
-								<option value="Pending">Pending</option>
-								<option value="Paid">Paid</option>
-							</TextField>
-							<TextField
-								size="small"
-								color="success"
-								select
-								SelectProps={{
-									native: true,
-								}}
-								InputProps={{
-									startAdornment: (
-										<InputAdornment position="start">
-											<p className="Payment">Status</p>
-										</InputAdornment>
-									),
-								}}
-							>
-								<option value="All">All</option>
-								<option value="Pending">Pending</option>
-								<option value="Approved">Approved</option>
-								<option value="OnWay">On the way</option>
-								<option value="Delivered">Delivered</option>
-							</TextField>
-						</div>
-						<Table>
-							<TableHead
-								sx={{
-									backgroundColor: "#f5f5f5",
-									color: "#000",
-									fontWeight: "bold",
-								}}
-							>
-								<TableRow>
-									<TableCell>SN</TableCell>
-									<TableCell>Customer</TableCell>
-									<TableCell>Product</TableCell>
-									<TableCell>Quantity</TableCell>
-									<TableCell>Price</TableCell>
-									<TableCell>Total</TableCell>
-									<TableCell>Payment</TableCell>
-									<TableCell>Status</TableCell>
-									<TableCell></TableCell>
-								</TableRow>
-							</TableHead>
-
-							<TableBody>
-								{loading ? (
-									<TableRow>
-										<TableCell colSpan={8}>
-											<div className="Loading">
-												<i className="fa fa-spinner fa-spin" />
-											</div>
-										</TableCell>
-									</TableRow>
-								) : (
-									orders.flatMap((order) =>
-										order.products.map((product, index) => (
-											<TableRow
-												key={`${order._id}-${index}`}
-												onClick={() => history.push(`/orders/${order._id}`)}
-											>
-												<TableCell>{orders.indexOf(order) + 1}</TableCell>
-												<TableCell>
-													<div className="Customer">
-														<div className="Avatar">
-															<img
-																src={getCustomer(order.userId)?.profilePicture}
-																alt=""
-															/>
-														</div>
-														<div className="CustomerDetails">
-															<span>{getCustomer(order.userId)?.name}</span>
-															<p>{getCustomer(order.userId)?.email}</p>
-															<h3>{getTimeLabel(order?.date)}</h3>
-														</div>
-													</div>
-												</TableCell>
-												<TableCell>
-													<div className="Customer">
-														<div className="ProductImage">
-															<img
-																src={product?.productId.images[0]}
-																alt={product?.productId.productName}
-															/>
-														</div>
-														<div className="CustomerDetails">
-															<span>{product?.productId.productName}</span>
-															<h3>{product?.productId.productCategory}</h3>
-															<p>{product?.productId.brandName}</p>
-														</div>
-													</div>
-												</TableCell>
-												<TableCell>{product.quantity}</TableCell>
-												<TableCell>
-													{product?.productId.price
-														? `KES ${product.productId.price
-																.toString()
-																.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-														: "No price available"}
-												</TableCell>
-
-												<TableCell>
-													{"KES" +
-														" " +
-														(product.quantity * product?.productId.price)
-															.toString()
-															.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-												</TableCell>
-												<TableCell>
-													<p
-														style={{
-															color:
-																order.payment.status === "Pending"
-																	? "var(--warning-dark)"
-																	: order.payment.status === "Paid"
-																	? "var(--success-dark)"
-																	: "var(--error-dark)",
-														}}
-													>
-														{order.payment.status}
-													</p>
-												</TableCell>
-												<TableCell>
-													<p
-														style={{
-															color:
-																order.status === "Pending"
-																	? "var(--warning-darker)"
-																	: order.status === "Approved"
-																	? "var(--primary-darker)"
-																	: order.status === "Delivered"
-																	? "var(--success-darker)"
-																	: "var(--error-darker)",
-
-															backgroundColor:
-																order.status === "Pending"
-																	? "var(--warning-lighter)"
-																	: order.status === "Approved"
-																	? "var(--primary-lighter)"
-																	: order.status === "Delivered"
-																	? "var(--success-lighter)"
-																	: "var(--error-lighter)",
-														}}
-													>
-														{order.status}
-													</p>
-												</TableCell>
-												<TableCell>
-													<i className="fa fa-ellipsis-v"></i>
-												</TableCell>
-											</TableRow>
-										))
-									)
-								)}
-							</TableBody>
-						</Table>
-					</TableContainer>
+					<Table
+						columns={columns}
+						expandable={{
+							expandedRowRender,
+							rowExpandable: () => true,
+							expandedRowKeys: expandedKeys,
+							onExpand: (expanded, record) => {
+								handleRowClick(record);
+							},
+						}}
+						dataSource={filteredOrders}
+						rowKey="_id"
+						loading={loading}
+						onRow={(record) => ({
+							onClick: () => handleRowClick(record),
+						})}
+						className="ParentTable"
+					/>
 				)}
 			</div>
 		</div>
 	);
 };
 
-export default Orders;
-
-// validate props
-
 Orders.propTypes = {
-	orders: PropTypes.array.isRequired,
 	users: PropTypes.array.isRequired,
-	loading: PropTypes.bool.isRequired,
-	getOrders: PropTypes.func.isRequired,
-	getUsers: PropTypes.func.isRequired,
-	history: PropTypes.object.isRequired,
-	user: PropTypes.object.isRequired,
-	match: PropTypes.object.isRequired,
-	product: PropTypes.object.isRequired,
-	products: PropTypes.array.isRequired,
 	getTimeLabel: PropTypes.func.isRequired,
+	orders: PropTypes.array.isRequired,
 };
+
+export default Orders;

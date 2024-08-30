@@ -1,5 +1,6 @@
-.RequestsTable {
-    width: 100% !important;
+.RequestsTable,
+.RequestsTableContainer {
+    width: 100%;
     height: 100%;
     overflow: auto;
     display: flex;
@@ -20,3 +21,7 @@
     }
 }
 
+.TableContainer,
+.RequestsPaper {
+    width: 100%;
+}

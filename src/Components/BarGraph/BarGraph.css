@@ -23,3 +23,30 @@
     border: 1px solid green;
     border-radius: 5px;
 }
+
+.BarGraphHeader {
+    width: 100%;
+    height: 5vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem;
+    border-radius: 5px;
+    background: #f5f5f5;
+
+    & h2 {
+        font-size: .8rem;
+    }
+}
+
+.BarGraphContainer.fullscreen {
+    background-color: white;
+}
+
+.YearSelect {
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 0.75rem;
+    border: none;
+    background: transparent;
+}

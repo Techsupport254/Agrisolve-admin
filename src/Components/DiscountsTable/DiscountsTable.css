@@ -1,0 +1,80 @@
+.DiscountsTable {
+    width: 100%;
+}
+
+.DiscountsTableContainer {
+    width: 100%;
+}
+
+.DiscountsTable {
+    width: 100%;
+}
+
+.TableContainer {
+    width: 100%;
+}
+
+.DiscountsTableHeader {
+    background-color: #f5f5f5;
+}
+
+.DiscountDetails {
+    display: flex;
+    align-items: center;
+}
+
+.DiscountDetails img {
+    margin-right: 10px;
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+}
+
+.DiscountPopover {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .1);
+
+    & div {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1rem;
+
+        & span {
+            font-weight: 600;
+            font-size: .8rem;
+        }
+
+        & p {
+            font-size: .8rem;
+        }
+    }
+}
+
+.Active {
+    color: var(--white);
+    background: var(--success-darker);
+    padding: .2rem .5rem;
+    border-radius: 5px;
+}
+
+.Expired {
+    color: var(--white);
+    background: var(--danger);
+    padding: .2rem .5rem;
+    border-radius: 5px;
+}
+
+.DiscountFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    padding: .5rem 0;
+}
