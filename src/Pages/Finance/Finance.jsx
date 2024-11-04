@@ -61,14 +61,16 @@ const Finance = ({ user, getTimelabel, earnings, users }) => {
 							users={users}
 							earnings={earnings}
 							getTimelabel={getTimelabel}
-							balance={numericValues.balance} // Pass numeric values
-							totalEarnings={numericValues.totalEarnings} // Pass numeric values
-							netEarnings={numericValues.netEarnings} // Pass numeric values
-							totalExpenses={numericValues.totalExpenses} // Pass numeric values
-							formattedBalance={formattedBalance} // Pass formatted values for display
-							formattedTotalEarnings={formattedTotalEarnings} // Pass formatted values for display
-							formattedNetEarnings={formattedNetEarnings} // Pass formatted values for display
-							formattedTotalExpenses={formattedTotalExpenses} // Pass formatted values for display
+							balance={numericValues.balance}
+							totalEarnings={numericValues.totalEarnings}
+							netEarnings={numericValues.netEarnings}
+							totalExpenses={numericValues.totalExpenses}
+							formattedBalance={formattedBalance}
+							formattedTotalEarnings={formattedTotalEarnings}
+							formattedNetEarnings={formattedNetEarnings}
+							formattedTotalExpenses={formattedTotalExpenses}
+							totalExpense={totalExpenses}
+							totalIncome={totalEarnings}
 						/>
 					</div>
 				</div>

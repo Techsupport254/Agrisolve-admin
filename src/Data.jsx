@@ -301,42 +301,6 @@ export const requestsNavigations = [
 	},
 ];
 
-// analytics data
-export const analyticsData = [
-	{
-		id: 1,
-		title: "Orders Completed",
-		icon: <i className="fas fa-shopping-cart"></i>,
-		value: 1000,
-		color: "var(--success-darker)",
-		bg: "var(--success-lighter)",
-	},
-	{
-		id: 1,
-		title: "Total Revenue",
-		icon: <i className="fa-solid fa-chart-column"></i>,
-		value: 50000,
-		color: "var(--primary-darker)",
-		bg: "var(--primary-lighter)",
-	},
-	{
-		id: 2,
-		title: "Total Sales",
-		icon: <i className="fas fa-shopping-cart"></i>,
-		value: 1500,
-		color: "var(--secondary-darker)",
-		bg: "var(--secondary-lighter)",
-	},
-	{
-		id: 3,
-		title: "Total Customers Served",
-		icon: <i className="fas fa-users"></i>,
-		value: 300,
-		color: "var(--warning-darker)",
-		bg: "var(--warning-lighter)",
-	},
-];
-
 // news data
 export const newsData = [
 	{

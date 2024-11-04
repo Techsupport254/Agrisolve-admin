@@ -5,13 +5,9 @@ import AnalyticsCard from "../AnalyticsCard/AnalyticsCard";
 const AnalyticsCards = ({ analyticsData }) => {
 	return (
 		<div className="AnalyticsCardsContainer">
-			{analyticsData.map((data, index) => {
-				return (
-					<div className="AnalyticsCard" key={index}>
-						<AnalyticsCard data={data} />
-					</div>
-				);
-			})}
+			{analyticsData.map((data) => (
+				<AnalyticsCard key={data.id} data={data} />
+			))}
 		</div>
 	);
 };

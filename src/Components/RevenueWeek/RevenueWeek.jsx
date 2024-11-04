@@ -1,104 +1,65 @@
-import React from "react";
-import {
-	AreaChart,
-	Area,
-	XAxis,
-	Tooltip,
-	ResponsiveContainer,
-	ReferenceLine,
-	ReferenceDot,
-} from "recharts";
+import React, { useState } from "react";
+import YearDropdown from "./YearDropdown";
+import TotalsDisplay from "./TotalsDisplay";
+import SalesChart from "./SalesChart";
 import "./RevenueWeek.css";
 
-const generateRandomRevenueForAllMonths = () => {
-	const currentDate = new Date();
-	const currentMonthIndex = currentDate.getMonth();
+// Simulate data generation for two years: 2022 and 2023
+const generateDataForYear = (year) => {
 	const months = [
 		"Jan",
 		"Feb",
-		"March",
-		"April",
+		"Mar",
+		"Apr",
 		"May",
-		"June",
-		"July",
+		"Jun",
+		"Jul",
 		"Aug",
-		"Sept",
+		"Sep",
 		"Oct",
 		"Nov",
 		"Dec",
 	];
-	const monthsUpToCurrent = months.slice(0, currentMonthIndex + 1);
-	const randomData = monthsUpToCurrent.map((month) => {
-		const randomRevenue = Math.floor(Math.random() * 10000); // Generating random revenue value up to 10000
-		return { name: month, revenue: randomRevenue };
+	const data = months.map((month) => {
+		return {
+			name: month,
+			income: Math.floor(Math.random() * 100),
+			expenses: Math.floor(Math.random() * 100),
+		};
 	});
-	return randomData;
+	return data;
 };
 
-const RevenueWeek = () => {
-	const randomDataForAllMonths = generateRandomRevenueForAllMonths();
+const YearlySales = ({ earnings }) => {
+	console.log(earnings);
+	const [selectedYear, setSelectedYear] = useState("2023");
 
-	// Find the current month's revenue data
-	const currentDate = new Date();
-	const currentMonthIndex = currentDate.getMonth();
-	const currentMonthRevenue = randomDataForAllMonths[currentMonthIndex];
+	// Data for 2022 and 2023
+	const data2022 = generateDataForYear(2022);
+	const data2023 = generateDataForYear(2023);
+
+	// Select data based on the year
+	const data = selectedYear === "2023" ? data2023 : data2022;
+
+	// Calculate total income and expenses for the selected year
+	const totalIncome = data.reduce((sum, month) => sum + month.income, 0);
+	const totalExpenses = data.reduce((sum, month) => sum + month.expenses, 0);
 
 	return (
-		<div className="revenue-week">
-			<ResponsiveContainer
-				width="100%"
-				height={250}
-				className="ResponsiveContainer"
-			>
-				<AreaChart
-					data={randomDataForAllMonths}
-					margin={{
-						top: 5,
-						right: 7,
-						left: 5,
-						bottom: -9,
-					}}
-				>
-					<XAxis
-						dataKey="name"
-						axisLine={true}
-						tickLine={false}
-						tick={{ fill: "#8884d8" }}
-					/>
-					<Tooltip />
-					<Area
-						type="monotone"
-						dataKey="revenue"
-						stroke="#8884d8"
-						fillOpacity={1}
-						fill="url(#colorUv)"
-					/>
-					<ReferenceLine
-						x={currentMonthRevenue.name}
-						stroke="#8884d8"
-						strokeDasharray="3 3"
-					/>
-					<ReferenceDot
-						x={currentMonthRevenue.name}
-						y={currentMonthRevenue.revenue}
-						r={6}
-						fill="#8884d8"
-						stroke="none"
-					/>
-					<defs>
-						<linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-							<stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-							<stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-						</linearGradient>
-					</defs>
-				</AreaChart>
-			</ResponsiveContainer>
-			<div className="revenue-info">
-				<p className="revenue-amount">Revenue this month</p>
-				<p className="revenue-value">${currentMonthRevenue.revenue}</p>
+		<div className="yearly-sales-container">
+			<div className="yearly-sales-header">
+				<div>
+					<h2>Yearly sales</h2>
+				</div>
+				<YearDropdown
+					selectedYear={selectedYear}
+					setSelectedYear={setSelectedYear}
+				/>
 			</div>
+			<TotalsDisplay totalIncome={totalIncome} totalExpenses={totalExpenses} />
+			<SalesChart data={data} />
 		</div>
 	);
 };
 
-export default RevenueWeek;
+export default YearlySales;

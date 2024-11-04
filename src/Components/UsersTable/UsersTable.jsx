@@ -120,6 +120,30 @@ const UsersTable = ({ users, getTimeLabel }) => {
 				accessor: "created_at",
 			},
 			{
+				Header: "Status",
+				accessor: "status",
+				Cell: ({ value }) => (
+					<Typography
+						variant="body2"
+						sx={{
+							padding: "1px 5px",
+							backgroundColor:
+								value === "active"
+									? "var(--success-dark)"
+									: value === "suspended"
+									? "var(--warning-dark)"
+									: "var(--error-dark)",
+							color: "white",
+							borderRadius: "10px",
+							display: "inline-block",
+							fontSize: ".8rem",
+						}}
+					>
+						{value.charAt(0).toUpperCase() + value.slice(1)}
+					</Typography>
+				),
+			},
+			{
 				Header: "Action",
 				accessor: "actions",
 				Cell: ({ row }) => (

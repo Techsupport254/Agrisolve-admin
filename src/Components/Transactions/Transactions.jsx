@@ -16,7 +16,7 @@ const Transactions = ({ earnings, user, users, totalExpense, totalIncome }) => {
 	}, [user?.email, admin_email]);
 
 	const userEarnings = earnings?.filter(
-		(earning) => earning?.userId === user?._id || admin
+		(earning) => earning?.userId === user?.id || admin
 	);
 
 	// Flatten data to match the desired transactionsData format
@@ -70,7 +70,7 @@ const Transactions = ({ earnings, user, users, totalExpense, totalIncome }) => {
 		datasets: [
 			{
 				label: "Income vs Expenses",
-				data: [totalIncome, -totalExpense],
+				data: [totalIncome, totalExpense],
 				backgroundColor: ["#82ca9d", "#ffc658", "#8884d8"],
 				borderColor: ["#fff", "#fff", "#fff"],
 				borderWidth: 2,
@@ -92,25 +92,37 @@ const Transactions = ({ earnings, user, users, totalExpense, totalIncome }) => {
 	const expectedPaymentDate = (requestDate) => {
 		const date = new Date(requestDate);
 		const day = date.getDate();
-		if (day >= 1 && day <= 5) {
-			date.setDate(5);
-		} else if (day >= 14 && day <= 18) {
+		const month = date.getMonth();
+		const year = date.getFullYear();
+
+		if (day >= 14 && day <= 18) {
 			date.setDate(18);
+		} else {
+			const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+			if (day >= lastDayOfMonth - 1 || day <= 3) {
+				if (day <= 3) {
+					date.setDate(
+						5
+					);
+				} else {
+					date.setDate(lastDayOfMonth + 5);
+				}
+			}
 		}
 		return date.toDateString();
 	};
 
-	console.log(transactionsData);
+	const formatNumber = new Intl.NumberFormat("en-US", {
+		style: "currency",
+		currency: "KES",
+	}).format;
 
 	return (
 		<div className="TransactionsContainer">
 			<div className="TransactionsLeft">
-				{transactionsData?.map(
-					(transaction) => (
-						console.log(transaction),
-						(<Transaction key={transaction.id} transaction={transaction} />)
-					)
-				)}
+				{transactionsData?.map((transaction) => (
+					<Transaction key={transaction.id} transaction={transaction} />
+				))}
 			</div>
 			<div className="TransactionsRight">
 				<div className="RequestedAmount">
@@ -119,7 +131,7 @@ const Transactions = ({ earnings, user, users, totalExpense, totalIncome }) => {
 					</div>
 					{requestedPayment ? (
 						<>
-							<span>KES. {requestedPayment.amount}</span>
+							<span>{formatNumber(requestedPayment.amount)}</span>
 							<small>
 								Expected: {expectedPaymentDate(requestedPayment.date)}
 							</small>

@@ -3,7 +3,6 @@ import "./TopProducts.css";
 import { Avatar } from "@mui/material";
 
 const TopProducts = ({ users, products, getTimeLabel }) => {
-	console.log(products);
 	const containerClassName = "TopProductsContainer";
 	return (
 		<div className="TopProducts">

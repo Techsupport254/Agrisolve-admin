@@ -9,7 +9,10 @@ const NewsCard = ({ data, getTimeLabel }) => {
 			</div>
 			<div className="ContentContainer">
 				<h1>{data.title}</h1>
-				<p>{data.description}</p>
+				<p>
+					{data.description}Impedit in
+					qui debitis quos labore sit molestias iure quasi, assumenda dolores.
+				</p>
 			</div>
 			<div className="Time">
 				<p>{getTimeLabel(data.created)}</p>

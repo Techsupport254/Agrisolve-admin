@@ -4,24 +4,15 @@ import "./AnalyticsCard.css";
 const AnalyticsCard = ({ data }) => {
 	return (
 		<div className="AnalyticsCardContainer">
-			<div
-				className="Icon"
-				style={{
-					color: data.color,
-					backgroundColor: data.bg,
-				}}
-			>
-				{data.icon}
+			<div className="CardLeft">
+				<div className="CardHeader">
+					<p>{data.title}</p>
+				</div>
+				<span className="Value">{data.value}</span>
+				<div className="Statistic">{data.statistic}</div>
 			</div>
-			<div className="AnalyticDetails">
-				<p>{data.title}</p>
-				<span
-					style={{
-						color: data.color,
-					}}
-				>
-					{data.value}
-				</span>
+			<div className="CardRight">
+				<div className="Graph">{data.graph}</div>
 			</div>
 		</div>
 	);

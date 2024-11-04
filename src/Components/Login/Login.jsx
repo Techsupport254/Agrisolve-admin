@@ -34,8 +34,6 @@ const LoginPopup = () => {
 				body: JSON.stringify({ email, password }),
 			});
 
-			console.log("Login response status:", response.status); // Debugging line
-
 			// Handle successful login
 			if (response.ok) {
 				const data = await response.json();

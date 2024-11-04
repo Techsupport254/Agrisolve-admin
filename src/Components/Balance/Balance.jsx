@@ -32,39 +32,49 @@ const Balance = ({
 	// Prepare the balance for display
 	const hiddenBalance = "x".repeat(balance?.toString().length || 0);
 
-	// Function to format number with commas
-	const formatNumber = (number) => new Intl.NumberFormat().format(number);
+	// Function to format to kes currency
+	const formatNumber = new Intl.NumberFormat("en-US", {
+		style: "currency",
+		currency: "kes",
+	}).format;
 
 	// Get current date
 	const currentDate = new Date();
 	const currentDay = currentDate.getDate();
+	const currentMonth = currentDate.getMonth() + 1;
 
-	// Disable request button if balance is <= 0 or if the current day isn't between the allowed ranges
-	const isRequestPeriod = (start, end) =>
-		currentDay >= start && currentDay <= end;
-	const isDisabled =
-		balance <= 0 || !(isRequestPeriod(1, 5) || isRequestPeriod(14, 18));
+	// Determine if the request period is valid
+	const isRequestPeriod = () => {
+		const lastDayOfCurrentMonth = new Date(
+			currentDate.getFullYear(),
+			currentMonth,
+			0
+		).getDate();
+		const isEndOfMonthPeriod =
+			currentDay >= lastDayOfCurrentMonth - 1 || currentDay <= 3;
+		const isMidMonthPeriod = currentDay >= 14 && currentDay <= 18;
+
+		return isEndOfMonthPeriod || isMidMonthPeriod;
+	};
+
+	// Disable request button if balance is <= 0 or if it's not within the allowed request period
+	const isDisabled = balance <= 0 || !isRequestPeriod();
 
 	const handleRequest = (balance) => {
 		if (balance > 500 && token && user?.id) {
 			axios
-				.post(
-					`http://localhost:8000/earnings/${user.id}/request`,
-					{
-						amount: balance,
+				.post(`http://localhost:8000/earnings/${user.id}/request`, {
+					headers: {
+						Authorization: `Bearer ${token}`,
 					},
-					{
-						headers: {
-							Authorization: `Bearer ${token}`,
-						},
-					}
-				)
+				})
 				.then((response) => {
 					setSnackbar({
 						open: true,
 						message: "Request sent successfully",
 						severity: "success",
 					});
+					window.location.reload();
 				})
 				.catch((error) => {
 					console.error("Error sending request:", error);
@@ -141,11 +151,11 @@ const Balance = ({
 			<div className="BottomCard">
 				<div className="Difference Expenses">
 					<i className="fa-solid fa-arrow-up"></i>
-					<span>KES. {formatNumber(totalExpenses)}</span>
+					<span>{formatNumber(totalExpenses)}</span>
 				</div>
 				<div className="Difference Incomes">
 					<i className="fa-solid fa-arrow-down"></i>
-					<span>KES. {formatNumber(netEarnings)}</span>
+					<span>{formatNumber(netEarnings)}</span>
 				</div>
 				<Button
 					variant="outlined"
